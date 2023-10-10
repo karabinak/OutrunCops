@@ -23,12 +23,13 @@ void ABaseVehiclePawn::BeginPlay()
 	Super::BeginPlay();
 
 	GetMesh()->SetSimulatePhysics(true);
+	SpringArm->TargetArmLength = 800.f;
+	SpringArm->SetRelativeRotation(FRotator(0.f, -25.f, 0.f));
 }
 
 void ABaseVehiclePawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
 }
 
 void ABaseVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -36,7 +37,6 @@ void ABaseVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("Throttle", this, &ABaseVehiclePawn::Throttle);
 	PlayerInputComponent->BindAxis("Brake", this, &ABaseVehiclePawn::Brake);
 	PlayerInputComponent->BindAxis("Steer", this, &ABaseVehiclePawn::Steer);
-
 }
 
 void ABaseVehiclePawn::Throttle(float AxisValue)
