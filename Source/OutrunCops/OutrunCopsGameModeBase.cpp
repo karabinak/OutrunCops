@@ -1,5 +1,22 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
-
 #include "OutrunCopsGameModeBase.h"
 
+
+AOutrunCopsGameModeBase::AOutrunCopsGameModeBase()
+{
+
+}
+
+void AOutrunCopsGameModeBase::BeginPlay()
+{
+
+}
+
+void AOutrunCopsGameModeBase::IsInInventory()
+{
+
+}
+
+void AOutrunCopsGameModeBase::AddToInventory()
+{
+
+}

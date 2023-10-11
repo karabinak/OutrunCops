@@ -4,7 +4,6 @@
 #include "Camera/CameraComponent.h"
 #include "ChaosVehicleMovementComponent.h"
 #include "ChaosWheeledVehicleMovementComponent.h"
-#include "InventoryComponent.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -12,7 +11,6 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 {
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
-	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 
 	SetRootComponent(GetMesh());
 	SpringArm->SetupAttachment(GetRootComponent());
@@ -22,7 +20,6 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 	SpringArm->TargetArmLength = 800.f;
 	SpringArm->SetRelativeRotation(FRotator(0.f, -25.f, 0.f));
 
-	
 }
 
 void ABaseVehiclePawn::BeginPlay()
@@ -34,28 +31,7 @@ void ABaseVehiclePawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (UGameplayStatics::GetPlayerController(GetWorld(), 0))
-	{
-		if (UGameplayStatics::GetPlayerController(GetWorld(), 0)->WasInputKeyJustPressed(EKeys::P))
-		{
-			SpawnAndPossesPawn(0);
-		}
-		else if (UGameplayStatics::GetPlayerController(GetWorld(), 0)->WasInputKeyJustPressed(EKeys::O))
-		{
-			SpawnAndPossesPawn(1);
-		}
-	}
-}
 
-void ABaseVehiclePawn::SpawnAndPossesPawn(int32 Selection)
-{
-	FActorSpawnParameters ActorSpawnParameters;
-	ABaseVehiclePawn* NewVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(Inventory->GetVehicleInventory().Find(Selection)->Get(), FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
-	if (NewVehicle)
-	{
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(NewVehicle);
-		Destroy();
-	}
 }
 
 void ABaseVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
