@@ -8,6 +8,7 @@
 
 class ABaseVehiclePawn;
 class UCameraComponent;
+class ABasePlayerController;
 
 UCLASS()
 class OUTRUNCOPS_API ABaseGarage : public AActor
@@ -33,6 +34,8 @@ private:
 	// Shop
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
 	TMap<int32, TSubclassOf<ABaseVehiclePawn>> VehicleCatalog;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
+	ABaseVehiclePawn* CurrentCatalogVehicle;
 
 	// Garage Meshes
 
@@ -42,6 +45,10 @@ private:
 	UStaticMeshComponent* VehicleStand;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* GarageMainView;
+	
+	// PC
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
+	ABasePlayerController* PlayerController;
 
 
 

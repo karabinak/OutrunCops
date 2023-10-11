@@ -2,6 +2,8 @@
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetTree.h"
 #include "BaseMenuWidget.h"
+#include "BaseVehiclePawn.h"
+#include "BasePlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -33,10 +35,14 @@ void ABaseGarage::BeginPlay()
 		MenuWidget->AddToViewport();
 		Cast<UBaseMenuWidget>(MenuWidget)->SetGarageRef(this);
 	}
+	PlayerController = Cast<ABasePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	if (PlayerController)
+	{
+		PlayerController->SetViewTarget(this);
+	}
 
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetViewTarget(this);
+	SetPreviewVehicle(0);
 }
-
 
 void ABaseGarage::Tick(float DeltaTime)
 {
@@ -46,7 +52,19 @@ void ABaseGarage::Tick(float DeltaTime)
 
 void ABaseGarage::SetPreviewVehicle(int32 CurrentValue)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%i"), CurrentValue);
+	if (VehicleCatalog.Find(CurrentValue))
+	{
+		if (CurrentCatalogVehicle)
+		{
+			CurrentCatalogVehicle->Destroy();
+		}
+		FVector Location = VehicleStand->GetSocketLocation(FName(TEXT("AttachVehicle")));
+		FRotator Rotation = VehicleStand->GetSocketRotation(FName(TEXT("AttachVehicle")));
+		FActorSpawnParameters SpawnParameters;
+		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(VehicleCatalog.Find(CurrentValue)->Get(), Location, Rotation, SpawnParameters);
+		CurrentCatalogVehicle->GetMesh()->SetSimulatePhysics(false);
+		CurrentCatalogVehicle->AttachToComponent(VehicleStand, FAttachmentTransformRules::KeepRelativeTransform);
+	}
 }
 
 void ABaseGarage::CreateMenuWidget()
