@@ -6,5 +6,5 @@
 ABasePlayerController::ABasePlayerController()
 {
 	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
-
+	
 }

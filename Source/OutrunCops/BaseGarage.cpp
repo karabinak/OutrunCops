@@ -1,7 +1,9 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetTree.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
 #include "BaseMenuWidget.h"
+#include "BaseShopWidget.h"
 #include "BaseVehiclePawn.h"
 #include "BasePlayerController.h"
 #include "Camera/CameraComponent.h"
@@ -30,10 +32,13 @@ void ABaseGarage::BeginPlay()
 	Super::BeginPlay();
 
 	CreateMenuWidget();
-	if (MenuWidget)
+	CreateShopyWidget();
+
+	if (MenuWidget && ShopWidget)
 	{
 		MenuWidget->AddToViewport();
 		Cast<UBaseMenuWidget>(MenuWidget)->SetGarageRef(this);
+		Cast<UBaseShopWidget>(ShopWidget)->SetGarageRef(this);
 	}
 	PlayerController = Cast<ABasePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	if (PlayerController)
@@ -72,5 +77,38 @@ void ABaseGarage::CreateMenuWidget()
 	if (MenuWidgetClass)
 	{
 		MenuWidget = CreateWidget<UUserWidget>(GetWorld(), MenuWidgetClass);
+	}
+}
+
+void ABaseGarage::CreateShopyWidget()
+{
+	if (ShopWidgetClass)
+	{
+		ShopWidget = CreateWidget<UUserWidget>(GetWorld(), ShopWidgetClass);
+	}
+}
+
+void ABaseGarage::SetWidgetState(EWidgetState ChangeWidgetState)
+{
+	WidgetState = ChangeWidgetState;
+
+	switch (WidgetState)
+	{
+	case EWidgetState::EWS_Menu:
+
+		UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
+		MenuWidget->AddToViewport();
+		break;
+
+
+	case EWidgetState::EWS_Shop:
+
+		UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
+		ShopWidget->AddToViewport();
+		break;
+
+
+	case EWidgetState::EWS_MAX:
+		break;
 	}
 }

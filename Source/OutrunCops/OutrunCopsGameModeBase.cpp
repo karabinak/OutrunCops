@@ -10,13 +10,3 @@ void AOutrunCopsGameModeBase::BeginPlay()
 {
 
 }
-
-void AOutrunCopsGameModeBase::IsInInventory()
-{
-
-}
-
-void AOutrunCopsGameModeBase::AddToInventory()
-{
-
-}

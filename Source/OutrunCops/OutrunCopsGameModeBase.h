@@ -22,19 +22,8 @@ protected:
 
 private:
 
-	// Inventory
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	TMap<int32, TSubclassOf<ABaseVehiclePawn>> VehicleInventory;
 
 public:
 
-	// Inventory
-	UFUNCTION(BlueprintCallable)
-	void IsInInventory();
 
-	UFUNCTION(BlueprintCallable)
-	void AddToInventory();
-
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE TMap<int32, TSubclassOf<ABaseVehiclePawn>> GetVehicleInventory() { return VehicleInventory; }
 };
