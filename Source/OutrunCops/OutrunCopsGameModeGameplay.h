@@ -13,5 +13,8 @@ UCLASS()
 class OUTRUNCOPS_API AOutrunCopsGameModeGameplay : public AGameModeBase
 {
 	GENERATED_BODY()
+
+protected:
+	void OnConstruction(const FTransform& Transform) override;
 	
 };
