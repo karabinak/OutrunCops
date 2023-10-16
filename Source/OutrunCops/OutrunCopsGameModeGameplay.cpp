@@ -2,12 +2,40 @@
 
 #include "BaseGameInstance.h"
 #include "BaseVehiclePawn.h"
+#include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 #include "OutrunCopsGameModeGameplay.h"
 
-void AOutrunCopsGameModeGameplay::OnConstruction(const FTransform& Transform)
+//void AOutrunCopsGameModeGameplay::OnConstruction(const FTransform& Transform)
+//{
+//	Super::OnConstruction(Transform);
+//
+//	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+//	DefaultPawnClass = GameInstance->GetCurrentVehicle();
+//}
+
+void AOutrunCopsGameModeGameplay::BeginPlay()
 {
-	Super::OnConstruction(Transform);
+	Super::BeginPlay();
 
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
-	DefaultPawnClass = GameInstance->GetCurrentVehicle();
+
+	FActorSpawnParameters ActorSpawnParameters;
+	ABaseVehiclePawn* Vehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetCurrentVehicle(), FVector(500.f, 0.f, 50.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Vehicle);
+
+	CreateGameplayWidget();
+
+	if (GameplayWidget)
+	{
+		GameplayWidget->AddToViewport();
+	}
+}
+
+void AOutrunCopsGameModeGameplay::CreateGameplayWidget()
+{
+	if (GameplayWidgetClass)
+	{
+		GameplayWidget = CreateWidget<UUserWidget>(GetWorld(), GameplayWidgetClass);
+	}
 }
