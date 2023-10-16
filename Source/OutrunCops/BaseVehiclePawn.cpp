@@ -4,6 +4,7 @@
 #include "Camera/CameraComponent.h"
 #include "ChaosVehicleMovementComponent.h"
 #include "ChaosWheeledVehicleMovementComponent.h"
+#include "Components/WidgetComponent.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -20,6 +21,11 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 	SpringArm->TargetArmLength = 800.f;
 	SpringArm->SetRelativeRotation(FRotator(0.f, -25.f, 0.f));
 
+	VehicleWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("VehicleWidget"));
+	VehicleWidget->SetupAttachment(GetRootComponent());
+	VehicleWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	VehicleWidget->SetDrawSize(FVector2D(200.f, 50.f));
+	VehicleWidget->SetPivot(FVector2D(0.f, 1.f));
 }
 
 void ABaseVehiclePawn::BeginPlay()

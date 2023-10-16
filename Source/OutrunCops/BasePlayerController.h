@@ -21,4 +21,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
 	UInventoryComponent* Inventory;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
+	int32 PlayerBasicCurrency = 30000;
+
+public:
+
+	FORCEINLINE UInventoryComponent* GetInventory() const { return Inventory; }
+	FORCEINLINE int32 GetPlayerBasicCurrency() const { return PlayerBasicCurrency; }
+
 };

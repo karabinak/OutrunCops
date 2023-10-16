@@ -31,7 +31,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	void CreateMenuWidget();
-	void CreateShopyWidget();
+	void CreateShopWidget();
 
 private:
 
@@ -74,7 +74,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void SetPreviewVehicle(int32 CurrentValue);
+	ABaseVehiclePawn* SetPreviewVehicle(int32 CurrentValue);
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetState(EWidgetState ChangeWidgetState);
 

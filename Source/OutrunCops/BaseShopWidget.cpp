@@ -3,7 +3,10 @@
 
 #include "BaseShopWidget.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "BasePlayerController.h"
+
 void UBaseShopWidget::NativeConstruct()
 {
-
+	PC = Cast<ABasePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 }

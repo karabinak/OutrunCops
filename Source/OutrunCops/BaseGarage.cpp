@@ -6,6 +6,8 @@
 #include "BaseShopWidget.h"
 #include "BaseVehiclePawn.h"
 #include "BasePlayerController.h"
+#include "BaseGameInstance.h"
+#include "InventoryComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -32,7 +34,7 @@ void ABaseGarage::BeginPlay()
 	Super::BeginPlay();
 
 	CreateMenuWidget();
-	CreateShopyWidget();
+	CreateShopWidget();
 
 	if (MenuWidget && ShopWidget)
 	{
@@ -46,6 +48,11 @@ void ABaseGarage::BeginPlay()
 		PlayerController->SetViewTarget(this);
 	}
 
+	// PLACEHODER
+	PlayerController->GetInventory()->AddToInventory(0, VehicleCatalog.Find(0)->Get());
+	UBaseGameInstance* Instance = Cast<UBaseGameInstance>(GetGameInstance());
+	Instance->SetCurrentVehicle(PlayerController->GetInventory()->GetFromInventory(0));
+
 	SetPreviewVehicle(0);
 }
 
@@ -55,8 +62,23 @@ void ABaseGarage::Tick(float DeltaTime)
 
 }
 
-void ABaseGarage::SetPreviewVehicle(int32 CurrentValue)
+ABaseVehiclePawn* ABaseGarage::SetPreviewVehicle(int32 CurrentValue)
 {
+	if (!PlayerController->GetInventory()->GetVehicleInventory().IsEmpty() && PlayerController->GetInventory()->GetVehicleInventory().Contains(CurrentValue))
+	{
+		if (CurrentCatalogVehicle)
+		{
+			CurrentCatalogVehicle->Destroy();
+		}
+		FVector Location = VehicleStand->GetSocketLocation(FName(TEXT("AttachVehicle")));
+		FRotator Rotation = VehicleStand->GetSocketRotation(FName(TEXT("AttachVehicle")));
+		FActorSpawnParameters SpawnParameters;
+		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(PlayerController->GetInventory()->GetVehicleInventory().Find(CurrentValue)->Get(), Location, Rotation, SpawnParameters);
+		CurrentCatalogVehicle->GetMesh()->SetSimulatePhysics(false);
+		CurrentCatalogVehicle->AttachToComponent(VehicleStand, FAttachmentTransformRules::KeepRelativeTransform);
+		return CurrentCatalogVehicle;
+	}
+
 	if (VehicleCatalog.Find(CurrentValue))
 	{
 		if (CurrentCatalogVehicle)
@@ -69,7 +91,10 @@ void ABaseGarage::SetPreviewVehicle(int32 CurrentValue)
 		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(VehicleCatalog.Find(CurrentValue)->Get(), Location, Rotation, SpawnParameters);
 		CurrentCatalogVehicle->GetMesh()->SetSimulatePhysics(false);
 		CurrentCatalogVehicle->AttachToComponent(VehicleStand, FAttachmentTransformRules::KeepRelativeTransform);
+		return CurrentCatalogVehicle;
 	}
+
+	return nullptr;
 }
 
 void ABaseGarage::CreateMenuWidget()
@@ -80,7 +105,7 @@ void ABaseGarage::CreateMenuWidget()
 	}
 }
 
-void ABaseGarage::CreateShopyWidget()
+void ABaseGarage::CreateShopWidget()
 {
 	if (ShopWidgetClass)
 	{
