@@ -27,7 +27,6 @@ protected:
 	void Brake(float AxisValue);
 	void Steer(float AxisValue);
 
-
 private:
 
 	// TO DO VEHICLE WIDGET COMPONENT

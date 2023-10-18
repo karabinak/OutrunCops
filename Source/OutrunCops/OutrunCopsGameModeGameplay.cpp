@@ -6,14 +6,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "OutrunCopsGameModeGameplay.h"
 
-//void AOutrunCopsGameModeGameplay::OnConstruction(const FTransform& Transform)
-//{
-//	Super::OnConstruction(Transform);
-//
-//	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
-//	DefaultPawnClass = GameInstance->GetCurrentVehicle();
-//}
-
 void AOutrunCopsGameModeGameplay::BeginPlay()
 {
 	Super::BeginPlay();
@@ -21,7 +13,7 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
 
 	FActorSpawnParameters ActorSpawnParameters;
-	ABaseVehiclePawn* Vehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetCurrentVehicle(), FVector(500.f, 0.f, 50.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
+	ABaseVehiclePawn* Vehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(500.f, 0.f, 50.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Vehicle);
 
 	CreateGameplayWidget();

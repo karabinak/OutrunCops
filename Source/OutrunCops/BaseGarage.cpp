@@ -48,12 +48,12 @@ void ABaseGarage::BeginPlay()
 		PlayerController->SetViewTarget(this);
 	}
 
-	// PLACEHODER
-	PlayerController->GetInventory()->AddToInventory(0, VehicleCatalog.Find(0)->Get());
-	UBaseGameInstance* Instance = Cast<UBaseGameInstance>(GetGameInstance());
-	Instance->SetCurrentVehicle(PlayerController->GetInventory()->GetFromInventory(0));
+	//// PLACEHODER
+	//PlayerController->GetInventory()->AddToInventory(0, VehicleCatalog.Find(0)->Get());
+	//UBaseGameInstance* Instance = Cast<UBaseGameInstance>(GetGameInstance());
+	//Instance->SetCurrentVehicle(PlayerController->GetInventory()->GetFromInventory(0));
 
-	SetPreviewVehicle(0);
+	SetPreviewVehicle(Cast<UBaseGameInstance>(GetGameInstance())->GetVehicleInt_Inst());
 }
 
 void ABaseGarage::Tick(float DeltaTime)
@@ -62,39 +62,52 @@ void ABaseGarage::Tick(float DeltaTime)
 
 }
 
-ABaseVehiclePawn* ABaseGarage::SetPreviewVehicle(int32 CurrentValue)
+ABaseVehiclePawn* ABaseGarage::SetPreviewVehicle(int32 VehicleValue)
 {
-	if (!PlayerController->GetInventory()->GetVehicleInventory().IsEmpty() && PlayerController->GetInventory()->GetVehicleInventory().Contains(CurrentValue))
+	bool IsInInventory = PlayerController->GetInventory()->GetVehicleInventory().Contains(VehicleValue);
+	bool IsNotEmpty = !PlayerController->GetInventory()->GetVehicleInventory().IsEmpty();
+
+	// Vehicle From Player Inventory ( if purchased )
+	if (IsNotEmpty && IsInInventory)
 	{
-		if (CurrentCatalogVehicle)
-		{
-			CurrentCatalogVehicle->Destroy();
-		}
-		FVector Location = VehicleStand->GetSocketLocation(FName(TEXT("AttachVehicle")));
-		FRotator Rotation = VehicleStand->GetSocketRotation(FName(TEXT("AttachVehicle")));
-		FActorSpawnParameters SpawnParameters;
-		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(PlayerController->GetInventory()->GetVehicleInventory().Find(CurrentValue)->Get(), Location, Rotation, SpawnParameters);
-		CurrentCatalogVehicle->GetMesh()->SetSimulatePhysics(false);
-		CurrentCatalogVehicle->AttachToComponent(VehicleStand, FAttachmentTransformRules::KeepRelativeTransform);
+		DestroyPreviousVehicle();
+		SpawnNewVehicle(VehicleValue, IsInInventory);
 		return CurrentCatalogVehicle;
 	}
 
-	if (VehicleCatalog.Find(CurrentValue))
+	// Vehicle From Catalog ( not purchased )
+	if (VehicleCatalog.Find(VehicleValue))
 	{
-		if (CurrentCatalogVehicle)
-		{
-			CurrentCatalogVehicle->Destroy();
-		}
-		FVector Location = VehicleStand->GetSocketLocation(FName(TEXT("AttachVehicle")));
-		FRotator Rotation = VehicleStand->GetSocketRotation(FName(TEXT("AttachVehicle")));
-		FActorSpawnParameters SpawnParameters;
-		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(VehicleCatalog.Find(CurrentValue)->Get(), Location, Rotation, SpawnParameters);
-		CurrentCatalogVehicle->GetMesh()->SetSimulatePhysics(false);
-		CurrentCatalogVehicle->AttachToComponent(VehicleStand, FAttachmentTransformRules::KeepRelativeTransform);
+		DestroyPreviousVehicle();
+		SpawnNewVehicle(VehicleValue, IsInInventory);
 		return CurrentCatalogVehicle;
 	}
+	return CurrentCatalogVehicle;
+}
 
-	return nullptr;
+void ABaseGarage::DestroyPreviousVehicle()
+{
+	if (CurrentCatalogVehicle)
+	{
+		CurrentCatalogVehicle->Destroy();
+	}
+}
+
+void ABaseGarage::SpawnNewVehicle(int32 VehicleValue, bool IsInInventory)
+{
+	FVector Location = VehicleStand->GetSocketLocation(FName(TEXT("AttachVehicle")));
+	FRotator Rotation = VehicleStand->GetSocketRotation(FName(TEXT("AttachVehicle")));
+	FActorSpawnParameters SpawnParameters;
+	if (IsInInventory)
+	{
+		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->Get(), Location, Rotation, SpawnParameters);
+	}
+	else
+	{
+		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(VehicleCatalog.Find(VehicleValue)->Get(), Location, Rotation, SpawnParameters);
+	}
+	CurrentCatalogVehicle->GetMesh()->SetSimulatePhysics(false);
+	CurrentCatalogVehicle->AttachToComponent(VehicleStand, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void ABaseGarage::CreateMenuWidget()

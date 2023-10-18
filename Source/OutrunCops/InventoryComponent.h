@@ -26,6 +26,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	FORCEINLINE TMap<int32, TSubclassOf<ABaseVehiclePawn>> GetVehicleInventory() { return PlayerInventory; }
+	FORCEINLINE void SetVehicleInventory(TMap<int32, TSubclassOf<ABaseVehiclePawn>> Inventory) { PlayerInventory = Inventory; }
 
 	UFUNCTION(BlueprintCallable)
 	void AddToInventory(int32 Value, TSubclassOf<ABaseVehiclePawn> Vehicle);
@@ -35,5 +36,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool IsInInventory(int32 Value);
+
 		
 };

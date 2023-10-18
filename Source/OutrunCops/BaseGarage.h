@@ -30,10 +30,14 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	void DestroyPreviousVehicle();
+	void SpawnNewVehicle(int32 VehicleValue, bool IsInInventory);
+
 	void CreateMenuWidget();
 	void CreateShopWidget();
 
 private:
+
 
 	// Widgets
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
@@ -74,8 +78,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	ABaseVehiclePawn* SetPreviewVehicle(int32 CurrentValue);
+	ABaseVehiclePawn* SetPreviewVehicle(int32 VehicleValue);
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetState(EWidgetState ChangeWidgetState);
+
+	TMap<int32, TSubclassOf<ABaseVehiclePawn>> GetVehicleCatalog() { return VehicleCatalog; }
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE ABaseVehiclePawn* GetCurrentPreviewVehicle() { return CurrentCatalogVehicle; }
 
 };

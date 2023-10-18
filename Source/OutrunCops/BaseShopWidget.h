@@ -6,6 +6,7 @@
 
 class ABaseGarage;
 class ABasePlayerController;
+class UBaseGameInstance;
 
 UCLASS()
 class OUTRUNCOPS_API UBaseShopWidget : public UUserWidget
@@ -16,17 +17,38 @@ protected:
 
 	virtual void NativeConstruct() override;
 
+	UFUNCTION(BlueprintCallable)
+	void SaveCurrentVehicleInt(int32 CurrentVehicle);
+
+	UFUNCTION(BlueprintCallable)
+	bool AddVehicleInt();
+
+	UFUNCTION(BlueprintCallable)
+	bool SubtractVehicleInt();
 
 private:
-
+	// REFERENCES
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
 	ABaseGarage* GarageRef;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
-	ABasePlayerController* PC;
+	ABasePlayerController* PlayerControllerRef;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
+	UBaseGameInstance* GameInstanceRef;
+
+	// Widget Values
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
+	int32 VehicleInt = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
+	int32 AmountOfVehiclesInCatalog;
 
 public:
 
 	void SetGarageRef(ABaseGarage* BaseGarage) { GarageRef = BaseGarage; }
+
+	FORCEINLINE void SetVehicleInt(int32 Value) { VehicleInt = Value; }
+	FORCEINLINE int32 GetVehicleInt() { return VehicleInt; }
 
 };

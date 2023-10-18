@@ -1,5 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+#include "Kismet/GameplayStatics.h"
 
 #include "BaseGameplayWidget.h"
 
+void UBaseGameplayWidget::OpenMenuLevel()
+{
+	//Cast<ABasePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetInventory()->GetVehicleInventory();
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("MainMenu"));
+}

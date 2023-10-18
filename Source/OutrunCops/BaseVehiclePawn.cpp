@@ -45,6 +45,7 @@ void ABaseVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("Throttle", this, &ABaseVehiclePawn::Throttle);
 	PlayerInputComponent->BindAxis("Brake", this, &ABaseVehiclePawn::Brake);
 	PlayerInputComponent->BindAxis("Steer", this, &ABaseVehiclePawn::Steer);
+
 }
 
 void ABaseVehiclePawn::Throttle(float AxisValue)

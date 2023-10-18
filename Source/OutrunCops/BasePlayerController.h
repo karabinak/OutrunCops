@@ -22,11 +22,18 @@ private:
 	UInventoryComponent* Inventory;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	int32 PlayerBasicCurrency = 30000;
+	int32 PlayerBasicCurrency;
 
 public:
 
 	FORCEINLINE UInventoryComponent* GetInventory() const { return Inventory; }
+
+	FORCEINLINE void SetPlayerBasicCurrency(int32 BasicCurrency) { PlayerBasicCurrency = BasicCurrency; }
 	FORCEINLINE int32 GetPlayerBasicCurrency() const { return PlayerBasicCurrency; }
+
+	UFUNCTION(BlueprintCallable)
+	void AddBasicCurrency(int32 BasicCurrency);
+	UFUNCTION(BlueprintCallable)
+	void SubtractBasicCurrency(int32 BasicCurrency);
 
 };
