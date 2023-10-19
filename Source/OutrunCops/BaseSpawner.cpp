@@ -12,15 +12,20 @@ void ABaseSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SpawnRoad();
-	SpawnRoad();
+	SpawnRoad(0, true);
+	SpawnRoad(0, true);
+	SpawnRoad(0, true);
+	SpawnRoad(0, true);
 }
 
-void ABaseSpawner::SpawnRoad()
+void ABaseSpawner::SpawnRoad(int32 RoadNumber, bool CustomRoad)
 {
-	// Random Road Generator
-	const int32 RandNumber = FMath::RandRange(0, RoadCollection.Num() - 1);
-	UClass* SelectedRoad = RoadCollection[RandNumber];
+	RandRoad = FMath::RandRange(0, RoadCollection.Num() - 1);
+	if (CustomRoad)
+	{
+		RandRoad = RoadNumber;
+	}
+	UClass* SelectedRoad = RoadCollection[RandRoad];
 
 	// Getting Vector And Rotator to spawn new road
 	if (!SpawnedRoads.IsEmpty())

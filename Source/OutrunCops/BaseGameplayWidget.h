@@ -14,7 +14,8 @@ class OUTRUNCOPS_API UBaseGameplayWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-protected:
+public:
 	UFUNCTION(BlueprintCallable)
-	void OpenMenuLevel();
+	void AddPauseToViewport();
+
 };

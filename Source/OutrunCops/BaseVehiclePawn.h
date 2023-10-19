@@ -26,10 +26,9 @@ protected:
 	void Throttle(float AxisValue);
 	void Brake(float AxisValue);
 	void Steer(float AxisValue);
+	void CalculateDistance();
 
 private:
-
-	// TO DO VEHICLE WIDGET COMPONENT
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm;
@@ -45,5 +44,21 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget", meta = (AllowPrivateAccess = "true"))
 	FName Name = TEXT("Polo");
 
+	// Distance Varaibles
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Distance Calculation", meta = (AllowPrivateAccess = "true"))
+	float Distance = 0.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Distance Calculation", meta = (AllowPrivateAccess = "true"))
+	FVector LastFrameVector;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Distance Calculation", meta = (AllowPrivateAccess = "true"))
+	bool bCanCalculateDistance = false;
+
 public:
+
+	UFUNCTION()
+	void ChangeCamera(float Axis);
+
+	FORCEINLINE void SetCanCalculateDistance(bool CanCalculate) { bCanCalculateDistance = CanCalculate; }
 };

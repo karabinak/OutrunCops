@@ -1,9 +1,9 @@
+#include "OutrunCopsGameModeGameplay.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "BaseGameplayWidget.h"
 
-void UBaseGameplayWidget::OpenMenuLevel()
+void UBaseGameplayWidget::AddPauseToViewport()
 {
-	//Cast<ABasePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetInventory()->GetVehicleInventory();
-	UGameplayStatics::OpenLevel(GetWorld(), TEXT("MainMenu"));
+	Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()))->GetPauseWidget()->AddToViewport();
 }

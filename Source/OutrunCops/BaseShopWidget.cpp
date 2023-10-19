@@ -22,7 +22,7 @@ void UBaseShopWidget::NativeConstruct()
 
 void UBaseShopWidget::SaveCurrentVehicleInt(int32 CurrentVehicle)
 {
-	Cast<UBaseGameInstance>(GetGameInstance())->SetVehicleInt_Inst(CurrentVehicle);
+	GameInstanceRef->SetVehicleInt_Inst(CurrentVehicle);
 }
 
 bool UBaseShopWidget::AddVehicleInt()

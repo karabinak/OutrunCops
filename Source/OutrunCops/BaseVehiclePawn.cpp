@@ -37,7 +37,7 @@ void ABaseVehiclePawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-
+	CalculateDistance();
 }
 
 void ABaseVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -61,4 +61,21 @@ void ABaseVehiclePawn::Brake(float AxisValue)
 void ABaseVehiclePawn::Steer(float AxisValue)
 {
 	GetVehicleMovement()->SetSteeringInput(AxisValue);
+}
+
+void ABaseVehiclePawn::CalculateDistance()
+{
+	if (!bCanCalculateDistance) return;
+	const FVector CurrentLocation = GetActorLocation();
+	double DistanceOneSec = FVector::Dist(CurrentLocation, LastFrameVector);
+
+	Distance += DistanceOneSec / 100;
+	LastFrameVector = CurrentLocation;
+	UE_LOG(LogTemp, Warning, TEXT("%f"), Distance);
+}
+
+void ABaseVehiclePawn::ChangeCamera(float Axis)
+{
+	FRotator NewCameraRot = SpringArm->GetRelativeRotation() + FRotator(0.f, Axis, 0.f);
+	SpringArm->SetRelativeRotation(NewCameraRot);
 }

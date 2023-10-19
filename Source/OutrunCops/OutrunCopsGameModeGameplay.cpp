@@ -13,14 +13,20 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
 
 	FActorSpawnParameters ActorSpawnParameters;
-	ABaseVehiclePawn* Vehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(500.f, 0.f, 50.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
+	ABaseVehiclePawn* Vehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(500.f, 0.f, 15.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Vehicle);
 
 	CreateGameplayWidget();
+	CreatePauseWidget();
+	CreateEndRunWidget();
 
 	if (GameplayWidget)
 	{
 		GameplayWidget->AddToViewport();
+	}
+	if (Vehicle)
+	{
+		Vehicle->SetCanCalculateDistance(true);
 	}
 }
 
@@ -29,5 +35,21 @@ void AOutrunCopsGameModeGameplay::CreateGameplayWidget()
 	if (GameplayWidgetClass)
 	{
 		GameplayWidget = CreateWidget<UUserWidget>(GetWorld(), GameplayWidgetClass);
+	}
+}
+
+void AOutrunCopsGameModeGameplay::CreatePauseWidget()
+{
+	if (PauseWidgetClass)
+	{
+		PauseWidget = CreateWidget<UUserWidget>(GetWorld(), PauseWidgetClass);
+	}
+}
+
+void AOutrunCopsGameModeGameplay::CreateEndRunWidget()
+{
+	if (EndRunWidgetClass)
+	{
+		EndRunWidget = CreateWidget<UUserWidget>(GetWorld(), EndRunWidgetClass);
 	}
 }
