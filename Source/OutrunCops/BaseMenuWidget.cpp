@@ -1,8 +1,9 @@
+#include "BaseMenuWidget.h"
+
 #include "Kismet/GameplayStatics.h"
 #include "BaseGameInstance.h"
 #include "BasePlayerController.h"
 #include "InventoryComponent.h"
-#include "BaseMenuWidget.h"
 
 void UBaseMenuWidget::NativeConstruct()
 {

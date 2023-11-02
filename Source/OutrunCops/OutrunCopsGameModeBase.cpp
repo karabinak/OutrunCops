@@ -18,4 +18,6 @@ void AOutrunCopsGameModeBase::BeginPlay()
 	// Setting Basic Currency
 	Cast<ABasePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetPlayerBasicCurrency(Cast<UBaseGameInstance>(GetGameInstance())->GetPlayerBasicCurrency_Inst());
 
+
+
 }

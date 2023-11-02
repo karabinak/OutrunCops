@@ -4,6 +4,7 @@
 #include "BaseVehiclePawn.h"
 #include "Kismet/GameplayStatics.h"
 #include "BaseSpawner.h"
+#include "OutrunCopsGameModeGameplay.h"
 
 ABaseRoad::ABaseRoad()
 {
@@ -33,6 +34,8 @@ void ABaseRoad::OnSpawnerTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp
 	{
 		SpawnerTrigger->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 		SpawnerRef->SpawnRoad();
+		AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
+		Gamemode->SpawnPoliceCar();
 	}
 }
 

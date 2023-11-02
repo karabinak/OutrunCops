@@ -18,8 +18,8 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 	Camera->SetupAttachment(SpringArm);
 
 	GetMesh()->SetSimulatePhysics(true);
-	SpringArm->TargetArmLength = 800.f;
-	SpringArm->SetRelativeRotation(FRotator(0.f, -25.f, 0.f));
+	SpringArm->TargetArmLength = 1500.f;
+	SpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
 
 	VehicleWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("VehicleWidget"));
 	VehicleWidget->SetupAttachment(GetRootComponent());
@@ -71,7 +71,6 @@ void ABaseVehiclePawn::CalculateDistance()
 
 	Distance += DistanceOneSec / 100;
 	LastFrameVector = CurrentLocation;
-	UE_LOG(LogTemp, Warning, TEXT("%f"), Distance);
 }
 
 void ABaseVehiclePawn::ChangeCamera(float Axis)

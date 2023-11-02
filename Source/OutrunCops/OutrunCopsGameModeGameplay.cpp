@@ -1,10 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+#include "OutrunCopsGameModeGameplay.h"
 
+#include "BaseVehiclePawn.h"
 #include "BaseGameInstance.h"
 #include "BaseVehiclePawn.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
-#include "OutrunCopsGameModeGameplay.h"
+#include "BaseEnemy.h"
 
 void AOutrunCopsGameModeGameplay::BeginPlay()
 {
@@ -13,8 +14,8 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
 
 	FActorSpawnParameters ActorSpawnParameters;
-	ABaseVehiclePawn* Vehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(500.f, 0.f, 15.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Vehicle);
+	BaseVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(500.f, 0.f, 15.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BaseVehicle);
 
 	CreateGameplayWidget();
 	CreatePauseWidget();
@@ -24,11 +25,37 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	{
 		GameplayWidget->AddToViewport();
 	}
-	if (Vehicle)
+	if (BaseVehicle)
 	{
-		Vehicle->SetCanCalculateDistance(true);
+		BaseVehicle->SetCanCalculateDistance(true);
 	}
 }
+
+void AOutrunCopsGameModeGameplay::SpawnPoliceCar()
+{
+	if (PoliceAmount < MaxPolice)
+	{
+		FActorSpawnParameters Spawnparameters;
+
+		for (int i = 0; i < 5; i++)
+		{
+			ABaseEnemy* PoliceCar = GetWorld()->SpawnActor<ABaseEnemy>(BasicPoliceCar.Get(), PoliceSpawnTransform, Spawnparameters);
+			if (PoliceCar)
+			{
+				SetPoliceAmount(1);
+				PoliceCar = nullptr;
+				return;
+			}
+			PoliceSpawnTransform.SetLocation(PoliceSpawnTransform.GetLocation() + FVector(-50.f, 0.f, 0.f));
+		}
+	}
+}
+
+void AOutrunCopsGameModeGameplay::SetAmountOfChasersInSphere(int32 Amount)
+{
+	AmountOfChasersInSphere += Amount;
+}
+
 
 void AOutrunCopsGameModeGameplay::CreateGameplayWidget()
 {
