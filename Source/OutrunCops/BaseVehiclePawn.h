@@ -55,6 +55,32 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Distance Calculation", meta = (AllowPrivateAccess = "true"))
 	bool bCanCalculateDistance = false;
 
+	// Car Parts
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* WheelFL;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* WheelFR;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* WheelRL;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* WheelRR;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* FrontBumper;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* FrontBumperCover;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* RearBumper;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* RearBumperCover;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* MirrorR;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* MirrorL;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* Hood;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* Trunk;
+
 public:
 
 	UFUNCTION()
