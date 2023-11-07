@@ -35,9 +35,7 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 	WheelRR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RR_Wheel"));
 
 	FrontBumper = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontBumper"));
-	FrontBumperCover = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontBumperCover"));
 	RearBumper = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearBumper"));
-	RearBumperCover = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearBumperCover"));
 	MirrorR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MirrorR"));
 	MirrorL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MirrorL"));
 	Hood = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hood"));
@@ -49,9 +47,7 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 	WheelRR->SetupAttachment(GetMesh(), TEXT("RR"));
 
 	FrontBumper->SetupAttachment(GetMesh());
-	FrontBumperCover->SetupAttachment(GetMesh());
 	RearBumper->SetupAttachment(GetMesh());
-	RearBumperCover->SetupAttachment(GetMesh());
 	MirrorR->SetupAttachment(GetMesh());
 	MirrorL->SetupAttachment(GetMesh());
 	Hood->SetupAttachment(GetMesh());
