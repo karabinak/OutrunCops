@@ -57,6 +57,8 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 void ABaseVehiclePawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetMesh()->OnComponentHit.AddDynamic(this, &ABaseVehiclePawn::OnHit);
 }
 
 void ABaseVehiclePawn::Tick(float DeltaSeconds)
@@ -103,4 +105,38 @@ void ABaseVehiclePawn::ChangeCamera(float Axis)
 {
 	FRotator NewCameraRot = SpringArm->GetRelativeRotation() + FRotator(0.f, Axis, 0.f);
 	SpringArm->SetRelativeRotation(NewCameraRot);
+}
+
+void ABaseVehiclePawn::DetachComponent(UStaticMeshComponent* CarPart)
+{
+	CarPart->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	CarPart->SetSimulatePhysics(true);
+	CarPart->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
+	CarPart->AddImpulse(FVector(0.f, 0.f, 500.f));
+}
+
+void ABaseVehiclePawn::AttachComponent(UStaticMeshComponent* CarPart)
+{
+	CarPart->SetSimulatePhysics(false);
+	CarPart->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CarPart->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
+	CarPart->SetWorldRotation(FRotator::ZeroRotator);
+	CarPart->SetRelativeLocation(FVector::ZeroVector);
+}
+
+void ABaseVehiclePawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (!bCanHit) return;
+	bCanHit = false;
+
+	float Impact = FMath::Floor(NormalImpulse.Length() / 70000.f) ;
+	HitPoints -= Impact;
+
+	UE_LOG(LogTemp, Warning, TEXT("%f"), HitPoints);
+	GetWorld()->GetTimerManager().SetTimer(HitCooldownTimer, this, &ABaseVehiclePawn::ResetCanHit, 3.f);
+}
+
+void ABaseVehiclePawn::ResetCanHit()
+{
+	bCanHit = true;
 }

@@ -27,6 +27,14 @@ protected:
 	void Brake(float AxisValue);
 	void Steer(float AxisValue);
 	void CalculateDistance();
+	void DetachComponent(UStaticMeshComponent* CarPart);
+	void AttachComponent(UStaticMeshComponent* CarPart);
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	void ResetCanHit();
+
 
 private:
 
@@ -76,6 +84,14 @@ private:
 	class UStaticMeshComponent* Hood;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* Trunk;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	bool bCanHit = true;
+
+	FTimerHandle HitCooldownTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	float HitPoints = 200.f;
 
 public:
 
