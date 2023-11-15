@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "BaseGarage.h"
 #include "BasePlayerController.h"
+#include "BaseVehiclePawn.h"
 
 void UBaseShopWidget::NativeConstruct()
 {
@@ -39,4 +40,20 @@ bool UBaseShopWidget::SubtractVehicleInt()
 
 	VehicleInt--;
 	return true;
+}
+
+void UBaseShopWidget::BuyVehicle()
+{
+	if (PlayerControllerRef)
+	{
+		if (PlayerControllerRef->GetPlayerBasicCurrency() >= GarageRef->GetCurrentCatalogVehicle()->GetPrice())
+		{
+			PlayerControllerRef->SubtractBasicCurrency(GarageRef->GetCurrentCatalogVehicle()->GetPrice());
+		}
+		else
+		{
+			// NO MONEY?
+			GEngine->AddOnScreenDebugMessage(1, -1.f, FColor::Red, FString::Printf(TEXT("No Bitches??")));
+		}
+	}
 }

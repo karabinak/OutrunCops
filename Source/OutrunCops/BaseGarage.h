@@ -84,6 +84,6 @@ public:
 	TMap<int32, TSubclassOf<ABaseVehiclePawn>> GetVehicleCatalog() { return VehicleCatalog; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE ABaseVehiclePawn* GetCurrentPreviewVehicle() { return CurrentCatalogVehicle; }
+	FORCEINLINE ABaseVehiclePawn* GetCurrentCatalogVehicle() { return CurrentCatalogVehicle; }
 
 };

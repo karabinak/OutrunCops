@@ -1,5 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BaseEndGameWidget.h"
+#include "MySaveGame.h"
 
+UMySaveGame::UMySaveGame()
+{
+}

@@ -3,15 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "BaseEndGameWidget.generated.h"
+#include "GameFramework/SaveGame.h"
+#include "MySaveGame.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class OUTRUNCOPS_API UBaseEndGameWidget : public UUserWidget
+class OUTRUNCOPS_API UMySaveGame : public USaveGame
 {
 	GENERATED_BODY()
 	
+public:
+
+	UMySaveGame();
 };

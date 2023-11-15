@@ -26,6 +26,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	bool SubtractVehicleInt();
 
+	UFUNCTION(BlueprintCallable)
+	void BuyVehicle();
+
 private:
 	// REFERENCES
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))

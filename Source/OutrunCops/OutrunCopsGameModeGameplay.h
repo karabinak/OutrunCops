@@ -34,6 +34,8 @@ protected:
 	void CreatePauseWidget();
 	void CreateEndRunWidget();
 
+	void AddEndRunToViewport();
+
 private:
 	// Gameplay Widget
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
@@ -88,4 +90,6 @@ public:
 	void SpawnPoliceCar();
 
 	void SetAmountOfChasersInSphere(int32 Amount);
+
+	void EndRun();
 };

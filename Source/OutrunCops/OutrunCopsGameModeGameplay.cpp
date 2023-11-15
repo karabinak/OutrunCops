@@ -5,6 +5,7 @@
 #include "BaseVehiclePawn.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "BasePlayerController.h"
 #include "BaseEnemy.h"
 
 void AOutrunCopsGameModeGameplay::BeginPlay()
@@ -16,6 +17,7 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	FActorSpawnParameters ActorSpawnParameters;
 	BaseVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(500.f, 0.f, 15.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BaseVehicle);
+	Cast<ABasePlayerController>(BaseVehicle->GetController())->SetPlayerBasicCurrency(GameInstance->GetPlayerBasicCurrency_Inst());
 
 	CreateGameplayWidget();
 	CreatePauseWidget();
@@ -56,7 +58,6 @@ void AOutrunCopsGameModeGameplay::SetAmountOfChasersInSphere(int32 Amount)
 	AmountOfChasersInSphere += Amount;
 }
 
-
 void AOutrunCopsGameModeGameplay::CreateGameplayWidget()
 {
 	if (GameplayWidgetClass)
@@ -79,4 +80,17 @@ void AOutrunCopsGameModeGameplay::CreateEndRunWidget()
 	{
 		EndRunWidget = CreateWidget<UUserWidget>(GetWorld(), EndRunWidgetClass);
 	}
+}
+
+void AOutrunCopsGameModeGameplay::AddEndRunToViewport()
+{
+	if (EndRunWidget)
+	{
+		EndRunWidget->AddToViewport();
+	}
+}
+
+void AOutrunCopsGameModeGameplay::EndRun()
+{
+	AddEndRunToViewport();
 }

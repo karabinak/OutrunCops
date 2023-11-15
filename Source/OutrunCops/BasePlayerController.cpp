@@ -26,5 +26,6 @@ void ABasePlayerController::SubtractBasicCurrency(int32 BasicCurrency)
 	{
 		PlayerBasicCurrency = PlayerBasicCurrency - BasicCurrency;
 	}
+	GEngine->AddOnScreenDebugMessage(1, -1.f, FColor::Red, FString::Printf(TEXT("Currency: %i"), PlayerBasicCurrency));
 	Cast<UBaseGameInstance>(GetGameInstance())->SetPlayerBasicCurrency_Inst(PlayerBasicCurrency);
 }

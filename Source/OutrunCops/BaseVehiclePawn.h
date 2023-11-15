@@ -7,6 +7,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UWidgetComponent;
+class UStaticMeshComponent;
 
 UCLASS()
 class OUTRUNCOPS_API ABaseVehiclePawn : public AWheeledVehiclePawn
@@ -35,6 +36,8 @@ protected:
 
 	void ResetCanHit();
 
+	// TO DELETE
+	void Interaction();
 
 private:
 
@@ -65,25 +68,25 @@ private:
 
 	// Car Parts
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* WheelFL;
+	 UStaticMeshComponent* WheelFL;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* WheelFR;
+	 UStaticMeshComponent* WheelFR;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* WheelRL;
+	 UStaticMeshComponent* WheelRL;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* WheelRR;
+	UStaticMeshComponent* WheelRR;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* FrontBumper;
+	UStaticMeshComponent* FrontBumper;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* RearBumper;
+	UStaticMeshComponent* RearBumper;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* MirrorR;
+	UStaticMeshComponent* MirrorR;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* MirrorL;
+	UStaticMeshComponent* MirrorL;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* Hood;
+	UStaticMeshComponent* Hood;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* Trunk;
+	UStaticMeshComponent* Trunk;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	bool bCanHit = true;
@@ -91,7 +94,14 @@ private:
 	FTimerHandle HitCooldownTimer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	float HitPoints = 200.f;
+	float HitPoints = 100.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	float OnePartHitPoints = HitPoints / 6;
+
+	int32 ActiveParts = 5;
+
+	TArray<UStaticMeshComponent*> PartsToDetach;
 
 public:
 
@@ -99,4 +109,6 @@ public:
 	void ChangeCamera(float Axis);
 
 	FORCEINLINE void SetCanCalculateDistance(bool CanCalculate) { bCanCalculateDistance = CanCalculate; }
+	FORCEINLINE float GetDistance() {return Distance; }
+	FORCEINLINE int32 GetPrice() { return Price; }
 };

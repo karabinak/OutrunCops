@@ -6,6 +6,8 @@
 #include "ChaosWheeledVehicleMovementComponent.h"
 #include "Components/WidgetComponent.h"
 
+
+#include "OutrunCopsGameModeGameplay.h"
 #include "Kismet/GameplayStatics.h"
 
 ABaseVehiclePawn::ABaseVehiclePawn()
@@ -59,6 +61,13 @@ void ABaseVehiclePawn::BeginPlay()
 	Super::BeginPlay();
 
 	GetMesh()->OnComponentHit.AddDynamic(this, &ABaseVehiclePawn::OnHit);
+
+	PartsToDetach.Add(FrontBumper);
+	PartsToDetach.Add(RearBumper);
+	PartsToDetach.Add(MirrorR);
+	PartsToDetach.Add(MirrorL);
+	PartsToDetach.Add(Hood);
+	PartsToDetach.Add(Trunk);
 }
 
 void ABaseVehiclePawn::Tick(float DeltaSeconds)
@@ -74,6 +83,7 @@ void ABaseVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("Brake", this, &ABaseVehiclePawn::Brake);
 	PlayerInputComponent->BindAxis("Steer", this, &ABaseVehiclePawn::Steer);
 
+	PlayerInputComponent->BindAction("Interaction", EInputEvent::IE_Pressed, this, &ABaseVehiclePawn::Interaction);
 }
 
 void ABaseVehiclePawn::Throttle(float AxisValue)
@@ -129,8 +139,32 @@ void ABaseVehiclePawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 	if (!bCanHit) return;
 	bCanHit = false;
 
-	float Impact = FMath::Floor(NormalImpulse.Length() / 70000.f) ;
+	float Impact = FMath::Floor(NormalImpulse.Length() / 60000.f);
 	HitPoints -= Impact;
+
+	if (HitPoints < ActiveParts * OnePartHitPoints && !PartsToDetach.IsEmpty())
+	{
+		int32 Random = FMath::RandRange(0, PartsToDetach.Num() - 1);
+		DetachComponent(PartsToDetach[Random]);
+		PartsToDetach.RemoveAt(Random);
+	}
+
+	if (HitPoints <= 0.f)
+	{
+		DetachComponent(WheelFL);
+		DetachComponent(WheelFR);
+		DetachComponent(WheelRL);
+		DetachComponent(WheelRR);
+
+
+		UChaosWheeledVehicleMovementComponent* EngineRef = Cast<UChaosWheeledVehicleMovementComponent>(GetVehicleMovement());
+
+		EngineRef->WheelSetups[0].WheelClass = nullptr;
+		EngineRef->WheelSetups[1].WheelClass = nullptr;
+		EngineRef->WheelSetups[2].WheelClass = nullptr;
+		EngineRef->WheelSetups[3].WheelClass = nullptr;
+
+	}
 
 	UE_LOG(LogTemp, Warning, TEXT("%f"), HitPoints);
 	GetWorld()->GetTimerManager().SetTimer(HitCooldownTimer, this, &ABaseVehiclePawn::ResetCanHit, 3.f);
@@ -139,4 +173,11 @@ void ABaseVehiclePawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 void ABaseVehiclePawn::ResetCanHit()
 {
 	bCanHit = true;
+}
+
+void ABaseVehiclePawn::Interaction()
+{
+	AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
+	Gamemode->EndRun();
+
 }
