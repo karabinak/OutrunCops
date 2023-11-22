@@ -45,6 +45,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	float CameraChangeValue = 0.f;
 
+	// Organization
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	USceneComponent* RoadAssets;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	USceneComponent* RoadProps;
+
 public:
 
 	FORCEINLINE UStaticMeshComponent* GetMesh() const { return Road; }

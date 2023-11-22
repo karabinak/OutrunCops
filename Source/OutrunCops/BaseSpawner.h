@@ -33,6 +33,9 @@ private:
 	int32 RandRoad = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	int32 LastRoadSpawned = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	FVector SpawnLocation = FVector::ZeroVector;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
@@ -41,4 +44,7 @@ private:
 public: 
 
 	void SpawnRoad(int32 RoadNumber = 0, bool CustomRoad = false);
+	void GetSpawnTransform();
+	void CreateNewRoad(UClass* SelectedRoad);
+	void DestroyLastRoad();
 };

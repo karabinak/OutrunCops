@@ -20,31 +20,49 @@ void ABaseSpawner::BeginPlay()
 
 void ABaseSpawner::SpawnRoad(int32 RoadNumber, bool CustomRoad)
 {
-	RandRoad = FMath::RandRange(0, RoadCollection.Num() - 1);
 	if (CustomRoad)
 	{
 		RandRoad = RoadNumber;
 	}
+	else
+	{
+		while (RandRoad == LastRoadSpawned)
+		{
+			RandRoad = FMath::RandRange(0, RoadCollection.Num() - 1);
+		}
+	}
+	LastRoadSpawned = RandRoad;
+
 	UClass* SelectedRoad = RoadCollection[RandRoad];
 
-	// Getting Vector And Rotator to spawn new road
+	GetSpawnTransform();
+	DestroyLastRoad();
+	CreateNewRoad(SelectedRoad);
+}
+
+void ABaseSpawner::GetSpawnTransform()
+{
 	if (!SpawnedRoads.IsEmpty())
 	{
 		FTransform SocketTransform = SpawnedRoads[SpawnedRoads.Num() - 1]->GetMesh()->GetSocketTransform("AttachSocket");
 		SpawnLocation = SocketTransform.GetLocation();
 		SpawnRotation = SocketTransform.GetRotation().Rotator();
 	}
+}
 
-	// Destroying Last Road
+void ABaseSpawner::CreateNewRoad(UClass* SelectedRoad)
+{
+	FActorSpawnParameters SpawnParameters;
+	ABaseRoad* Road = GetWorld()->SpawnActor<ABaseRoad>(SelectedRoad, SpawnLocation, SpawnRotation, SpawnParameters);
+	Road->SetSpawnRef(this);
+	SpawnedRoads.Add(Road);
+}
+
+void ABaseSpawner::DestroyLastRoad()
+{
 	if (SpawnedRoads.Num() >= MaxSpawnedRoads)
 	{
 		SpawnedRoads[0]->Destroy();
 		SpawnedRoads.RemoveAt(0);
 	}
-
-	// Create Road
-	FActorSpawnParameters SpawnParameters;
-	ABaseRoad* Road = GetWorld()->SpawnActor<ABaseRoad>(SelectedRoad, SpawnLocation, SpawnRotation, SpawnParameters);
-	Road->SetSpawnRef(this);
-	SpawnedRoads.Add(Road);
 }

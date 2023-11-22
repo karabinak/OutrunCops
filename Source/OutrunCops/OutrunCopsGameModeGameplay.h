@@ -72,9 +72,6 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"));
 	FTransform PoliceSpawnTransform = FTransform(FRotator(0.f, 0.f, 0.f), FVector(500.f, 0.f, 50.f), FVector(1.f, 1.f, 1.f));
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	int32 AmountOfChasersInSphere = 0;
-
 public:
 	
 	FORCEINLINE UUserWidget* GetPauseWidget() { return PauseWidget; }
@@ -88,8 +85,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SpawnPoliceCar();
-
-	void SetAmountOfChasersInSphere(int32 Amount);
 
 	void EndRun();
 };
