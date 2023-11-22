@@ -53,6 +53,11 @@ void AOutrunCopsGameModeGameplay::SpawnPoliceCar()
 	}
 }
 
+void AOutrunCopsGameModeGameplay::SetAmountOfChasersInSphere(int32 Amount)
+{
+	AmountOfChasersInSphere += Amount;
+}
+
 void AOutrunCopsGameModeGameplay::CreateGameplayWidget()
 {
 	if (GameplayWidgetClass)
@@ -88,5 +93,4 @@ void AOutrunCopsGameModeGameplay::AddEndRunToViewport()
 void AOutrunCopsGameModeGameplay::EndRun()
 {
 	AddEndRunToViewport();
-	BaseVehicle->SetCanCalculateDistance(false);
 }

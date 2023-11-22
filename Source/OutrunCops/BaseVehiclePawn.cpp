@@ -60,8 +60,6 @@ void ABaseVehiclePawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
-
 	GetMesh()->OnComponentHit.AddDynamic(this, &ABaseVehiclePawn::OnHit);
 
 	PartsToDetach.Add(FrontBumper);
@@ -77,7 +75,6 @@ void ABaseVehiclePawn::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	CalculateDistance();
-	CalculatePoliceWasted();
 }
 
 void ABaseVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -154,7 +151,19 @@ void ABaseVehiclePawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 
 	if (HitPoints <= 0.f)
 	{
-		Gamemode->EndRun();
+		DetachComponent(WheelFL);
+		DetachComponent(WheelFR);
+		DetachComponent(WheelRL);
+		DetachComponent(WheelRR);
+
+
+		UChaosWheeledVehicleMovementComponent* EngineRef = Cast<UChaosWheeledVehicleMovementComponent>(GetVehicleMovement());
+
+		EngineRef->WheelSetups[0].WheelClass = nullptr;
+		EngineRef->WheelSetups[1].WheelClass = nullptr;
+		EngineRef->WheelSetups[2].WheelClass = nullptr;
+		EngineRef->WheelSetups[3].WheelClass = nullptr;
+
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("%f"), HitPoints);
@@ -166,24 +175,9 @@ void ABaseVehiclePawn::ResetCanHit()
 	bCanHit = true;
 }
 
-void ABaseVehiclePawn::CalculatePoliceWasted()
-{
-	if (AmountOfChasersInSphere > 0 && GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 <= MinSpeedToGetWasted && GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 >= -MinSpeedToGetWasted)
-	{
-		ElapsedTimeWasted = GetWorldTimerManager().GetTimerElapsed(TimeToWasted);
-		if (!GetWorldTimerManager().IsTimerActive(TimeToWasted))
-		{
-			GetWorldTimerManager().SetTimer(TimeToWasted, Gamemode, &AOutrunCopsGameModeGameplay::EndRun, TimeToGetWasted);
-		}
-	}
-	else
-	{
-		GetWorldTimerManager().ClearTimer(TimeToWasted);
-		ElapsedTimeWasted = 0.f;
-	}
-}
-
 void ABaseVehiclePawn::Interaction()
 {
+	AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
 	Gamemode->EndRun();
+
 }

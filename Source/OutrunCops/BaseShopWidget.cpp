@@ -8,7 +8,6 @@
 #include "BaseGarage.h"
 #include "BasePlayerController.h"
 #include "BaseVehiclePawn.h"
-#include "InventoryComponent.h"
 
 void UBaseShopWidget::NativeConstruct()
 {
@@ -50,12 +49,15 @@ void UBaseShopWidget::BuyVehicle()
 		if (PlayerControllerRef->GetPlayerBasicCurrency() >= GarageRef->GetCurrentCatalogVehicle()->GetPrice())
 		{
 			PlayerControllerRef->SubtractBasicCurrency(GarageRef->GetCurrentCatalogVehicle()->GetPrice());
+<<<<<<< HEAD
 			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, GarageRef->GetCurrentCatalogVehicle());
+=======
+>>>>>>> parent of 82e9278 (Save)
 		}
 		else
 		{
 			// NO MONEY?
-			GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("No Bitches??")));
+			GEngine->AddOnScreenDebugMessage(1, -1.f, FColor::Red, FString::Printf(TEXT("No Bitches??")));
 		}
 	}
 }

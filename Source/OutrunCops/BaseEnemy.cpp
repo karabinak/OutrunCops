@@ -67,7 +67,7 @@ void ABaseEnemy::OverlappingWithPlayer(UPrimitiveComponent* OverlappedComp, AAct
 {
 	if (BaseVehicle == OtherActor)
 	{
-		BaseVehicle->SetAmountOfChasersInSphere(1);
+		Gamemode->SetAmountOfChasersInSphere(1);
 	}
 }
 
@@ -75,6 +75,6 @@ void ABaseEnemy::StopOverlappingWithPlayer(UPrimitiveComponent* OverlappedComp, 
 {
 	if (BaseVehicle == OtherActor)
 	{
-		BaseVehicle->SetAmountOfChasersInSphere(-1);
+		Gamemode->SetAmountOfChasersInSphere(-1);
 	}
 }

@@ -8,7 +8,6 @@ class USpringArmComponent;
 class UCameraComponent;
 class UWidgetComponent;
 class UStaticMeshComponent;
-class AOutrunCopsGameModeGameplay;
 
 UCLASS()
 class OUTRUNCOPS_API ABaseVehiclePawn : public AWheeledVehiclePawn
@@ -36,7 +35,6 @@ protected:
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	void ResetCanHit();
-	void CalculatePoliceWasted();
 
 	// TO DELETE
 	void Interaction();
@@ -56,8 +54,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget", meta = (AllowPrivateAccess = "true"))
 	FName Name = TEXT("Polo");
-
-	AOutrunCopsGameModeGameplay* Gamemode;
 
 	// Distance Varaibles
 
@@ -92,8 +88,6 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Trunk;
 
-	// Hitting
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	bool bCanHit = true;
 
@@ -109,24 +103,6 @@ private:
 
 	TArray<UStaticMeshComponent*> PartsToDetach;
 
-	// Chasers
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	int32 AmountOfChasersInSphere = 0;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	float MinSpeedToGetWasted = 30.f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-
-	float ElapsedTimeWasted = 0.f;
-
-	FTimerHandle TimeToWasted;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	float TimeToGetWasted = 3.f;
-
-
 public:
 
 	UFUNCTION()
@@ -135,6 +111,4 @@ public:
 	FORCEINLINE void SetCanCalculateDistance(bool CanCalculate) { bCanCalculateDistance = CanCalculate; }
 	FORCEINLINE float GetDistance() {return Distance; }
 	FORCEINLINE int32 GetPrice() { return Price; }
-
-	void SetAmountOfChasersInSphere(int32 Amount) { AmountOfChasersInSphere += Amount; }
 };

@@ -18,12 +18,6 @@ ABaseRoad::ABaseRoad()
 	SpawnerTrigger->SetupAttachment(GetRootComponent());
 	CameraTrigger->SetupAttachment(GetRootComponent());
 
-	RoadAssets = CreateDefaultSubobject<USceneComponent>(TEXT("RoadAssets"));
-	RoadProps = CreateDefaultSubobject<USceneComponent>(TEXT("RoadProps"));
-
-	RoadAssets->SetupAttachment(Road);
-	RoadProps->SetupAttachment(Road);
-
 }
 
 void ABaseRoad::BeginPlay()
