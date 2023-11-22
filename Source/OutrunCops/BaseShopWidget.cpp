@@ -49,8 +49,12 @@ void UBaseShopWidget::BuyVehicle()
 		if (PlayerControllerRef->GetPlayerBasicCurrency() >= GarageRef->GetCurrentCatalogVehicle()->GetPrice())
 		{
 			PlayerControllerRef->SubtractBasicCurrency(GarageRef->GetCurrentCatalogVehicle()->GetPrice());
+<<<<<<< HEAD
 			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, GarageRef->GetCurrentCatalogVehicle());
 
+=======
+			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, GarageRef->GetCurrentCatalogVehicle()->GetClass());
+>>>>>>> parent of 08a483a (savedv2)
 		}
 		else
 		{
@@ -58,10 +62,4 @@ void UBaseShopWidget::BuyVehicle()
 			GEngine->AddOnScreenDebugMessage(1, -1.f, FColor::Red, FString::Printf(TEXT("No Bitches??")));
 		}
 	}
-}
-
-void UBaseShopWidget::ChangeMaterial()
-{
-	GarageRef->GetCurrentCatalogVehicle()->GetMesh()->SetMaterial(0, Material);
-	PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, GarageRef->GetCurrentCatalogVehicle());
 }

@@ -29,9 +29,6 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void BuyVehicle();
 
-	UFUNCTION(BlueprintCallable)
-	void ChangeMaterial();
-
 private:
 	// REFERENCES
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
@@ -49,9 +46,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
 	int32 AmountOfVehiclesInCatalog;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	UMaterialInstance* Material;
 
 public:
 
