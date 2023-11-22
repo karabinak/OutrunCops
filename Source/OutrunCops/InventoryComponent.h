@@ -20,19 +20,19 @@ protected:
 private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	TMap<int32, TSubclassOf<ABaseVehiclePawn>> PlayerInventory;
+	TMap<int32, ABaseVehiclePawn*> PlayerInventory;
 
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	FORCEINLINE TMap<int32, TSubclassOf<ABaseVehiclePawn>> GetVehicleInventory() { return PlayerInventory; }
-	FORCEINLINE void SetVehicleInventory(TMap<int32, TSubclassOf<ABaseVehiclePawn>> Inventory) { PlayerInventory = Inventory; }
+	FORCEINLINE TMap<int32, ABaseVehiclePawn*> GetVehicleInventory() { return PlayerInventory; }
+	FORCEINLINE void SetVehicleInventory(TMap<int32, ABaseVehiclePawn*> Inventory) { PlayerInventory = Inventory; }
 
 	UFUNCTION(BlueprintCallable)
-	void AddToInventory(int32 Value, TSubclassOf<ABaseVehiclePawn> Vehicle);
+	void AddToInventory(int32 Value, ABaseVehiclePawn* Vehicle);
 
 	UFUNCTION(BlueprintCallable)
-	TSubclassOf<ABaseVehiclePawn> GetFromInventory(int32 Value);
+	ABaseVehiclePawn* GetFromInventory(int32 Value);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsInInventory(int32 Value);

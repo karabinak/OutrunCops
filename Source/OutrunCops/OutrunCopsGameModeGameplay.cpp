@@ -15,7 +15,7 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
 
 	FActorSpawnParameters ActorSpawnParameters;
-	BaseVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(500.f, 0.f, 15.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
+	BaseVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst()->StaticClass(), FVector(500.f, 0.f, 15.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BaseVehicle);
 	Cast<ABasePlayerController>(BaseVehicle->GetController())->SetPlayerBasicCurrency(GameInstance->GetPlayerBasicCurrency_Inst());
 

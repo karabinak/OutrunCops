@@ -99,7 +99,7 @@ void ABaseGarage::SpawnNewVehicle(int32 VehicleValue, bool IsInInventory)
 	FActorSpawnParameters SpawnParameters;
 	if (IsInInventory)
 	{
-		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->Get(), Location, Rotation, SpawnParameters);
+		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(PlayerController->GetInventory()->GetFromInventory(VehicleValue)->StaticClass(), Location, Rotation, SpawnParameters);
 	}
 	else
 	{

@@ -50,7 +50,7 @@ void UBaseShopWidget::BuyVehicle()
 		if (PlayerControllerRef->GetPlayerBasicCurrency() >= GarageRef->GetCurrentCatalogVehicle()->GetPrice())
 		{
 			PlayerControllerRef->SubtractBasicCurrency(GarageRef->GetCurrentCatalogVehicle()->GetPrice());
-			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, GarageRef->GetCurrentCatalogVehicle()->GetClass());
+			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, GarageRef->GetCurrentCatalogVehicle());
 		}
 		else
 		{
@@ -58,4 +58,10 @@ void UBaseShopWidget::BuyVehicle()
 			GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("No Bitches??")));
 		}
 	}
+}
+
+void UBaseShopWidget::ChangeMaterial()
+{
+	GarageRef->GetCurrentCatalogVehicle()->GetMesh()->SetMaterial(0, Material);
+	PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, GarageRef->GetCurrentCatalogVehicle());
 }

@@ -19,12 +19,12 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 }
 
-void UInventoryComponent::AddToInventory(int32 Value, TSubclassOf<ABaseVehiclePawn> Vehicle)
+void UInventoryComponent::AddToInventory(int32 Value, ABaseVehiclePawn* Vehicle)
 {
 	PlayerInventory.Add(Value, Vehicle);
 }
 
-TSubclassOf<ABaseVehiclePawn> UInventoryComponent::GetFromInventory(int32 Value)
+ABaseVehiclePawn* UInventoryComponent::GetFromInventory(int32 Value)
 {
 	if (PlayerInventory.Contains(Value))
 	{

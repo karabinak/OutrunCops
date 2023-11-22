@@ -16,10 +16,10 @@ class OUTRUNCOPS_API UBaseGameInstance : public UGameInstance
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<ABaseVehiclePawn> PlayerVehicle_Inst;
+	ABaseVehiclePawn* PlayerVehicle_Inst;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	TMap<int32, TSubclassOf<ABaseVehiclePawn>> PlayerInventory_Inst;
+	TMap<int32, ABaseVehiclePawn*> PlayerInventory_Inst;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
 	int32 VehicleInt_Inst = 0;
@@ -30,11 +30,11 @@ private:
 
 public:
 
-	FORCEINLINE void SetPlayerVehicle_Inst(TSubclassOf<ABaseVehiclePawn> Vehicle) { PlayerVehicle_Inst = Vehicle; }
-	FORCEINLINE TSubclassOf<ABaseVehiclePawn> GetPlayerVehicle_Inst() { return PlayerVehicle_Inst;}
+	FORCEINLINE void SetPlayerVehicle_Inst(ABaseVehiclePawn* Vehicle) { PlayerVehicle_Inst = Vehicle; }
+	FORCEINLINE ABaseVehiclePawn* GetPlayerVehicle_Inst() { return PlayerVehicle_Inst;}
 
-	FORCEINLINE void SetPlayerInventory_Inst(TMap<int32, TSubclassOf<ABaseVehiclePawn>> Inventory) { PlayerInventory_Inst = Inventory; }
-	FORCEINLINE TMap<int32, TSubclassOf<ABaseVehiclePawn>> GetPlayerInventory_Inst() { return PlayerInventory_Inst; }
+	FORCEINLINE void SetPlayerInventory_Inst(TMap<int32, ABaseVehiclePawn*> Inventory) { PlayerInventory_Inst = Inventory; }
+	FORCEINLINE TMap<int32, ABaseVehiclePawn*> GetPlayerInventory_Inst() { return PlayerInventory_Inst; }
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE void SetVehicleInt_Inst(int32 CurrentVehicleInt) { VehicleInt_Inst = CurrentVehicleInt; }
