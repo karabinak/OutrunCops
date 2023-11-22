@@ -49,13 +49,8 @@ void UBaseShopWidget::BuyVehicle()
 		if (PlayerControllerRef->GetPlayerBasicCurrency() >= GarageRef->GetCurrentCatalogVehicle()->GetPrice())
 		{
 			PlayerControllerRef->SubtractBasicCurrency(GarageRef->GetCurrentCatalogVehicle()->GetPrice());
-<<<<<<< HEAD
-<<<<<<< HEAD
 			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, GarageRef->GetCurrentCatalogVehicle());
-=======
->>>>>>> parent of 82e9278 (Save)
-=======
->>>>>>> parent of 82e9278 (Save)
+
 		}
 		else
 		{
