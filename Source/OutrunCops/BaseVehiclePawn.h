@@ -109,6 +109,6 @@ public:
 	void ChangeCamera(float Axis);
 
 	FORCEINLINE void SetCanCalculateDistance(bool CanCalculate) { bCanCalculateDistance = CanCalculate; }
-	FORCEINLINE float GetDistance() {return Distance; }
+	FORCEINLINE float GetDistance() { return Distance; }
 	FORCEINLINE int32 GetPrice() { return Price; }
 };

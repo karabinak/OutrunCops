@@ -54,6 +54,7 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 	MirrorL->SetupAttachment(GetMesh());
 	Hood->SetupAttachment(GetMesh());
 	Trunk->SetupAttachment(GetMesh());
+
 }
 
 void ABaseVehiclePawn::BeginPlay()

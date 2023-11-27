@@ -8,6 +8,7 @@
 #include "BaseGarage.h"
 #include "BasePlayerController.h"
 #include "BaseVehiclePawn.h"
+#include "InventoryComponent.h"
 
 void UBaseShopWidget::NativeConstruct()
 {
@@ -49,12 +50,7 @@ void UBaseShopWidget::BuyVehicle()
 		if (PlayerControllerRef->GetPlayerBasicCurrency() >= GarageRef->GetCurrentCatalogVehicle()->GetPrice())
 		{
 			PlayerControllerRef->SubtractBasicCurrency(GarageRef->GetCurrentCatalogVehicle()->GetPrice());
-<<<<<<< HEAD
-			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, GarageRef->GetCurrentCatalogVehicle());
-
-=======
 			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, GarageRef->GetCurrentCatalogVehicle()->GetClass());
->>>>>>> parent of 08a483a (savedv2)
 		}
 		else
 		{

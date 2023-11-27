@@ -5,6 +5,19 @@
 #include "BaseVehiclePawn.h"
 #include "InventoryComponent.generated.h"
 
+class ABaseVehiclePawn;
+
+USTRUCT(BlueprintType)
+struct FInventorySlot
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<ABaseVehiclePawn> VehicleClass;
+
+	// Add customization data here
+};
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class OUTRUNCOPS_API UInventoryComponent : public UActorComponent
