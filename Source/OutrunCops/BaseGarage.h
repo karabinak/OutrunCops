@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "VehicleStructs.h"
 #include "BaseGarage.generated.h"
 
 class ABaseVehiclePawn;

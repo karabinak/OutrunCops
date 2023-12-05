@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "VehicleStructs.h"
 #include "BaseShopWidget.generated.h"
 
 class ABaseGarage;
@@ -29,6 +30,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void BuyVehicle();
 
+	UFUNCTION(BlueprintCallable)
+	void ChangeVehicleColor();
+
 private:
 	// REFERENCES
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
@@ -46,6 +50,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
 	int32 AmountOfVehiclesInCatalog;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
+	UMaterial* Material;
 
 public:
 

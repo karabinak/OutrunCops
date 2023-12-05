@@ -6,7 +6,15 @@
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "BasePlayerController.h"
+#include "InventoryComponent.h"
+#include "ChaosVehicleMovementComponent.h"
 #include "BaseEnemy.h"
+
+AOutrunCopsGameModeGameplay::AOutrunCopsGameModeGameplay()
+{
+	PrimaryActorTick.bStartWithTickEnabled = true;
+	PrimaryActorTick.bCanEverTick = true;
+}
 
 void AOutrunCopsGameModeGameplay::BeginPlay()
 {
@@ -17,7 +25,11 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	FActorSpawnParameters ActorSpawnParameters;
 	BaseVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(500.f, 0.f, 15.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BaseVehicle);
+
 	Cast<ABasePlayerController>(BaseVehicle->GetController())->SetPlayerBasicCurrency(GameInstance->GetPlayerBasicCurrency_Inst());
+	GameInstance->LoadGame();
+
+	//Cast<ABasePlayerController>(BaseVehicle->GetController())->GetInventory()->SetVehicleInventory(GameInstance->GetPlayerInventory_Inst());
 
 	CreateGameplayWidget();
 	CreatePauseWidget();
@@ -30,6 +42,26 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	if (BaseVehicle)
 	{
 		BaseVehicle->SetCanCalculateDistance(true);
+	}
+}
+
+void AOutrunCopsGameModeGameplay::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (AmountOfChasersInSphere > 0 && BaseVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 <= MinSpeedToGetWasted && BaseVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 >= -MinSpeedToGetWasted)
+	{
+		ElapsedTimeWasted = GetWorldTimerManager().GetTimerElapsed(TimeToWasted);
+		if (!GetWorldTimerManager().IsTimerActive(TimeToWasted))
+		{
+			GetWorldTimerManager().SetTimer(TimeToWasted, this, &AOutrunCopsGameModeGameplay::EndRun, TimeToGetWasted);
+		}
+		GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Blue, FString::Printf(TEXT("TimeElapsed: %f"), ElapsedTimeWasted));
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(TimeToWasted);
+		ElapsedTimeWasted = 0.f;
 	}
 }
 

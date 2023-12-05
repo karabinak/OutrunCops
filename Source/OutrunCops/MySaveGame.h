@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "VehicleStructs.h"
 #include "MySaveGame.generated.h"
 
 /**
@@ -17,4 +18,10 @@ class OUTRUNCOPS_API UMySaveGame : public USaveGame
 public:
 
 	UMySaveGame();
+
+	UPROPERTY(VisibleAnywhere)
+	TMap<int32, FInventorySlot> Inventory;
+
+	UPROPERTY(VisibleAnywhere)
+	int32 PlayerBasicCurrency;
 };

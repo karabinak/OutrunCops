@@ -3,3 +3,9 @@
 
 #include "BaseEndRunWidget.h"
 
+#include "Kismet/GameplayStatics.h"
+
+void UBaseEndRunWidget::OpenMenuLevel()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("MainMenu"));
+}

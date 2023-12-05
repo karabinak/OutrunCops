@@ -32,6 +32,7 @@ bool UBaseShopWidget::AddVehicleInt()
 	if (VehicleInt + 1 > AmountOfVehiclesInCatalog - 1) return false;
 
 	VehicleInt++;
+	GameInstanceRef->SetVehicleInt_Inst(VehicleInt);
 	return true;
 }
 
@@ -40,6 +41,7 @@ bool UBaseShopWidget::SubtractVehicleInt()
 	if (VehicleInt - 1 < 0) return false;
 
 	VehicleInt--;
+	GameInstanceRef->SetVehicleInt_Inst(VehicleInt);
 	return true;
 }
 
@@ -50,7 +52,14 @@ void UBaseShopWidget::BuyVehicle()
 		if (PlayerControllerRef->GetPlayerBasicCurrency() >= GarageRef->GetCurrentCatalogVehicle()->GetPrice())
 		{
 			PlayerControllerRef->SubtractBasicCurrency(GarageRef->GetCurrentCatalogVehicle()->GetPrice());
-			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, GarageRef->GetCurrentCatalogVehicle()->GetClass());
+
+			FInventorySlot Vehicle;
+			Vehicle.VehicleClass = GarageRef->GetCurrentCatalogVehicle()->GetClass();
+			Vehicle.VehicleUpgrades.MaxTorque = 60.f;
+			Vehicle.VehicleCustomization.BodyPaint = GarageRef->GetCurrentCatalogVehicle()->GetMesh()->GetMaterial(0)->GetMaterial();
+
+			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, Vehicle);
+			
 		}
 		else
 		{
@@ -58,4 +67,14 @@ void UBaseShopWidget::BuyVehicle()
 			GEngine->AddOnScreenDebugMessage(1, -1.f, FColor::Red, FString::Printf(TEXT("No Bitches??")));
 		}
 	}
+}
+
+void UBaseShopWidget::ChangeVehicleColor()
+{
+	GarageRef->GetCurrentCatalogVehicle()->GetMesh()->SetMaterial(0, Material);
+
+	FInventorySlot Vehicle;
+	Vehicle.VehicleClass = GarageRef->GetCurrentCatalogVehicle()->GetClass();
+	Vehicle.VehicleCustomization.BodyPaint = Material;
+	PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, Vehicle);
 }

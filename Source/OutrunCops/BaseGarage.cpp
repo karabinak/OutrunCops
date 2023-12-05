@@ -99,12 +99,13 @@ void ABaseGarage::SpawnNewVehicle(int32 VehicleValue, bool IsInInventory)
 	FActorSpawnParameters SpawnParameters;
 	if (IsInInventory)
 	{
-		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->Get(), Location, Rotation, SpawnParameters);
+		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->VehicleClass, Location, Rotation, SpawnParameters);
 	}
 	else
 	{
 		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(VehicleCatalog.Find(VehicleValue)->Get(), Location, Rotation, SpawnParameters);
 	}
+
 	CurrentCatalogVehicle->GetMesh()->SetSimulatePhysics(false);
 	CurrentCatalogVehicle->AttachToComponent(VehicleStand, FAttachmentTransformRules::KeepRelativeTransform);
 }

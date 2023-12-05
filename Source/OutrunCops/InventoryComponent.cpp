@@ -1,5 +1,7 @@
 #include "InventoryComponent.h"
 #include "BaseVehiclePawn.h"
+#include "BaseGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 UInventoryComponent::UInventoryComponent()
 {
@@ -19,16 +21,19 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 }
 
-void UInventoryComponent::AddToInventory(int32 Value, TSubclassOf<ABaseVehiclePawn> Vehicle)
+void UInventoryComponent::AddToInventory(int32 Value, FInventorySlot Vehicle)
 {
 	PlayerInventory.Add(Value, Vehicle);
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	GameInstance->SetPlayerInventory_Inst(PlayerInventory);
+	GameInstance->SaveGame();
 }
 
-TSubclassOf<ABaseVehiclePawn> UInventoryComponent::GetFromInventory(int32 Value)
+UClass* UInventoryComponent::GetFromInventory(int32 Value)
 {
 	if (PlayerInventory.Contains(Value))
 	{
-		return PlayerInventory.FindRef(Value);
+		return PlayerInventory.FindRef(Value).VehicleClass;
 	}
 	return nullptr;
 }

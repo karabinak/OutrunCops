@@ -5,7 +5,8 @@
 #include "ChaosVehicleMovementComponent.h"
 #include "ChaosWheeledVehicleMovementComponent.h"
 #include "Components/WidgetComponent.h"
-
+#include "MySaveGame.h"
+#include "BaseGameInstance.h"
 
 #include "OutrunCopsGameModeGameplay.h"
 #include "Kismet/GameplayStatics.h"
@@ -61,14 +62,45 @@ void ABaseVehiclePawn::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UMySaveGame* DataToLoad = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0));
+	if (DataToLoad != nullptr)
+	{
+		UBaseGameInstance* Instance = Cast<UBaseGameInstance>(GetGameInstance());
+
+		if (DataToLoad->Inventory.Contains(Instance->GetVehicleInt_Inst()))
+		{
+			GetMesh()->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleInt_Inst())->VehicleCustomization.BodyPaint);
+		}
+
+		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("Game Loaded")));
+	}
+
 	GetMesh()->OnComponentHit.AddDynamic(this, &ABaseVehiclePawn::OnHit);
 
-	PartsToDetach.Add(FrontBumper);
-	PartsToDetach.Add(RearBumper);
-	PartsToDetach.Add(MirrorR);
-	PartsToDetach.Add(MirrorL);
-	PartsToDetach.Add(Hood);
-	PartsToDetach.Add(Trunk);
+	if (FrontBumper)
+	{
+		PartsToDetach.Add(FrontBumper);
+	}
+	if (RearBumper)
+	{
+		PartsToDetach.Add(RearBumper);
+	}
+	if (MirrorR)
+	{
+		PartsToDetach.Add(MirrorR);
+	}
+	if (MirrorL)
+	{
+		PartsToDetach.Add(MirrorL);
+	}
+	if (Hood)
+	{
+		PartsToDetach.Add(Hood);
+	}
+	if (Trunk)
+	{
+		PartsToDetach.Add(Trunk);
+	}
 }
 
 void ABaseVehiclePawn::Tick(float DeltaSeconds)
@@ -178,6 +210,7 @@ void ABaseVehiclePawn::ResetCanHit()
 
 void ABaseVehiclePawn::Interaction()
 {
+
 	AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
 	Gamemode->EndRun();
 

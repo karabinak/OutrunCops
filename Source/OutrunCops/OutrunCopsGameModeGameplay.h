@@ -28,7 +28,11 @@ class OUTRUNCOPS_API AOutrunCopsGameModeGameplay : public AGameModeBase
 
 protected:
 
+	AOutrunCopsGameModeGameplay();
+
 	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
 
 	void CreateGameplayWidget();
 	void CreatePauseWidget();
@@ -74,6 +78,17 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	int32 AmountOfChasersInSphere = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	float MinSpeedToGetWasted = 30.f;
+
+	FTimerHandle TimeToWasted;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	float TimeToGetWasted = 3.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	float ElapsedTimeWasted = 0.f;
 
 public:
 	

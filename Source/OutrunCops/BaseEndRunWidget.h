@@ -13,5 +13,8 @@ UCLASS()
 class OUTRUNCOPS_API UBaseEndRunWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	void OpenMenuLevel();
 };

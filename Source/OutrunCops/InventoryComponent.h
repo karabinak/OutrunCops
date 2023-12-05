@@ -3,20 +3,10 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "BaseVehiclePawn.h"
+#include "VehicleStructs.h"
 #include "InventoryComponent.generated.h"
 
 class ABaseVehiclePawn;
-
-USTRUCT(BlueprintType)
-struct FInventorySlot
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<ABaseVehiclePawn> VehicleClass;
-
-	// Add customization data here
-};
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -26,6 +16,7 @@ class OUTRUNCOPS_API UInventoryComponent : public UActorComponent
 
 public:	
 	UInventoryComponent();
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -33,19 +24,21 @@ protected:
 private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	TMap<int32, TSubclassOf<ABaseVehiclePawn>> PlayerInventory;
+	TMap<int32, FInventorySlot> PlayerInventory;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
+	//TMap<int32, TSubclassOf<ABaseVehiclePawn>> PlayerInventory;
 
 public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	FORCEINLINE TMap<int32, TSubclassOf<ABaseVehiclePawn>> GetVehicleInventory() { return PlayerInventory; }
-	FORCEINLINE void SetVehicleInventory(TMap<int32, TSubclassOf<ABaseVehiclePawn>> Inventory) { PlayerInventory = Inventory; }
-
-	UFUNCTION(BlueprintCallable)
-	void AddToInventory(int32 Value, TSubclassOf<ABaseVehiclePawn> Vehicle);
+	FORCEINLINE TMap<int32, FInventorySlot> GetVehicleInventory() { return PlayerInventory; }
+	FORCEINLINE void SetVehicleInventory(TMap<int32, FInventorySlot> Inventory) { PlayerInventory = Inventory; }
 
 	UFUNCTION(BlueprintCallable)
-	TSubclassOf<ABaseVehiclePawn> GetFromInventory(int32 Value);
+	void AddToInventory(int32 Value, FInventorySlot Vehicle);
+
+	UFUNCTION(BlueprintCallable)
+	UClass* GetFromInventory(int32 Value);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsInInventory(int32 Value);
