@@ -62,18 +62,6 @@ void ABaseVehiclePawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UMySaveGame* DataToLoad = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0));
-	if (DataToLoad != nullptr)
-	{
-		UBaseGameInstance* Instance = Cast<UBaseGameInstance>(GetGameInstance());
-
-		if (DataToLoad->Inventory.Contains(Instance->GetVehicleInt_Inst()))
-		{
-			GetMesh()->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleInt_Inst())->VehicleCustomization.BodyPaint);
-		}
-
-		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("Game Loaded")));
-	}
 
 	GetMesh()->OnComponentHit.AddDynamic(this, &ABaseVehiclePawn::OnHit);
 
@@ -101,6 +89,28 @@ void ABaseVehiclePawn::BeginPlay()
 	{
 		PartsToDetach.Add(Trunk);
 	}
+
+	UMySaveGame* DataToLoad = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0));
+	if (DataToLoad != nullptr)
+	{
+		UBaseGameInstance* Instance = Cast<UBaseGameInstance>(GetGameInstance());
+
+		if (DataToLoad->Inventory.Contains(Instance->GetVehicleInt_Inst()))
+		{
+			GetMesh()->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleInt_Inst())->VehicleCustomization.BodyPaint);
+
+			for (int i = 0; i < PartsToDetach.Num(); i++)
+			{
+				if (PartsToDetach[i])
+				{
+					PartsToDetach[i]->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleInt_Inst())->VehicleCustomization.BodyPaint);
+				}
+			}
+		}
+
+		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("Game Loaded")));
+	}
+
 }
 
 void ABaseVehiclePawn::Tick(float DeltaSeconds)

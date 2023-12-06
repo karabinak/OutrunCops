@@ -13,10 +13,14 @@ ABaseRoad::ABaseRoad()
 	Road = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SM_Road"));
 	SpawnerTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawnerTrigger"));
 	CameraTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("CameraTrigger"));
+	Props = CreateDefaultSubobject<USceneComponent>(TEXT("PROPS"));
+	Assets = CreateDefaultSubobject<USceneComponent>(TEXT("ASSETS"));
 
 	SetRootComponent(Road);
 	SpawnerTrigger->SetupAttachment(GetRootComponent());
 	CameraTrigger->SetupAttachment(GetRootComponent());
+	Props->SetupAttachment(GetRootComponent());
+	Assets->SetupAttachment(GetRootComponent());
 
 }
 

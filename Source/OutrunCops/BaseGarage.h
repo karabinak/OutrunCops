@@ -87,4 +87,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE ABaseVehiclePawn* GetCurrentCatalogVehicle() { return CurrentCatalogVehicle; }
 
+
 };

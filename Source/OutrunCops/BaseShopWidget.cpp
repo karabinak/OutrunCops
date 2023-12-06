@@ -73,6 +73,15 @@ void UBaseShopWidget::ChangeVehicleColor()
 {
 	GarageRef->GetCurrentCatalogVehicle()->GetMesh()->SetMaterial(0, Material);
 
+	TArray<UStaticMeshComponent*> VehicleParts = GarageRef->GetCurrentCatalogVehicle()->GetPartsToDetach();
+	for (int i = 0; i < VehicleParts.Num(); i++)
+	{
+		if (VehicleParts[i])
+		{
+			VehicleParts[i]->SetMaterial(0, Material);
+		}
+	}
+
 	FInventorySlot Vehicle;
 	Vehicle.VehicleClass = GarageRef->GetCurrentCatalogVehicle()->GetClass();
 	Vehicle.VehicleCustomization.BodyPaint = Material;
