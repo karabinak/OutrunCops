@@ -103,6 +103,9 @@ private:
 
 	TArray<UStaticMeshComponent*> PartsToDetach;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	FVector GarageSpawnLocation = FVector::ZeroVector;
+
 public:
 
 	UFUNCTION()
@@ -112,4 +115,5 @@ public:
 	FORCEINLINE float GetDistance() { return Distance; }
 	FORCEINLINE int32 GetPrice() { return Price; }
 	FORCEINLINE TArray<UStaticMeshComponent*> GetPartsToDetach() { return PartsToDetach; }
+	FORCEINLINE FVector GetGarageSpawnLocation() { return GarageSpawnLocation; }
 };

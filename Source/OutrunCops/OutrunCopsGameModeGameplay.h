@@ -90,6 +90,8 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	float ElapsedTimeWasted = 0.f;
 
+
+
 public:
 	
 	FORCEINLINE UUserWidget* GetPauseWidget() { return PauseWidget; }

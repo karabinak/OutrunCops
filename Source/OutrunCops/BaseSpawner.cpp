@@ -14,9 +14,12 @@ void ABaseSpawner::BeginPlay()
 
 	SpawnRoad(0, true);
 	SpawnRoad(0, true);
+	SpawnRoad(0, true);
+	SpawnRoad(0, true);
 	SpawnRoad(5, true);
 	SpawnRoad(0, true);
 	SpawnRoad(0, true);
+	SpawnBarricade();
 }
 
 void ABaseSpawner::SpawnRoad(int32 RoadNumber, bool CustomRoad)
@@ -35,28 +38,57 @@ void ABaseSpawner::SpawnRoad(int32 RoadNumber, bool CustomRoad)
 	}
 	LastRoadSpawned = RandRoad;
 
-
-
 	UClass* SelectedRoad = RoadCollection[RandRoad];
 
-	// Getting Vector And Rotator to spawn new road
+	GetSocketTransform();
+	DestroyLastRoad();
+	CreateRoad(SelectedRoad);
+	if (!CustomRoad)
+	{
+		SpawnBarricade();
+	}
+}
+
+void ABaseSpawner::CreateRoad(UClass* SelectedRoad)
+{
+	FActorSpawnParameters SpawnParameters;
+	ABaseRoad* Road = GetWorld()->SpawnActor<ABaseRoad>(SelectedRoad, SpawnLocation, SpawnRotation, SpawnParameters);
+	Road->SetSpawnRef(this);
+	SpawnedRoads.Add(Road);
+}
+
+void ABaseSpawner::DestroyLastRoad()
+{
+	if (SpawnedRoads.Num() >= MaxSpawnedRoads)
+	{
+		SpawnedRoads[0]->Destroy();
+		SpawnedRoads.RemoveAt(0);
+	}
+}
+
+void ABaseSpawner::GetSocketTransform()
+{
 	if (!SpawnedRoads.IsEmpty())
 	{
 		FTransform SocketTransform = SpawnedRoads[SpawnedRoads.Num() - 1]->GetMesh()->GetSocketTransform("AttachSocket");
 		SpawnLocation = SocketTransform.GetLocation();
 		SpawnRotation = SocketTransform.GetRotation().Rotator();
 	}
+}
 
-	// Destroying Last Road
-	if (SpawnedRoads.Num() >= MaxSpawnedRoads)
+void ABaseSpawner::SpawnBarricade()
+{
+	if (SpawnedBarricade)
 	{
-		SpawnedRoads[0]->Destroy();
-		SpawnedRoads.RemoveAt(0);
+		SpawnedBarricade->Destroy();
+		SpawnedBarricade = nullptr;
 	}
 
-	// Create Road
-	FActorSpawnParameters SpawnParameters;
-	ABaseRoad* Road = GetWorld()->SpawnActor<ABaseRoad>(SelectedRoad, SpawnLocation, SpawnRotation, SpawnParameters);
-	Road->SetSpawnRef(this);
-	SpawnedRoads.Add(Road);
+	if (SpawnedRoads[1])
+	{
+		FActorSpawnParameters SpawnerParametersBarricade;
+		ABaseRoad* RoadToSpawnBarricade = SpawnedRoads[1];
+		UClass* BarricadeClass = Barricade.Get();
+		SpawnedBarricade = GetWorld()->SpawnActor<AActor>(BarricadeClass, RoadToSpawnBarricade->GetActorLocation(), RoadToSpawnBarricade->GetActorRotation(), SpawnerParametersBarricade);
+	}
 }

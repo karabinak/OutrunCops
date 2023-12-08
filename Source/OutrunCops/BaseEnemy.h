@@ -43,7 +43,7 @@ private:
 	float DespawnDistance = 8000.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	float SpawnForce = 2000000.f;
+	float SpawnForce = 3000000.f;
 
 	AOutrunCopsGameModeGameplay* Gamemode;
 

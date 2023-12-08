@@ -108,6 +108,7 @@ void ABaseGarage::SpawnNewVehicle(int32 VehicleValue, bool IsInInventory)
 
 	CurrentCatalogVehicle->GetMesh()->SetSimulatePhysics(false);
 	CurrentCatalogVehicle->AttachToComponent(VehicleStand, FAttachmentTransformRules::KeepRelativeTransform);
+	CurrentCatalogVehicle->SetActorRelativeLocation(CurrentCatalogVehicle->GetGarageSpawnLocation());
 }
 
 void ABaseGarage::CreateMenuWidget()

@@ -39,6 +39,8 @@ void ABaseRoad::OnSpawnerTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp
 		SpawnerTrigger->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 		SpawnerRef->SpawnRoad();
 		AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
+		// TO CHANGE BAD LOCATION FOR TURNS
+		Gamemode->SetPoliceSpawnLocation(FTransform(GetActorRotation(), GetActorLocation(), FVector(1.f, 1.f, 1.f)));
 		Gamemode->SpawnPoliceCar();
 	}
 }

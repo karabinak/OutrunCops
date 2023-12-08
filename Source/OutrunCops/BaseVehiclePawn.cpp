@@ -21,8 +21,13 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 	Camera->SetupAttachment(SpringArm);
 
 	GetMesh()->SetSimulatePhysics(true);
-	SpringArm->TargetArmLength = 1500.f;
+	SpringArm->TargetArmLength = 2000.f;
 	SpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
+	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 150.f));
+	SpringArm->bEnableCameraLag = true;
+	SpringArm->bEnableCameraRotationLag = true;
+	SpringArm->CameraRotationLagSpeed = 5.f;
+	SpringArm->CameraLagSpeed = 5.f;
 
 	VehicleWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("VehicleWidget"));
 	VehicleWidget->SetupAttachment(GetRootComponent());

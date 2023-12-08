@@ -18,6 +18,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	void SpawnBarricade();
+
 private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
@@ -27,7 +29,7 @@ private:
 	TArray<ABaseRoad*> SpawnedRoads;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	int32 MaxSpawnedRoads = 7;
+	int32 MaxSpawnedRoads = 9;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	int32 RandRoad = 0;
@@ -41,7 +43,16 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	FRotator SpawnRotation = FRotator::ZeroRotator;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> Barricade;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"))
+	AActor* SpawnedBarricade;
+
 public: 
 
 	void SpawnRoad(int32 RoadNumber = 0, bool CustomRoad = false);
+	void CreateRoad(UClass* SelectedRoad);
+	void DestroyLastRoad();
+	void GetSocketTransform();
 };
