@@ -60,5 +60,6 @@ public:
 
 	FORCEINLINE void SetVehicleInt(int32 Value) { VehicleInt = Value; }
 	FORCEINLINE int32 GetVehicleInt() { return VehicleInt; }
+	FORCEINLINE int32 GetAmountOfVehiclesInCatalog() { return AmountOfVehiclesInCatalog; }
 
 };
