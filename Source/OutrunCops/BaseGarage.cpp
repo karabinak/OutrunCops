@@ -31,28 +31,26 @@ ABaseGarage::ABaseGarage()
 void ABaseGarage::BeginPlay()
 {
 	Super::BeginPlay();
-
-	CreateMenuWidget();
-	CreateShopWidget();
-
-	if (MenuWidget && ShopWidget)
-	{
-		MenuWidget->AddToViewport();
-		Cast<UBaseMenuWidget>(MenuWidget)->SetGarageRef(this);
-		Cast<UBaseShopWidget>(ShopWidget)->SetGarageRef(this);
-	}
 	PlayerController = Cast<ABasePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	if (PlayerController)
 	{
 		PlayerController->SetViewTarget(this);
 	}
 
+	SetPreviewVehicle(Cast<UBaseGameInstance>(GetGameInstance())->GetVehicleInt_Inst());
+
+	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
+	CreateShopWidget();
+	if (ShopWidget)
+	{
+		Cast<UBaseShopWidget>(ShopWidget)->SetGarageRef(this);
+		ShopWidget->AddToViewport();
+	}
+
 	//// PLACEHODER
 	//PlayerController->GetInventory()->AddToInventory(0, VehicleCatalog.Find(0)->Get());
 	//UBaseGameInstance* Instance = Cast<UBaseGameInstance>(GetGameInstance());
 	//Instance->SetCurrentVehicle(PlayerController->GetInventory()->GetFromInventory(0));
-
-	SetPreviewVehicle(Cast<UBaseGameInstance>(GetGameInstance())->GetVehicleInt_Inst());
 }
 
 void ABaseGarage::Tick(float DeltaTime)
@@ -111,14 +109,6 @@ void ABaseGarage::SpawnNewVehicle(int32 VehicleValue, bool IsInInventory)
 	CurrentCatalogVehicle->SetActorRelativeLocation(CurrentCatalogVehicle->GetGarageSpawnLocation());
 }
 
-void ABaseGarage::CreateMenuWidget()
-{
-	if (MenuWidgetClass)
-	{
-		MenuWidget = CreateWidget<UUserWidget>(GetWorld(), MenuWidgetClass);
-	}
-}
-
 void ABaseGarage::CreateShopWidget()
 {
 	if (ShopWidgetClass)
@@ -133,13 +123,6 @@ void ABaseGarage::SetWidgetState(EWidgetState ChangeWidgetState)
 
 	switch (WidgetState)
 	{
-	case EWidgetState::EWS_Menu:
-
-		UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
-		MenuWidget->AddToViewport();
-		break;
-
-
 	case EWidgetState::EWS_Shop:
 
 		UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());

@@ -14,7 +14,6 @@ class ABasePlayerController;
 UENUM(BlueprintType)
 enum class EWidgetState : uint8
 {
-	EWS_Menu UMETA(DisplayName = "Menu"),
 	EWS_Shop UMETA(DisplayName = "Shop"),
 
 	EWS_MAX UMETA(DisplayName = "Default")
@@ -34,18 +33,12 @@ protected:
 	void DestroyPreviousVehicle();
 	void SpawnNewVehicle(int32 VehicleValue, bool IsInInventory);
 
-	void CreateMenuWidget();
 	void CreateShopWidget();
 
 private:
 
 
 	// Widgets
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<UUserWidget> MenuWidgetClass;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
-	UUserWidget* MenuWidget;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> ShopWidgetClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
