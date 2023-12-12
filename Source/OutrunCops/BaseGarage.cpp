@@ -6,6 +6,7 @@
 #include "BaseMenuWidget.h"
 #include "BaseShopWidget.h"
 #include "BaseVehiclePawn.h"
+#include "LevelSelectorWidget.h"
 #include "BasePlayerController.h"
 #include "BaseGameInstance.h"
 #include "InventoryComponent.h"
@@ -41,9 +42,11 @@ void ABaseGarage::BeginPlay()
 
 	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
 	CreateShopWidget();
-	if (ShopWidget)
+	CreateLevelSelector();
+	if (ShopWidget && LevelSelectorWidget)
 	{
 		Cast<UBaseShopWidget>(ShopWidget)->SetGarageRef(this);
+		Cast<ULevelSelectorWidget>(LevelSelectorWidget)->SetGarageRef(this);
 		ShopWidget->AddToViewport();
 	}
 
@@ -98,6 +101,7 @@ void ABaseGarage::SpawnNewVehicle(int32 VehicleValue, bool IsInInventory)
 	if (IsInInventory)
 	{
 		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->VehicleClass, Location, Rotation, SpawnParameters);
+		Cast<UBaseGameInstance>(GetGameInstance())->SetPlayerVehicle_Inst(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->VehicleClass);
 	}
 	else
 	{
@@ -117,6 +121,14 @@ void ABaseGarage::CreateShopWidget()
 	}
 }
 
+void ABaseGarage::CreateLevelSelector()
+{
+	if (LevelSelectorClass)
+	{
+		LevelSelectorWidget = CreateWidget<UUserWidget>(GetWorld(), LevelSelectorClass);
+	}
+}
+
 void ABaseGarage::SetWidgetState(EWidgetState ChangeWidgetState)
 {
 	WidgetState = ChangeWidgetState;
@@ -132,5 +144,21 @@ void ABaseGarage::SetWidgetState(EWidgetState ChangeWidgetState)
 
 	case EWidgetState::EWS_MAX:
 		break;
+	}
+}
+
+void ABaseGarage::OpenLevelSelector()
+{
+	if (LevelSelectorWidget)
+	{
+		LevelSelectorWidget->AddToViewport();
+	}
+}
+
+void ABaseGarage::RemoveLevelSelector()
+{
+	if (LevelSelectorWidget)
+	{
+		LevelSelectorWidget->RemoveFromViewport();
 	}
 }

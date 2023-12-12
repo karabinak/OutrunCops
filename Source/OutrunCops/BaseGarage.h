@@ -34,6 +34,7 @@ protected:
 	void SpawnNewVehicle(int32 VehicleValue, bool IsInInventory);
 
 	void CreateShopWidget();
+	void CreateLevelSelector();
 
 private:
 
@@ -43,6 +44,11 @@ private:
 	TSubclassOf<UUserWidget> ShopWidgetClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	UUserWidget* ShopWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> LevelSelectorClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
+	UUserWidget* LevelSelectorWidget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	EWidgetState WidgetState;
@@ -79,6 +85,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE ABaseVehiclePawn* GetCurrentCatalogVehicle() { return CurrentCatalogVehicle; }
+
+	UFUNCTION(BlueprintCallable)
+	void OpenLevelSelector();
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveLevelSelector();
 
 
 };

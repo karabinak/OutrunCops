@@ -8,6 +8,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UWidgetComponent;
 class UStaticMeshComponent;
+class UChaosWheeledVehicleMovementComponent;
 
 UCLASS()
 class OUTRUNCOPS_API ABaseVehiclePawn : public AWheeledVehiclePawn
@@ -40,6 +41,9 @@ protected:
 	void Interaction();
 
 private:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UChaosWheeledVehicleMovementComponent* EngineRef;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm;

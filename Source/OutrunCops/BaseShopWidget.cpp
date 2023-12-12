@@ -59,6 +59,8 @@ void UBaseShopWidget::BuyVehicle()
 			Vehicle.VehicleCustomization.BodyPaint = GarageRef->GetCurrentCatalogVehicle()->GetMesh()->GetMaterial(0)->GetMaterial();
 
 			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, Vehicle);
+
+			Cast<UBaseGameInstance>(GetGameInstance())->SetPlayerVehicle_Inst(PlayerControllerRef->GetInventory()->GetVehicleInventory().Find(VehicleInt)->VehicleClass);
 			
 		}
 		else

@@ -11,6 +11,8 @@
 #include "OutrunCopsGameModeGameplay.h"
 #include "Kismet/GameplayStatics.h"
 
+
+
 ABaseVehiclePawn::ABaseVehiclePawn()
 {
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
@@ -67,6 +69,8 @@ void ABaseVehiclePawn::BeginPlay()
 {
 	Super::BeginPlay();
 
+	EngineRef = Cast<UChaosWheeledVehicleMovementComponent>(GetVehicleMovement());
+
 
 	GetMesh()->OnComponentHit.AddDynamic(this, &ABaseVehiclePawn::OnHit);
 
@@ -122,6 +126,7 @@ void ABaseVehiclePawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	
 	CalculateDistance();
 }
 
@@ -204,9 +209,6 @@ void ABaseVehiclePawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 		DetachComponent(WheelRL);
 		DetachComponent(WheelRR);
 
-
-		UChaosWheeledVehicleMovementComponent* EngineRef = Cast<UChaosWheeledVehicleMovementComponent>(GetVehicleMovement());
-
 		EngineRef->WheelSetups[0].WheelClass = nullptr;
 		EngineRef->WheelSetups[1].WheelClass = nullptr;
 		EngineRef->WheelSetups[2].WheelClass = nullptr;
@@ -226,7 +228,7 @@ void ABaseVehiclePawn::ResetCanHit()
 void ABaseVehiclePawn::Interaction()
 {
 
-	AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
-	Gamemode->EndRun();
+	//AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
+	//Gamemode->EndRun();
 
 }
