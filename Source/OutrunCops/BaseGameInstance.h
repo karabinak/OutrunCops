@@ -29,7 +29,7 @@ private:
 	int32 VehicleInt_Inst = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	int32 PlayerBasicCurrency_Inst = 25999;
+	int32 PlayerBasicCurrency_Inst = 50999;
 
 
 public:
@@ -41,7 +41,7 @@ public:
 	FORCEINLINE TMap<int32, FInventorySlot> GetPlayerInventory_Inst() { return PlayerInventory_Inst; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE void SetVehicleInt_Inst(int32 CurrentVehicleInt) { VehicleInt_Inst = CurrentVehicleInt; }
+	void SetVehicleInt_Inst(int32 CurrentVehicleInt);
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int32 GetVehicleInt_Inst() { return VehicleInt_Inst; }
 

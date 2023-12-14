@@ -23,8 +23,8 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 	Camera->SetupAttachment(SpringArm);
 
 	GetMesh()->SetSimulatePhysics(true);
-	SpringArm->TargetArmLength = 2000.f;
-	SpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
+	SpringArm->TargetArmLength = 1700.f;
+	SpringArm->SetRelativeRotation(FRotator(-40.f, 0.f, 0.f));
 	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 150.f));
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->bEnableCameraRotationLag = true;
@@ -164,10 +164,26 @@ void ABaseVehiclePawn::CalculateDistance()
 	LastFrameVector = CurrentLocation;
 }
 
-void ABaseVehiclePawn::ChangeCamera(float Axis)
+void ABaseVehiclePawn::ChangeCamera(float Axis, bool Tunel)
 {
-	FRotator NewCameraRot = SpringArm->GetRelativeRotation() + FRotator(0.f, Axis, 0.f);
-	SpringArm->SetRelativeRotation(NewCameraRot);
+	FRotator NewCameraRot;
+	if (Tunel)
+	{
+		NewCameraRot = FRotator(20.f, Axis, 0.f);
+		SpringArm->SetRelativeRotation(NewCameraRot);
+	}
+	else
+	{
+		NewCameraRot = SpringArm->GetRelativeRotation() + FRotator(0.f, Axis, 0.f);
+		SpringArm->SetRelativeRotation(NewCameraRot);
+		SpringArm->TargetArmLength = 600.f;
+	}
+}
+
+void ABaseVehiclePawn::EndChangCamera()
+{
+	SpringArm->TargetArmLength = 1700.f;
+	SpringArm->SetRelativeRotation(FRotator(-40.f, SpringArm->GetRelativeRotation().Yaw, 0.f));
 }
 
 void ABaseVehiclePawn::DetachComponent(UStaticMeshComponent* CarPart)

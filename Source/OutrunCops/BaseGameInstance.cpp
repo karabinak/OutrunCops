@@ -23,6 +23,7 @@ void UBaseGameInstance::SaveGame()
 	{
 		DataToSave->PlayerBasicCurrency = PlayerBasicCurrency_Inst;
 		DataToSave->Inventory = PlayerInventory_Inst;
+		DataToSave->ChosenVehicleInt = VehicleInt_Inst;
 		UGameplayStatics::SaveGameToSlot(DataToSave, TEXT("Slot1"), 0);
 
 		GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Green, FString::Printf(TEXT("Game Saved")));
@@ -41,6 +42,7 @@ void UBaseGameInstance::LoadGame()
 	{
 		PlayerBasicCurrency_Inst = DataToLoad->PlayerBasicCurrency;
 		PlayerInventory_Inst = DataToLoad->Inventory;
+		VehicleInt_Inst = DataToLoad->ChosenVehicleInt;
 
 		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("Game Loaded")));
 	}
@@ -48,4 +50,10 @@ void UBaseGameInstance::LoadGame()
 	{
 		CreateSaveFile();
 	}
+}
+
+void UBaseGameInstance::SetVehicleInt_Inst(int32 CurrentVehicleInt)
+{
+	VehicleInt_Inst = CurrentVehicleInt;
+	SaveGame();
 }

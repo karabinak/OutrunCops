@@ -38,8 +38,6 @@ void ABaseGarage::BeginPlay()
 		PlayerController->SetViewTarget(this);
 	}
 
-	SetPreviewVehicle(Cast<UBaseGameInstance>(GetGameInstance())->GetVehicleInt_Inst());
-
 	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
 	CreateShopWidget();
 	CreateLevelSelector();
@@ -49,6 +47,8 @@ void ABaseGarage::BeginPlay()
 		Cast<ULevelSelectorWidget>(LevelSelectorWidget)->SetGarageRef(this);
 		ShopWidget->AddToViewport();
 	}
+
+	SetPreviewVehicle(Cast<UBaseGameInstance>(GetGameInstance())->GetVehicleInt_Inst());
 
 	//// PLACEHODER
 	//PlayerController->GetInventory()->AddToInventory(0, VehicleCatalog.Find(0)->Get());

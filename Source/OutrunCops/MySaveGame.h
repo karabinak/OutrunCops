@@ -20,6 +20,9 @@ public:
 	UMySaveGame();
 
 	UPROPERTY(VisibleAnywhere)
+	int32 ChosenVehicleInt;
+
+	UPROPERTY(VisibleAnywhere)
 	TMap<int32, FInventorySlot> Inventory;
 
 	UPROPERTY(VisibleAnywhere)

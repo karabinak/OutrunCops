@@ -47,6 +47,20 @@ private:
 
 	AOutrunCopsGameModeGameplay* Gamemode;
 
+	// Vehicle Parts
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* WheelFL;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* WheelFR;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* WheelRL;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* WheelRR;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* FrontBumper;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* Siren;
+
 public:
 
 };

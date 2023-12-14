@@ -11,6 +11,23 @@ ABaseEnemy::ABaseEnemy()
 {
 	ArrestedZone = CreateDefaultSubobject<USphereComponent>("ArrestedZone");
 	ArrestedZone->SetupAttachment(GetMesh());
+
+	// CAR PARTS
+	WheelFL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FL_Wheel"));
+	WheelFR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FR_Wheel"));
+	WheelRL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RL_Wheel"));
+	WheelRR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RR_Wheel"));
+
+	FrontBumper = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontBumper"));
+	Siren = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearBumper"));
+
+	WheelFL->SetupAttachment(GetMesh(), TEXT("FL"));
+	WheelFR->SetupAttachment(GetMesh(), TEXT("FR"));
+	WheelRL->SetupAttachment(GetMesh(), TEXT("RL"));
+	WheelRR->SetupAttachment(GetMesh(), TEXT("RR"));
+
+	FrontBumper->SetupAttachment(GetMesh());
+	Siren->SetupAttachment(GetMesh());
 }
 
 void ABaseEnemy::BeginPlay()

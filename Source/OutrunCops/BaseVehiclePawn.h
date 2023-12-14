@@ -113,7 +113,8 @@ private:
 public:
 
 	UFUNCTION()
-	void ChangeCamera(float Axis);
+	void ChangeCamera(float Axis, bool Tunnel = false);
+	void EndChangCamera();
 
 	FORCEINLINE void SetCanCalculateDistance(bool CanCalculate) { bCanCalculateDistance = CanCalculate; }
 	FORCEINLINE float GetDistance() { return Distance; }

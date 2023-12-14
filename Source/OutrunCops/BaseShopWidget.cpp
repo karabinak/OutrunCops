@@ -20,6 +20,7 @@ void UBaseShopWidget::NativeConstruct()
 	AmountOfVehiclesInCatalog = GarageRef->GetVehicleCatalog().Num();
 
 	VehicleInt = GameInstanceRef->GetVehicleInt_Inst();
+
 }
 
 void UBaseShopWidget::SaveCurrentVehicleInt(int32 CurrentVehicle)

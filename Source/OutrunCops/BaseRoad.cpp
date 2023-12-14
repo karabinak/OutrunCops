@@ -50,6 +50,15 @@ void ABaseRoad::OnCameraChangeOverlap(UPrimitiveComponent* OverlappedComp, AActo
 	ABaseVehiclePawn* Pawn = Cast<ABaseVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	if (Pawn == OtherActor)
 	{
-		Pawn->ChangeCamera(CameraChangeValue);
+		Pawn->ChangeCamera(CameraChangeValue, bTunnel);
+	}
+}
+
+void ABaseRoad::ChangeCameraEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	ABaseVehiclePawn* Pawn = Cast<ABaseVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	if (Pawn == OtherActor && bTunnel)
+	{
+		Pawn->EndChangCamera();
 	}
 }
