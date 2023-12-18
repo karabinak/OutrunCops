@@ -15,13 +15,14 @@ ABaseRoad::ABaseRoad()
 	CameraTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("CameraTrigger"));
 	Props = CreateDefaultSubobject<USceneComponent>(TEXT("PROPS"));
 	Assets = CreateDefaultSubobject<USceneComponent>(TEXT("ASSETS"));
+	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("SpawnLocation"));
 
 	SetRootComponent(Road);
 	SpawnerTrigger->SetupAttachment(GetRootComponent());
 	CameraTrigger->SetupAttachment(GetRootComponent());
 	Props->SetupAttachment(GetRootComponent());
 	Assets->SetupAttachment(GetRootComponent());
-
+	SpawnLocation->SetupAttachment(GetRootComponent());
 }
 
 void ABaseRoad::BeginPlay()
@@ -30,6 +31,7 @@ void ABaseRoad::BeginPlay()
 
 	SpawnerTrigger->OnComponentBeginOverlap.AddDynamic(this, &ABaseRoad::OnSpawnerTriggerBeginOverlap);
 	CameraTrigger->OnComponentBeginOverlap.AddDynamic(this, &ABaseRoad::OnCameraChangeOverlap);
+	CameraTrigger->OnComponentEndOverlap.AddDynamic(this, &ABaseRoad::ChangeCameraEndOverlap);
 }
 
 void ABaseRoad::OnSpawnerTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -39,8 +41,7 @@ void ABaseRoad::OnSpawnerTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp
 		SpawnerTrigger->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 		SpawnerRef->SpawnRoad();
 		AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
-		// TO CHANGE BAD LOCATION FOR TURNS
-		Gamemode->SetPoliceSpawnLocation(FTransform(GetActorRotation(), GetActorLocation(), FVector(1.f, 1.f, 1.f)));
+		Gamemode->SetPoliceSpawnLocation(FTransform(SpawnLocation->GetComponentRotation(), SpawnLocation->GetComponentLocation(), FVector(1.f, 1.f, 1.f)));
 		Gamemode->SpawnPoliceCar();
 	}
 }
@@ -50,6 +51,10 @@ void ABaseRoad::OnCameraChangeOverlap(UPrimitiveComponent* OverlappedComp, AActo
 	ABaseVehiclePawn* Pawn = Cast<ABaseVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	if (Pawn == OtherActor)
 	{
+		if (!bTunnel)
+		{
+			CameraTrigger->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+		}
 		Pawn->ChangeCamera(CameraChangeValue, bTunnel);
 	}
 }
@@ -57,8 +62,8 @@ void ABaseRoad::OnCameraChangeOverlap(UPrimitiveComponent* OverlappedComp, AActo
 void ABaseRoad::ChangeCameraEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	ABaseVehiclePawn* Pawn = Cast<ABaseVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	if (Pawn == OtherActor && bTunnel)
+	if (Pawn == OtherActor)
 	{
-		Pawn->EndChangCamera();
+		Pawn->EndChangCamera(bTunnel);
 	}
 }

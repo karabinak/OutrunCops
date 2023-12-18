@@ -60,6 +60,8 @@ private:
 	UStaticMeshComponent* FrontBumper;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Siren;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* Mirrors;
 
 public:
 

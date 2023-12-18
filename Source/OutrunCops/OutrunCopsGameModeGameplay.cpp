@@ -49,18 +49,18 @@ void AOutrunCopsGameModeGameplay::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (AmountOfChasersInSphere > 0 && BaseVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 <= MinSpeedToGetWasted && BaseVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 >= -MinSpeedToGetWasted)
+	if (AmountOfChasersInSphere > 0 && BaseVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 <= MinSpeedToGetWasted && BaseVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 >= -MinSpeedToGetWasted && !bPlayerWasted)
 	{
-		ElapsedTimeWasted = GetWorldTimerManager().GetTimerElapsed(TimeToWasted);
-		if (!GetWorldTimerManager().IsTimerActive(TimeToWasted))
+		ElapsedTimeWasted = GetWorldTimerManager().GetTimerElapsed(WastedTimer);
+		if (!GetWorldTimerManager().IsTimerActive(WastedTimer))
 		{
-			GetWorldTimerManager().SetTimer(TimeToWasted, this, &AOutrunCopsGameModeGameplay::EndRun, TimeToGetWasted);
+			GetWorldTimerManager().SetTimer(WastedTimer, this, &AOutrunCopsGameModeGameplay::EndRun, TimeToGetWasted);
 		}
 		GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Blue, FString::Printf(TEXT("TimeElapsed: %f"), ElapsedTimeWasted));
 	}
 	else
 	{
-		GetWorldTimerManager().ClearTimer(TimeToWasted);
+		GetWorldTimerManager().ClearTimer(WastedTimer);
 		ElapsedTimeWasted = 0.f;
 	}
 }
@@ -124,5 +124,7 @@ void AOutrunCopsGameModeGameplay::AddEndRunToViewport()
 
 void AOutrunCopsGameModeGameplay::EndRun()
 {
+	bPlayerWasted = true;
+	ElapsedTimeWasted = TimeToGetWasted;
 	AddEndRunToViewport();
 }

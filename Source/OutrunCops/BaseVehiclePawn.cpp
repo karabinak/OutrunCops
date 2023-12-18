@@ -23,7 +23,7 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 	Camera->SetupAttachment(SpringArm);
 
 	GetMesh()->SetSimulatePhysics(true);
-	SpringArm->TargetArmLength = 1700.f;
+	SpringArm->TargetArmLength = SpringArmBaseLenght;
 	SpringArm->SetRelativeRotation(FRotator(-40.f, 0.f, 0.f));
 	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 150.f));
 	SpringArm->bEnableCameraLag = true;
@@ -34,7 +34,7 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 	VehicleWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("VehicleWidget"));
 	VehicleWidget->SetupAttachment(GetRootComponent());
 	VehicleWidget->SetWidgetSpace(EWidgetSpace::Screen);
-	VehicleWidget->SetDrawSize(FVector2D(200.f, 50.f));
+	VehicleWidget->SetDrawSize(FVector2D(100.f, 50.f));
 	VehicleWidget->SetPivot(FVector2D(0.f, 1.f));
 
 
@@ -68,6 +68,8 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 void ABaseVehiclePawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	HitPoints = MaxHealth;
 
 	EngineRef = Cast<UChaosWheeledVehicleMovementComponent>(GetVehicleMovement());
 
@@ -164,26 +166,25 @@ void ABaseVehiclePawn::CalculateDistance()
 	LastFrameVector = CurrentLocation;
 }
 
-void ABaseVehiclePawn::ChangeCamera(float Axis, bool Tunel)
+void ABaseVehiclePawn::ChangeCamera(float ChangeValue, bool Tunnel)
 {
-	FRotator NewCameraRot;
-	if (Tunel)
+	FRotator NewCameraRot = SpringArm->GetRelativeRotation() + FRotator(0.f, ChangeValue, 0.f);
+	SpringArm->SetRelativeRotation(NewCameraRot);
+	SpringArmLastRotation = NewCameraRot;
+	if (Tunnel)
 	{
-		NewCameraRot = FRotator(20.f, Axis, 0.f);
-		SpringArm->SetRelativeRotation(NewCameraRot);
-	}
-	else
-	{
-		NewCameraRot = SpringArm->GetRelativeRotation() + FRotator(0.f, Axis, 0.f);
-		SpringArm->SetRelativeRotation(NewCameraRot);
+		SpringArm->SetRelativeRotation(FRotator(-15.f, NewCameraRot.Yaw, NewCameraRot.Roll));
 		SpringArm->TargetArmLength = 600.f;
 	}
 }
 
-void ABaseVehiclePawn::EndChangCamera()
+void ABaseVehiclePawn::EndChangCamera(bool Tunnel)
 {
-	SpringArm->TargetArmLength = 1700.f;
-	SpringArm->SetRelativeRotation(FRotator(-40.f, SpringArm->GetRelativeRotation().Yaw, 0.f));
+	if (Tunnel)
+	{
+		SpringArm->SetRelativeRotation(SpringArmLastRotation);
+		SpringArm->TargetArmLength = SpringArmBaseLenght;
+	}
 }
 
 void ABaseVehiclePawn::DetachComponent(UStaticMeshComponent* CarPart)
@@ -225,10 +226,14 @@ void ABaseVehiclePawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 		DetachComponent(WheelRL);
 		DetachComponent(WheelRR);
 
+
 		EngineRef->WheelSetups[0].WheelClass = nullptr;
 		EngineRef->WheelSetups[1].WheelClass = nullptr;
 		EngineRef->WheelSetups[2].WheelClass = nullptr;
 		EngineRef->WheelSetups[3].WheelClass = nullptr;
+
+		AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
+		Gamemode->EndRun();
 
 	}
 
@@ -244,7 +249,7 @@ void ABaseVehiclePawn::ResetCanHit()
 void ABaseVehiclePawn::Interaction()
 {
 
-	//AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
-	//Gamemode->EndRun();
+	AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
+	Gamemode->EndRun();
 
 }

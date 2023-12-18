@@ -20,6 +20,7 @@ ABaseEnemy::ABaseEnemy()
 
 	FrontBumper = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontBumper"));
 	Siren = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearBumper"));
+	Mirrors = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mirrors"));
 
 	WheelFL->SetupAttachment(GetMesh(), TEXT("FL"));
 	WheelFR->SetupAttachment(GetMesh(), TEXT("FR"));
@@ -28,6 +29,7 @@ ABaseEnemy::ABaseEnemy()
 
 	FrontBumper->SetupAttachment(GetMesh());
 	Siren->SetupAttachment(GetMesh());
+	Mirrors->SetupAttachment(GetMesh());
 }
 
 void ABaseEnemy::BeginPlay()

@@ -68,7 +68,7 @@ private:
 	FVector LastFrameVector;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Distance Calculation", meta = (AllowPrivateAccess = "true"))
-	bool bCanCalculateDistance = false;
+	bool bCanCalculateDistance = true;
 
 	// Car Parts
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
@@ -98,7 +98,10 @@ private:
 	FTimerHandle HitCooldownTimer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	float HitPoints = 100.f;
+	float HitPoints;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	float MaxHealth = 100.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	float OnePartHitPoints = HitPoints / 6;
@@ -110,15 +113,25 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	FVector GarageSpawnLocation = FVector::ZeroVector;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	float SpringArmBaseLenght = 1700.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	FRotator SpringArmLastRotation;
+
+
 public:
 
 	UFUNCTION()
-	void ChangeCamera(float Axis, bool Tunnel = false);
-	void EndChangCamera();
+	void ChangeCamera(float ChangeValue, bool Tunnel);
+	UFUNCTION()
+	void EndChangCamera(bool Tunnel);
 
 	FORCEINLINE void SetCanCalculateDistance(bool CanCalculate) { bCanCalculateDistance = CanCalculate; }
 	FORCEINLINE float GetDistance() { return Distance; }
 	FORCEINLINE int32 GetPrice() { return Price; }
+	FORCEINLINE float GetHitPoints() { return HitPoints; }
+	FORCEINLINE float GetMaxHealth() { return MaxHealth; }
 	FORCEINLINE TArray<UStaticMeshComponent*> GetPartsToDetach() { return PartsToDetach; }
 	FORCEINLINE FVector GetGarageSpawnLocation() { return GarageSpawnLocation; }
 };

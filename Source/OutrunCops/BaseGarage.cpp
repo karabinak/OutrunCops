@@ -48,7 +48,7 @@ void ABaseGarage::BeginPlay()
 		ShopWidget->AddToViewport();
 	}
 
-	SetPreviewVehicle(Cast<UBaseGameInstance>(GetGameInstance())->GetVehicleInt_Inst());
+	GetWorld()->GetTimerManager().SetTimer(SpawnDelayTimer, this, &ABaseGarage::DelayedBeginPlayFunc, 0.001f);
 
 	//// PLACEHODER
 	//PlayerController->GetInventory()->AddToInventory(0, VehicleCatalog.Find(0)->Get());
@@ -72,6 +72,11 @@ ABaseVehiclePawn* ABaseGarage::SetPreviewVehicle(int32 VehicleValue)
 	{
 		DestroyPreviousVehicle();
 		SpawnNewVehicle(VehicleValue, IsInInventory);
+		UBaseShopWidget* ShopCast = Cast<UBaseShopWidget>(ShopWidget);
+		if (ShopCast)
+		{
+			ShopCast->SetVehicleStats(CurrentCatalogVehicle);
+		}
 		return CurrentCatalogVehicle;
 	}
 
@@ -80,6 +85,11 @@ ABaseVehiclePawn* ABaseGarage::SetPreviewVehicle(int32 VehicleValue)
 	{
 		DestroyPreviousVehicle();
 		SpawnNewVehicle(VehicleValue, IsInInventory);
+		UBaseShopWidget* ShopCast = Cast<UBaseShopWidget>(ShopWidget);
+		if (ShopCast)
+		{
+			ShopCast->SetVehicleStats(CurrentCatalogVehicle);
+		}
 		return CurrentCatalogVehicle;
 	}
 	return CurrentCatalogVehicle;
@@ -102,10 +112,12 @@ void ABaseGarage::SpawnNewVehicle(int32 VehicleValue, bool IsInInventory)
 	{
 		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->VehicleClass, Location, Rotation, SpawnParameters);
 		Cast<UBaseGameInstance>(GetGameInstance())->SetPlayerVehicle_Inst(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->VehicleClass);
+		//UE_LOG(LogTemp, Warning, TEXT("True"));
 	}
 	else
 	{
 		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(VehicleCatalog.Find(VehicleValue)->Get(), Location, Rotation, SpawnParameters);
+		//UE_LOG(LogTemp, Warning, TEXT("False"));
 	}
 
 	CurrentCatalogVehicle->GetMesh()->SetSimulatePhysics(false);
@@ -127,6 +139,11 @@ void ABaseGarage::CreateLevelSelector()
 	{
 		LevelSelectorWidget = CreateWidget<UUserWidget>(GetWorld(), LevelSelectorClass);
 	}
+}
+
+void ABaseGarage::DelayedBeginPlayFunc()
+{
+	SetPreviewVehicle(Cast<UBaseGameInstance>(GetGameInstance())->GetVehicleInt_Inst());
 }
 
 void ABaseGarage::SetWidgetState(EWidgetState ChangeWidgetState)

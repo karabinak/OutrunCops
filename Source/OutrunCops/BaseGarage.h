@@ -35,6 +35,7 @@ protected:
 
 	void CreateShopWidget();
 	void CreateLevelSelector();
+	void DelayedBeginPlayFunc();
 
 private:
 
@@ -58,6 +59,9 @@ private:
 	TMap<int32, TSubclassOf<ABaseVehiclePawn>> VehicleCatalog;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shop Properties", meta = (AllowPrivateAccess = "true"))
 	ABaseVehiclePawn* CurrentCatalogVehicle;
+
+	// Garage player spawn Delay
+	FTimerHandle SpawnDelayTimer;
 
 	// Garage Meshes
 

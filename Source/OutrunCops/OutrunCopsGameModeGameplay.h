@@ -82,13 +82,15 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	float MinSpeedToGetWasted = 30.f;
 
-	FTimerHandle TimeToWasted;
+	FTimerHandle WastedTimer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	float TimeToGetWasted = 3.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	float ElapsedTimeWasted = 0.f;
+
+	bool bPlayerWasted = false;
 
 
 
@@ -98,6 +100,9 @@ public:
 
 	// TEST
 	FORCEINLINE FTransform SetPoliceSpawnLocation(FTransform SpawnLocation) { return PoliceSpawnTransform = SpawnLocation; }
+
+	FORCEINLINE float GetTimeToGetWasted() { return TimeToGetWasted; }
+	FORCEINLINE float GetElapsedTimeWasted() { return ElapsedTimeWasted; }
 
 	int32 SetPoliceAmount(int32 Amount) { return PoliceAmount += Amount; }
 

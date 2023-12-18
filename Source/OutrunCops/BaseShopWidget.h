@@ -58,6 +58,9 @@ public:
 
 	void SetGarageRef(ABaseGarage* BaseGarage) { GarageRef = BaseGarage; }
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	FORCEINLINE void SetVehicleStats(ABaseVehiclePawn* CurrentVehicle);
+
 	FORCEINLINE void SetVehicleInt(int32 Value) { VehicleInt = Value; }
 	FORCEINLINE int32 GetVehicleInt() { return VehicleInt; }
 	FORCEINLINE int32 GetAmountOfVehiclesInCatalog() { return AmountOfVehiclesInCatalog; }
