@@ -14,9 +14,8 @@ void ABaseSpawner::BeginPlay()
 
 	SpawnRoad(0, true);
 	SpawnRoad(0, true);
-	SpawnRoad(0, true);
-	SpawnRoad(0, true);
 	SpawnRoad(5, true);
+	SpawnRoad(0, true);
 	SpawnRoad(0, true);
 	SpawnRoad(0, true);
 	SpawnBarricade();

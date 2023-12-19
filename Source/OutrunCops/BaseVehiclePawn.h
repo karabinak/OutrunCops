@@ -104,10 +104,12 @@ private:
 	float MaxHealth = 100.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	float OnePartHitPoints = HitPoints / 6;
+	float OnePartHitPoints;
 
-	int32 ActiveParts = 5;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	int32 ActiveParts;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	TArray<UStaticMeshComponent*> PartsToDetach;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))

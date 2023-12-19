@@ -28,7 +28,7 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 150.f));
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->bEnableCameraRotationLag = true;
-	SpringArm->CameraRotationLagSpeed = 5.f;
+	SpringArm->CameraRotationLagSpeed = 3.f;
 	SpringArm->CameraLagSpeed = 5.f;
 
 	VehicleWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("VehicleWidget"));
@@ -76,30 +76,33 @@ void ABaseVehiclePawn::BeginPlay()
 
 	GetMesh()->OnComponentHit.AddDynamic(this, &ABaseVehiclePawn::OnHit);
 
-	if (FrontBumper)
+	if (FrontBumper->GetMaterial(0))
 	{
 		PartsToDetach.Add(FrontBumper);
 	}
-	if (RearBumper)
+	if (RearBumper->GetMaterial(0))
 	{
 		PartsToDetach.Add(RearBumper);
 	}
-	if (MirrorR)
+	if (MirrorR->GetMaterial(0))
 	{
 		PartsToDetach.Add(MirrorR);
 	}
-	if (MirrorL)
+	if (MirrorL->GetMaterial(0))
 	{
 		PartsToDetach.Add(MirrorL);
 	}
-	if (Hood)
+	if (Hood->GetMaterial(0))
 	{
 		PartsToDetach.Add(Hood);
 	}
-	if (Trunk)
+	if (Trunk->GetMaterial(0))
 	{
 		PartsToDetach.Add(Trunk);
 	}
+
+	ActiveParts = PartsToDetach.Num();
+	OnePartHitPoints = MaxHealth / ActiveParts;
 
 	UMySaveGame* DataToLoad = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0));
 	if (DataToLoad != nullptr)
@@ -208,8 +211,11 @@ void ABaseVehiclePawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 {
 	if (!bCanHit) return;
 	bCanHit = false;
+	GetWorld()->GetTimerManager().SetTimer(HitCooldownTimer, this, &ABaseVehiclePawn::ResetCanHit, 0.3f);
+
 
 	float Impact = FMath::Floor(NormalImpulse.Length() / 60000.f);
+	if (Impact <= 4.f) return;
 	HitPoints -= Impact;
 
 	if (HitPoints < ActiveParts * OnePartHitPoints && !PartsToDetach.IsEmpty())
@@ -217,28 +223,18 @@ void ABaseVehiclePawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 		int32 Random = FMath::RandRange(0, PartsToDetach.Num() - 1);
 		DetachComponent(PartsToDetach[Random]);
 		PartsToDetach.RemoveAt(Random);
+		ActiveParts--;
 	}
 
 	if (HitPoints <= 0.f)
 	{
-		DetachComponent(WheelFL);
-		DetachComponent(WheelFR);
-		DetachComponent(WheelRL);
-		DetachComponent(WheelRR);
-
-
-		EngineRef->WheelSetups[0].WheelClass = nullptr;
-		EngineRef->WheelSetups[1].WheelClass = nullptr;
-		EngineRef->WheelSetups[2].WheelClass = nullptr;
-		EngineRef->WheelSetups[3].WheelClass = nullptr;
+		HitPoints = 0.f;
 
 		AOutrunCopsGameModeGameplay* Gamemode = Cast<AOutrunCopsGameModeGameplay>(UGameplayStatics::GetGameMode(GetWorld()));
 		Gamemode->EndRun();
-
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("%f"), HitPoints);
-	GetWorld()->GetTimerManager().SetTimer(HitCooldownTimer, this, &ABaseVehiclePawn::ResetCanHit, 3.f);
 }
 
 void ABaseVehiclePawn::ResetCanHit()

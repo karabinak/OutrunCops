@@ -29,7 +29,7 @@ private:
 	TArray<ABaseRoad*> SpawnedRoads;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	int32 MaxSpawnedRoads = 9;
+	int32 MaxSpawnedRoads = 8;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	int32 RandRoad = 0;
