@@ -42,6 +42,8 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	if (BaseVehicle)
 	{
 		BaseVehicle->SetCanCalculateDistance(true);
+		BaseVehicle->SetLastFrameVector(BaseVehicle->GetActorLocation());
+		BaseVehicle->SetDistance(0.f);
 	}
 }
 

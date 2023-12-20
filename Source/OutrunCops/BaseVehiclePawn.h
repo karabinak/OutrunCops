@@ -130,6 +130,8 @@ public:
 	void EndChangCamera(bool Tunnel);
 
 	FORCEINLINE void SetCanCalculateDistance(bool CanCalculate) { bCanCalculateDistance = CanCalculate; }
+	FORCEINLINE void SetLastFrameVector(FVector NewLastFrameVector) { LastFrameVector = NewLastFrameVector; }
+	FORCEINLINE void SetDistance(float NewDistance) { Distance = NewDistance; }
 	FORCEINLINE float GetDistance() { return Distance; }
 	FORCEINLINE int32 GetPrice() { return Price; }
 	FORCEINLINE float GetHitPoints() { return HitPoints; }

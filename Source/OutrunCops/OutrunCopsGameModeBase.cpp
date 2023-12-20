@@ -20,6 +20,6 @@ void AOutrunCopsGameModeBase::BeginPlay()
 	Cast<ABasePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetPlayerBasicCurrency(Cast<UBaseGameInstance>(GetGameInstance())->GetPlayerBasicCurrency_Inst());
 
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+	GameInstance->SaveGame();
 	GameInstance->LoadGame();
-
 }

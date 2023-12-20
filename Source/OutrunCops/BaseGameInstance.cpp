@@ -52,6 +52,17 @@ void UBaseGameInstance::LoadGame()
 	}
 }
 
+void UBaseGameInstance::DeleteSave()
+{
+	UMySaveGame* DataToLoad = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0));
+
+	if (DataToLoad != nullptr)
+	{
+		UGameplayStatics::DeleteGameInSlot(TEXT("Slot1"), 0);
+		UKismetSystemLibrary::QuitGame(GetWorld(), 0, EQuitPreference::Quit, false);
+	}
+}
+
 void UBaseGameInstance::SetVehicleInt_Inst(int32 CurrentVehicleInt)
 {
 	VehicleInt_Inst = CurrentVehicleInt;

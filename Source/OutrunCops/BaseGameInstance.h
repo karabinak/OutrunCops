@@ -55,5 +55,10 @@ public:
 
 	void LoadGame();
 
+
+	// TO REMOVE
+	UFUNCTION(BlueprintCallable)
+	void DeleteSave();
+
 	
 };
