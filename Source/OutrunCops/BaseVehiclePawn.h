@@ -129,6 +129,7 @@ public:
 	UFUNCTION()
 	void EndChangCamera(bool Tunnel);
 
+	void AddHealth(float HealthAmount);
 	FORCEINLINE void SetCanCalculateDistance(bool CanCalculate) { bCanCalculateDistance = CanCalculate; }
 	FORCEINLINE void SetLastFrameVector(FVector NewLastFrameVector) { LastFrameVector = NewLastFrameVector; }
 	FORCEINLINE void SetDistance(float NewDistance) { Distance = NewDistance; }

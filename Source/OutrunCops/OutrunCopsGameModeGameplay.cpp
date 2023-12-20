@@ -58,7 +58,6 @@ void AOutrunCopsGameModeGameplay::Tick(float DeltaTime)
 		{
 			GetWorldTimerManager().SetTimer(WastedTimer, this, &AOutrunCopsGameModeGameplay::EndRun, TimeToGetWasted);
 		}
-		GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Blue, FString::Printf(TEXT("TimeElapsed: %f"), ElapsedTimeWasted));
 	}
 	else
 	{

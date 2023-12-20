@@ -7,6 +7,7 @@
 
 class UBoxComponent;
 class ABaseSpawner;
+class APickup;
 
 UCLASS()
 class OUTRUNCOPS_API ABaseRoad : public AActor
@@ -27,6 +28,9 @@ protected:
 
 	UFUNCTION()
 	void ChangeCameraEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION()
+	void SpawnHealthPickup();
 
 
 private:
@@ -56,12 +60,21 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* SpawnLocation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	USceneComponent* PickupSpawnLocation;
+
 	// Organizaiton
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Organization", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* Assets;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Organization", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* Props;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Organization", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<APickup> Pickup;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Organization", meta = (AllowPrivateAccess = "true"))
+	float ChanceToSpawnPickup = 0.1f;
 
 public:
 

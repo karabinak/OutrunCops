@@ -249,3 +249,15 @@ void ABaseVehiclePawn::Interaction()
 	Gamemode->EndRun();
 
 }
+
+void ABaseVehiclePawn::AddHealth(float HealthAmount)
+{
+	if (HitPoints + HealthAmount >= MaxHealth)
+	{
+		HitPoints = MaxHealth;
+	}
+	else
+	{
+		HitPoints += HealthAmount;
+	}
+}

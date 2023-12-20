@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "BaseSpawner.h"
 #include "OutrunCopsGameModeGameplay.h"
+#include "Pickup.h"
 
 ABaseRoad::ABaseRoad()
 {
@@ -16,6 +17,7 @@ ABaseRoad::ABaseRoad()
 	Props = CreateDefaultSubobject<USceneComponent>(TEXT("PROPS"));
 	Assets = CreateDefaultSubobject<USceneComponent>(TEXT("ASSETS"));
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("SpawnLocation"));
+	PickupSpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("PickupSpawnLocation"));
 
 	SetRootComponent(Road);
 	SpawnerTrigger->SetupAttachment(GetRootComponent());
@@ -23,6 +25,7 @@ ABaseRoad::ABaseRoad()
 	Props->SetupAttachment(GetRootComponent());
 	Assets->SetupAttachment(GetRootComponent());
 	SpawnLocation->SetupAttachment(GetRootComponent());
+	PickupSpawnLocation->SetupAttachment(GetRootComponent());
 }
 
 void ABaseRoad::BeginPlay()
@@ -32,6 +35,8 @@ void ABaseRoad::BeginPlay()
 	SpawnerTrigger->OnComponentBeginOverlap.AddDynamic(this, &ABaseRoad::OnSpawnerTriggerBeginOverlap);
 	CameraTrigger->OnComponentBeginOverlap.AddDynamic(this, &ABaseRoad::OnCameraChangeOverlap);
 	CameraTrigger->OnComponentEndOverlap.AddDynamic(this, &ABaseRoad::ChangeCameraEndOverlap);
+
+	SpawnHealthPickup();
 }
 
 void ABaseRoad::OnSpawnerTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -65,5 +70,19 @@ void ABaseRoad::ChangeCameraEndOverlap(UPrimitiveComponent* OverlappedComp, AAct
 	if (Pawn == OtherActor)
 	{
 		Pawn->EndChangCamera(bTunnel);
+	}
+}
+
+void ABaseRoad::SpawnHealthPickup()
+{
+	if (ChanceToSpawnPickup <= 0.f) return;
+	if (ChanceToSpawnPickup >= FMath::FRandRange(0.0f, 1.0f))
+	{
+		if (Pickup)
+		{
+			FActorSpawnParameters ActorSpawnParameters;
+			GetWorld()->SpawnActor<APickup>(Pickup, PickupSpawnLocation->GetComponentLocation(), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
+		}
+
 	}
 }

@@ -73,10 +73,10 @@ ABaseVehiclePawn* ABaseGarage::SetPreviewVehicle(int32 VehicleValue)
 		DestroyPreviousVehicle();
 		SpawnNewVehicle(VehicleValue, IsInInventory);
 		UBaseShopWidget* ShopCast = Cast<UBaseShopWidget>(ShopWidget);
-		if (ShopCast)
-		{
-			ShopCast->SetVehicleStats(CurrentCatalogVehicle);
-		}
+		//if (ShopCast)
+		//{
+		//	ShopCast->SetVehicleStats(CurrentCatalogVehicle);
+		//}
 		return CurrentCatalogVehicle;
 	}
 
@@ -86,10 +86,10 @@ ABaseVehiclePawn* ABaseGarage::SetPreviewVehicle(int32 VehicleValue)
 		DestroyPreviousVehicle();
 		SpawnNewVehicle(VehicleValue, IsInInventory);
 		UBaseShopWidget* ShopCast = Cast<UBaseShopWidget>(ShopWidget);
-		if (ShopCast)
-		{
-			ShopCast->SetVehicleStats(CurrentCatalogVehicle);
-		}
+		//if (ShopCast)
+		//{
+		//	ShopCast->SetVehicleStats(CurrentCatalogVehicle);
+		//}
 		return CurrentCatalogVehicle;
 	}
 	return CurrentCatalogVehicle;
