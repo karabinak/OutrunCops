@@ -9,6 +9,14 @@ class UCameraComponent;
 class UWidgetComponent;
 class UStaticMeshComponent;
 class UChaosWheeledVehicleMovementComponent;
+class USplineComponent;
+
+UENUM(BlueprintType)
+enum class EVehicleState : uint8
+{
+	EVS_Inactive UMETA(DisplayName = "CantPlay"),
+	EVS_Active UMETA(DisplayName = "Playing"),
+};
 
 UCLASS()
 class OUTRUNCOPS_API ABaseVehiclePawn : public AWheeledVehiclePawn
@@ -36,6 +44,8 @@ protected:
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	void ResetCanHit();
+
+	void SelfDrive();
 
 	// TO DELETE
 	void Interaction();
@@ -68,7 +78,10 @@ private:
 	FVector LastFrameVector;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Distance Calculation", meta = (AllowPrivateAccess = "true"))
-	bool bCanCalculateDistance = true;
+	bool bCanCalculateDistance = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Distance Calculation", meta = (AllowPrivateAccess = "true"))
+	bool bCanDrive = false;
 
 	// Car Parts
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
@@ -121,6 +134,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	FRotator SpringArmLastRotation;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	EVehicleState VehicleState = EVehicleState::EVS_Inactive;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	USplineComponent* SplineComponent;
+
 
 public:
 
@@ -129,7 +148,12 @@ public:
 	UFUNCTION()
 	void EndChangCamera(bool Tunnel);
 
+	void SetVehicleState(EVehicleState NewVehicleState);
+
+	void PathDriving(USplineComponent* SplineComp);
+
 	void AddHealth(float HealthAmount);
+	FORCEINLINE UCameraComponent* GetCamera() { return Camera; }
 	FORCEINLINE void SetCanCalculateDistance(bool CanCalculate) { bCanCalculateDistance = CanCalculate; }
 	FORCEINLINE void SetLastFrameVector(FVector NewLastFrameVector) { LastFrameVector = NewLastFrameVector; }
 	FORCEINLINE void SetDistance(float NewDistance) { Distance = NewDistance; }

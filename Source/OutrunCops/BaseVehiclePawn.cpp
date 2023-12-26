@@ -7,6 +7,8 @@
 #include "Components/WidgetComponent.h"
 #include "MySaveGame.h"
 #include "BaseGameInstance.h"
+#include "Components/SplineComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 #include "OutrunCopsGameModeGameplay.h"
 #include "Kismet/GameplayStatics.h"
@@ -68,6 +70,9 @@ ABaseVehiclePawn::ABaseVehiclePawn()
 void ABaseVehiclePawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SetVehicleState(EVehicleState::EVS_Inactive);
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	HitPoints = MaxHealth;
 
@@ -133,6 +138,7 @@ void ABaseVehiclePawn::Tick(float DeltaSeconds)
 
 	
 	CalculateDistance();
+	SelfDrive();
 }
 
 void ABaseVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -146,16 +152,19 @@ void ABaseVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void ABaseVehiclePawn::Throttle(float AxisValue)
 {
+	if (!bCanDrive) return;
 	GetVehicleMovement()->SetThrottleInput(AxisValue);
 }
 
 void ABaseVehiclePawn::Brake(float AxisValue)
 {
+	if (!bCanDrive) return;
 	GetVehicleMovement()->SetBrakeInput(AxisValue);
 }
 
 void ABaseVehiclePawn::Steer(float AxisValue)
 {
+	if (!bCanDrive) return;
 	GetVehicleMovement()->SetSteeringInput(AxisValue);
 }
 
@@ -260,4 +269,63 @@ void ABaseVehiclePawn::AddHealth(float HealthAmount)
 	{
 		HitPoints += HealthAmount;
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("%f"), HitPoints);
+}
+
+void ABaseVehiclePawn::SetVehicleState(EVehicleState NewVehicleState)
+{
+	switch (NewVehicleState)
+	{
+	case EVehicleState::EVS_Inactive:
+		bCanDrive = false;
+		bCanCalculateDistance = false;
+		break;
+
+	case EVehicleState::EVS_Active:
+		bCanDrive = true;
+		bCanCalculateDistance = true;
+		break;
+
+	default:
+
+		break;
+	}
+}
+
+
+void ABaseVehiclePawn::PathDriving(USplineComponent* SplineComp)
+{
+	SplineComponent = SplineComp;
+	//FVector ActorLocation = GetActorLocation();
+	//FVector TangentLocation = SplineComp->FindTangentClosestToWorldLocation(ActorLocation, ESplineCoordinateSpace::World);
+	//FVector NormalizedTangent = TangentLocation.GetSafeNormal() * 200.f + ActorLocation;
+	//FVector TangentNormalizedLocation = SplineComp->FindLocationClosestToWorldLocation(NormalizedTangent, ESplineCoordinateSpace::World);
+	//FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(ActorLocation, TangentNormalizedLocation);
+	//FRotator NormalizedDeltaRot = UKismetMathLibrary::NormalizedDeltaRotator(LookAtRot, GetActorRotation());
+
+	//double Steering = UKismetMathLibrary::MapRangeClamped(NormalizedDeltaRot.Yaw, -20.f, 20.f, -1.f, 1.f);
+
+	//GetVehicleMovement()->SetThrottleInput(0.95f);
+	//GetVehicleMovement()->SetBrakeInput(0.f);
+	//GetVehicleMovement()->SetSteeringInput(Steering);
+}
+
+void ABaseVehiclePawn::SelfDrive()
+{
+	if (SplineComponent == nullptr) return;
+
+	FVector ActorLocation = GetActorLocation();
+	FVector TangentLocation = SplineComponent->FindTangentClosestToWorldLocation(ActorLocation, ESplineCoordinateSpace::World);
+	FVector NormalizedTangent = TangentLocation.GetSafeNormal() * 200.f + ActorLocation;
+	FVector TangentNormalizedLocation = SplineComponent->FindLocationClosestToWorldLocation(NormalizedTangent, ESplineCoordinateSpace::World);
+	FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(ActorLocation, TangentNormalizedLocation);
+	FRotator NormalizedDeltaRot = UKismetMathLibrary::NormalizedDeltaRotator(LookAtRot, GetActorRotation());
+
+	double Steering = UKismetMathLibrary::MapRangeClamped(NormalizedDeltaRot.Yaw, -10.f, 10.f, -1.f, 1.f);
+
+	GetVehicleMovement()->SetThrottleInput(0.95f);
+	GetVehicleMovement()->SetBrakeInput(0.f);
+	GetVehicleMovement()->SetSteeringInput(Steering);
+
 }

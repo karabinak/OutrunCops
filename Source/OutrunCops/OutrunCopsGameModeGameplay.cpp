@@ -9,6 +9,7 @@
 #include "InventoryComponent.h"
 #include "ChaosVehicleMovementComponent.h"
 #include "BaseEnemy.h"
+#include "DesertCutsceneCamera.h"
 
 AOutrunCopsGameModeGameplay::AOutrunCopsGameModeGameplay()
 {
@@ -22,9 +23,20 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
 
-	FActorSpawnParameters ActorSpawnParameters;
-	BaseVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(8000.f, 0.f, 15.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BaseVehicle);
+	if (GameInstance->GetPlayerVehicle_Inst())
+	{
+		FActorSpawnParameters ActorSpawnParameters;
+		BaseVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(10100.f, 1050.f, 10.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BaseVehicle);
+	}
+	if (CutsceneCamera)
+	{
+		FActorSpawnParameters CameraActorSpawnParameters;
+		GetWorld()->SpawnActor<ADesertCutsceneCamera>(CutsceneCamera->GetDefaultObject()->GetClass(), CameraSpawnLocation, FRotator(0.f, 0.f, 0.f), CameraActorSpawnParameters);
+	}
+
+
+
 	// Setting Basic Currency
 	Cast<ABasePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetPlayerBasicCurrency(GameInstance->GetPlayerBasicCurrency_Inst());
 	GameInstance->LoadGame();
@@ -41,7 +53,6 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	}
 	if (BaseVehicle)
 	{
-		BaseVehicle->SetCanCalculateDistance(true);
 		BaseVehicle->SetLastFrameVector(BaseVehicle->GetActorLocation());
 		BaseVehicle->SetDistance(0.f);
 	}

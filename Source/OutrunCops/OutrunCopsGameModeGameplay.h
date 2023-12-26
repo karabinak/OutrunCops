@@ -8,6 +8,7 @@
 
 class ABaseVehiclePawn;
 class ABaseEnemy;
+class ADesertCutsceneCamera;
 
 //UENUM(BlueprintType)
 //enum class EChaseState : uint8
@@ -59,6 +60,11 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	UUserWidget* EndRunWidget;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ADesertCutsceneCamera> CutsceneCamera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	FVector CameraSpawnLocation = FVector(2000.f, 0.f, 1500.f);
 
 	// TEST
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"));

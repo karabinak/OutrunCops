@@ -7,6 +7,7 @@
 void UBaseGameplayWidget::NativeConstruct()
 {
 	PawnRef = Cast<ABaseVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	CustomConstruct();
 }
 
 void UBaseGameplayWidget::AddPauseToViewport()

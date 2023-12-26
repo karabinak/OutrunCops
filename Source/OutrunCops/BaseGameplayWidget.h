@@ -15,6 +15,9 @@ class OUTRUNCOPS_API UBaseGameplayWidget : public UUserWidget
 protected:
 	virtual void NativeConstruct() override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void CustomConstruct();
+
 
 public:
 	UFUNCTION(BlueprintCallable)

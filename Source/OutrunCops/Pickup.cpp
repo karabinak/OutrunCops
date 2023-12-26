@@ -31,11 +31,11 @@ void APickup::BeginPlay()
 void APickup::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ABaseVehiclePawn* Pawn = Cast<ABaseVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	if (Pawn)
+	if (Pawn == OtherActor)
 	{
 		Pawn->AddHealth(HealthAmount);
+		Destroy();
 	}
-	Destroy();
 }
 
 float APickup::TransformedCos()
@@ -48,6 +48,7 @@ void APickup::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	RunningTime += DeltaTime;
 
+	AddActorLocalRotation(FRotator(0.f, 1.5f, 0.f));
 	AddActorWorldOffset(FVector(0.f, 0.f, TransformedCos()));
 }
 

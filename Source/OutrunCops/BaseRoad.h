@@ -29,8 +29,7 @@ protected:
 	UFUNCTION()
 	void ChangeCameraEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	UFUNCTION()
-	void SpawnHealthPickup();
+	virtual void SpawnHealthPickup();
 
 
 private:
