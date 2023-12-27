@@ -51,11 +51,6 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	{
 		GameplayWidget->AddToViewport();
 	}
-	if (BaseVehicle)
-	{
-		BaseVehicle->SetLastFrameVector(BaseVehicle->GetActorLocation());
-		BaseVehicle->SetDistance(0.f);
-	}
 }
 
 void AOutrunCopsGameModeGameplay::Tick(float DeltaTime)

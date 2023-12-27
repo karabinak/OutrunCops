@@ -283,6 +283,8 @@ void ABaseVehiclePawn::SetVehicleState(EVehicleState NewVehicleState)
 		break;
 
 	case EVehicleState::EVS_Active:
+		Distance = 0.f;
+		LastFrameVector = GetActorLocation();
 		bCanDrive = true;
 		bCanCalculateDistance = true;
 		break;
