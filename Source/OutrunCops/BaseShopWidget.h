@@ -8,6 +8,7 @@
 class ABaseGarage;
 class ABasePlayerController;
 class UBaseGameInstance;
+class UUpgradeWidget;
 
 UCLASS()
 class OUTRUNCOPS_API UBaseShopWidget : public UUserWidget
@@ -30,8 +31,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void BuyVehicle();
 
-	UFUNCTION(BlueprintCallable)
-	void ChangeVehicleColor();
+	//UFUNCTION(BlueprintCallable)
+	//void ChangeVehicleColor();
+
 
 private:
 	// REFERENCES
@@ -50,9 +52,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
 	int32 AmountOfVehiclesInCatalog;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
-	UMaterial* Material;
 
 public:
 

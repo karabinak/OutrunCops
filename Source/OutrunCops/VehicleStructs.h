@@ -30,7 +30,7 @@ struct FInventorySlot
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UClass* VehicleClass;
+	TSubclassOf<ABaseVehiclePawn> VehicleClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FCustomizations VehicleCustomization;

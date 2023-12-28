@@ -20,7 +20,7 @@ protected:
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	UClass* PlayerVehicle_Inst;
+	ABaseVehiclePawn* PlayerVehicle_Inst;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
 	TMap<int32, FInventorySlot> PlayerInventory_Inst;
@@ -34,8 +34,8 @@ private:
 
 public:
 
-	FORCEINLINE void SetPlayerVehicle_Inst(UClass* Vehicle) { PlayerVehicle_Inst = Vehicle; }
-	FORCEINLINE UClass* GetPlayerVehicle_Inst() { return PlayerVehicle_Inst;}
+	FORCEINLINE void SetPlayerVehicle_Inst(ABaseVehiclePawn* Vehicle) { PlayerVehicle_Inst = Vehicle; }
+	FORCEINLINE ABaseVehiclePawn* GetPlayerVehicle_Inst() { return PlayerVehicle_Inst;}
 
 	FORCEINLINE void SetPlayerInventory_Inst(TMap<int32, FInventorySlot> Inventory) { PlayerInventory_Inst = Inventory; }
 	FORCEINLINE TMap<int32, FInventorySlot> GetPlayerInventory_Inst() { return PlayerInventory_Inst; }

@@ -15,6 +15,7 @@ UENUM(BlueprintType)
 enum class EWidgetState : uint8
 {
 	EWS_Shop UMETA(DisplayName = "Shop"),
+	EWS_Upgrade UMETA(DisplayName = "Upgrade"),
 
 	EWS_MAX UMETA(DisplayName = "Default")
 };
@@ -34,6 +35,7 @@ protected:
 	void SpawnNewVehicle(int32 VehicleValue, bool IsInInventory);
 
 	void CreateShopWidget();
+	void CreateUpgradeWidget();
 	void CreateLevelSelector();
 	void DelayedBeginPlayFunc();
 
@@ -50,6 +52,11 @@ private:
 	TSubclassOf<UUserWidget> LevelSelectorClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	UUserWidget* LevelSelectorWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> UpgradeWidgetClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
+	UUserWidget* UpgradeWidget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	EWidgetState WidgetState;
@@ -92,6 +99,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void OpenLevelSelector();
+
+	UFUNCTION(BlueprintCallable)
+	void OpenUpgrade();
 
 	UFUNCTION(BlueprintCallable)
 	void RemoveLevelSelector();

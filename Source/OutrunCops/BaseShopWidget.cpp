@@ -9,6 +9,7 @@
 #include "BasePlayerController.h"
 #include "BaseVehiclePawn.h"
 #include "InventoryComponent.h"
+#include "UpgradeWidget.h"
 
 void UBaseShopWidget::NativeConstruct()
 {
@@ -20,7 +21,6 @@ void UBaseShopWidget::NativeConstruct()
 	AmountOfVehiclesInCatalog = GarageRef->GetVehicleCatalog().Num();
 
 	VehicleInt = GameInstanceRef->GetVehicleInt_Inst();
-
 }
 
 void UBaseShopWidget::SaveCurrentVehicleInt(int32 CurrentVehicle)
@@ -60,8 +60,7 @@ void UBaseShopWidget::BuyVehicle()
 			Vehicle.VehicleCustomization.BodyPaint = GarageRef->GetCurrentCatalogVehicle()->GetMesh()->GetMaterial(0)->GetMaterial();
 
 			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, Vehicle);
-
-			Cast<UBaseGameInstance>(GetGameInstance())->SetPlayerVehicle_Inst(PlayerControllerRef->GetInventory()->GetVehicleInventory().Find(VehicleInt)->VehicleClass);
+			Cast<UBaseGameInstance>(GetGameInstance())->SetPlayerVehicle_Inst(PlayerControllerRef->GetInventory()->GetVehicleInventory().Find(VehicleInt)->VehicleClass.GetDefaultObject());
 			
 		}
 		else
@@ -72,21 +71,21 @@ void UBaseShopWidget::BuyVehicle()
 	}
 }
 
-void UBaseShopWidget::ChangeVehicleColor()
-{
-	GarageRef->GetCurrentCatalogVehicle()->GetMesh()->SetMaterial(0, Material);
-
-	TArray<UStaticMeshComponent*> VehicleParts = GarageRef->GetCurrentCatalogVehicle()->GetPartsToDetach();
-	for (int i = 0; i < VehicleParts.Num(); i++)
-	{
-		if (VehicleParts[i])
-		{
-			VehicleParts[i]->SetMaterial(0, Material);
-		}
-	}
-
-	FInventorySlot Vehicle;
-	Vehicle.VehicleClass = GarageRef->GetCurrentCatalogVehicle()->GetClass();
-	Vehicle.VehicleCustomization.BodyPaint = Material;
-	PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, Vehicle);
-}
+//void UBaseShopWidget::ChangeVehicleColor()
+//{
+//	GarageRef->GetCurrentCatalogVehicle()->GetMesh()->SetMaterial(0, Material);
+//
+//	TArray<UStaticMeshComponent*> VehicleParts = GarageRef->GetCurrentCatalogVehicle()->GetPartsToDetach();
+//	for (int i = 0; i < VehicleParts.Num(); i++)
+//	{
+//		if (VehicleParts[i])
+//		{
+//			VehicleParts[i]->SetMaterial(0, Material);
+//		}
+//	}
+//
+//	FInventorySlot Vehicle;
+//	Vehicle.VehicleClass = GarageRef->GetCurrentCatalogVehicle()->StaticClass();
+//	Vehicle.VehicleCustomization.BodyPaint = Material;
+//	PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, Vehicle);
+//}

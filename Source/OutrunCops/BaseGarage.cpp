@@ -5,6 +5,7 @@
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "BaseMenuWidget.h"
 #include "BaseShopWidget.h"
+#include "UpgradeWidget.h"
 #include "BaseVehiclePawn.h"
 #include "LevelSelectorWidget.h"
 #include "BasePlayerController.h"
@@ -41,10 +42,12 @@ void ABaseGarage::BeginPlay()
 	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
 	CreateShopWidget();
 	CreateLevelSelector();
-	if (ShopWidget && LevelSelectorWidget)
+	CreateUpgradeWidget();
+	if (ShopWidget && LevelSelectorWidget && UpgradeWidget)
 	{
 		Cast<UBaseShopWidget>(ShopWidget)->SetGarageRef(this);
 		Cast<ULevelSelectorWidget>(LevelSelectorWidget)->SetGarageRef(this);
+		Cast<UUpgradeWidget>(UpgradeWidget)->SetGarageRef(this);
 		ShopWidget->AddToViewport();
 	}
 
@@ -110,14 +113,13 @@ void ABaseGarage::SpawnNewVehicle(int32 VehicleValue, bool IsInInventory)
 	FActorSpawnParameters SpawnParameters;
 	if (IsInInventory)
 	{
-		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->VehicleClass, Location, Rotation, SpawnParameters);
-		Cast<UBaseGameInstance>(GetGameInstance())->SetPlayerVehicle_Inst(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->VehicleClass);
+		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->VehicleClass.Get(), Location, Rotation, SpawnParameters);
+		//Cast<UBaseGameInstance>(GetGameInstance())->SetPlayerVehicle_Inst(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->VehicleClass.GetDefaultObject());
 		//UE_LOG(LogTemp, Warning, TEXT("True"));
 	}
 	else
 	{
 		CurrentCatalogVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(VehicleCatalog.Find(VehicleValue)->Get(), Location, Rotation, SpawnParameters);
-		//UE_LOG(LogTemp, Warning, TEXT("False"));
 	}
 
 	CurrentCatalogVehicle->GetMesh()->SetSimulatePhysics(false);
@@ -141,6 +143,14 @@ void ABaseGarage::CreateLevelSelector()
 	}
 }
 
+void ABaseGarage::CreateUpgradeWidget()
+{
+	if (UpgradeWidgetClass)
+	{
+		UpgradeWidget = CreateWidget<UUserWidget>(GetWorld(), UpgradeWidgetClass);
+	}
+}
+
 void ABaseGarage::DelayedBeginPlayFunc()
 {
 	SetPreviewVehicle(Cast<UBaseGameInstance>(GetGameInstance())->GetVehicleInt_Inst());
@@ -158,6 +168,9 @@ void ABaseGarage::SetWidgetState(EWidgetState ChangeWidgetState)
 		ShopWidget->AddToViewport();
 		break;
 
+	case EWidgetState::EWS_Upgrade:
+		UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
+		OpenUpgrade();
 
 	case EWidgetState::EWS_MAX:
 		break;
@@ -169,6 +182,14 @@ void ABaseGarage::OpenLevelSelector()
 	if (LevelSelectorWidget)
 	{
 		LevelSelectorWidget->AddToViewport();
+	}
+}
+
+void ABaseGarage::OpenUpgrade()
+{
+	if (UpgradeWidgetClass)
+	{
+		UpgradeWidget->AddToViewport();
 	}
 }
 

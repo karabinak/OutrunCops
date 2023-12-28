@@ -26,7 +26,7 @@ void AOutrunCopsGameModeGameplay::BeginPlay()
 	if (GameInstance->GetPlayerVehicle_Inst())
 	{
 		FActorSpawnParameters ActorSpawnParameters;
-		BaseVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(10100.f, 1050.f, 10.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
+		BaseVehicle = GetWorld()->SpawnActor<ABaseVehiclePawn>(GameInstance->GetPlayerVehicle_Inst()->GetClass(), FVector(10100.f, 1050.f, 10.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
 		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BaseVehicle);
 	}
 	if (CutsceneCamera)
