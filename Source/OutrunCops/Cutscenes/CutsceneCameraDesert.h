@@ -16,14 +16,25 @@ class OUTRUNCOPS_API ACutsceneCameraDesert : public AActor
 public:	
 	ACutsceneCameraDesert();
 
+	virtual void Tick(float DeltaTime) override;
+
+
 protected:
 
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
 
 	void ChangeCamera();
+	void CameraAnimation();
 
 private:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	AMyPlayerController* PC;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	AVehiclePawn* PlayerPawn;
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CutsceneCamera;
 
@@ -32,12 +43,6 @@ private:
 
 	UPROPERTY()
 	FTimerHandle CameraChangeTime;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	AMyPlayerController* PC;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	AVehiclePawn* PlayerPawn;
 
 public:	
 

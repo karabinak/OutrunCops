@@ -8,6 +8,8 @@
 // Custom
 #include "OutrunCops/Vehicles/VehiclePawn.h"
 
+//////////////////////////////////////////////////////
+
 
 AStartingRoad::AStartingRoad()
 {
@@ -24,6 +26,8 @@ void AStartingRoad::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PlayerPawn = Cast<AVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+
 	AnimationTrigger->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	AnimationTrigger->OnComponentBeginOverlap.AddDynamic(this, &AStartingRoad::OnAnimationOverlap);
 	AnimationTrigger->OnComponentEndOverlap.AddDynamic(this, &AStartingRoad::OnAnimationEndOverlap);
@@ -33,23 +37,21 @@ void AStartingRoad::BeginPlay()
 
 void AStartingRoad::OnAnimationOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AVehiclePawn* Pawn = Cast<AVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	if (Pawn == OtherActor)
+	if (PlayerPawn == OtherActor)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("BeginOver"));
-		Pawn->PathDriving(SplineComp);
+		PlayerPawn->PathDriving(SplineComp);
 	}
 } 
 
 void AStartingRoad::OnAnimationEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	AVehiclePawn* Pawn = Cast<AVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	if (Pawn == OtherActor)
+	if (PlayerPawn == OtherActor)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("EndOver"));
 		AnimationTrigger->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-		Pawn->PathDriving(nullptr);
-		Pawn->SetVehicleState(EVehicleState::EVS_Active);
+		PlayerPawn->PathDriving(nullptr);
+		PlayerPawn->SetVehicleState(EVehicleState::EVS_Active);
 	}
 }
 

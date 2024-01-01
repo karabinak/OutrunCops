@@ -56,16 +56,12 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	float PlayerDistance = (PlayerPawn->GetActorLocation() - GetActorLocation()).Size();
-	if (PlayerDistance >= DespawnDistance)
-	{
-		if (Gamemode)
-		{
-			Gamemode->SetPoliceAmount(-1);
-			Destroy();
-		}
-	}
+	DistanceFromPlayer();
+	AIMovement();
+}
 
+void AEnemy::AIMovement()
+{
 	if (PlayerPawn)
 	{
 		FRotator DirectionRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), PlayerPawn->GetActorLocation());
@@ -83,6 +79,19 @@ void AEnemy::Tick(float DeltaTime)
 			GetVehicleMovement()->SetThrottleInput(0.f);
 			GetVehicleMovement()->SetBrakeInput(1.f);
 			GetVehicleMovement()->SetSteeringInput(-Steering);
+		}
+	}
+}
+
+void AEnemy::DistanceFromPlayer()
+{
+	float PlayerDistance = (PlayerPawn->GetActorLocation() - GetActorLocation()).Size();
+	if (PlayerDistance >= DestroyDistance)
+	{
+		if (Gamemode)
+		{
+			Gamemode->SetPoliceAmount(-1);
+			Destroy();
 		}
 	}
 }

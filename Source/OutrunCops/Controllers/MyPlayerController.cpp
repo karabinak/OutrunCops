@@ -15,23 +15,23 @@ AMyPlayerController::AMyPlayerController()
 	
 }
 
-void AMyPlayerController::AddBasicCurrency(int32 BasicCurrency)
+void AMyPlayerController::AddBasicCurrency(int32 Currency)
 {
-	PlayerBasicCurrency += BasicCurrency;
-	Cast<UMyGameInstance>(GetGameInstance())->SetPlayerBasicCurrency_Inst(PlayerBasicCurrency);
+	PlayerBasicCurrency += Currency;
+	Cast<UMyGameInstance>(GetGameInstance())->SetBasicCurrencyInstance(PlayerBasicCurrency);
 	Cast<UMyGameInstance>(GetGameInstance())->SaveGame();
 }
 
-void AMyPlayerController::SubtractBasicCurrency(int32 BasicCurrency)
+void AMyPlayerController::DecreaseBasicCurrency(int32 Currency)
 {
-	if (PlayerBasicCurrency - BasicCurrency <= 0)
+	if (PlayerBasicCurrency - Currency <= 0)
 	{
 		PlayerBasicCurrency = 0;
 	}
 	else
 	{
-		PlayerBasicCurrency = PlayerBasicCurrency - BasicCurrency;
+		PlayerBasicCurrency = PlayerBasicCurrency - Currency;
 	}
-	Cast<UMyGameInstance>(GetGameInstance())->SetPlayerBasicCurrency_Inst(PlayerBasicCurrency);
+	Cast<UMyGameInstance>(GetGameInstance())->SetBasicCurrencyInstance(PlayerBasicCurrency);
 	Cast<UMyGameInstance>(GetGameInstance())->SaveGame();
 }

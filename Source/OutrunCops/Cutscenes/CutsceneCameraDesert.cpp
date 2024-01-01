@@ -39,7 +39,6 @@ void ACutsceneCameraDesert::BeginPlay()
 
 void ACutsceneCameraDesert::ChangeCamera()
 {
-
 	if (PlayerPawn && PC)
 	{
 		PC->SetViewTarget(PlayerPawn);
@@ -51,6 +50,11 @@ void ACutsceneCameraDesert::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	CameraAnimation();
+}
+
+void ACutsceneCameraDesert::CameraAnimation()
+{
 	if (PlayerPawn)
 	{
 		FVector Location = FMath::VInterpTo(GetActorLocation(), FVector(13000.f, 0.f, PlayerPawn->GetCamera()->GetComponentLocation().Z), UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), 0.5f);

@@ -26,6 +26,6 @@ public:
 private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shop Properties", meta = (AllowPrivateAccess = "true"))
-	AVehiclePawn* PawnRef;
+	AVehiclePawn* PlayerVehicle;
 
 };

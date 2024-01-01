@@ -10,7 +10,7 @@
 
 void UGameplayHUDWidget::NativeConstruct()
 {
-	PawnRef = Cast<AVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	PlayerVehicle = Cast<AVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	CustomConstruct();
 }
 

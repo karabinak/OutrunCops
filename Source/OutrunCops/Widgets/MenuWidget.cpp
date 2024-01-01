@@ -21,12 +21,12 @@ void UMenuWidget::NativeConstruct()
 
 	AmountOfVehiclesInCatalog = GarageRef->GetVehicleCatalog().Num();
 
-	VehicleInt = GameInstanceRef->GetVehicleInt_Inst();
+	VehicleInt = GameInstanceRef->GetVehicleIntInstance();
 }
 
 void UMenuWidget::SaveCurrentVehicleInt(int32 CurrentVehicle)
 {
-	GameInstanceRef->SetVehicleInt_Inst(CurrentVehicle);
+	GameInstanceRef->SetVehicleIntInstance(CurrentVehicle);
 }
 
 bool UMenuWidget::AddVehicleInt()
@@ -34,7 +34,7 @@ bool UMenuWidget::AddVehicleInt()
 	if (VehicleInt + 1 > AmountOfVehiclesInCatalog - 1) return false;
 
 	VehicleInt++;
-	GameInstanceRef->SetVehicleInt_Inst(VehicleInt);
+	GameInstanceRef->SetVehicleIntInstance(VehicleInt);
 	return true;
 }
 
@@ -43,7 +43,7 @@ bool UMenuWidget::SubtractVehicleInt()
 	if (VehicleInt - 1 < 0) return false;
 
 	VehicleInt--;
-	GameInstanceRef->SetVehicleInt_Inst(VehicleInt);
+	GameInstanceRef->SetVehicleIntInstance(VehicleInt);
 	return true;
 }
 
@@ -53,7 +53,7 @@ void UMenuWidget::BuyVehicle()
 	{
 		if (PlayerControllerRef->GetPlayerBasicCurrency() >= GarageRef->GetCurrentCatalogVehicle()->GetPrice())
 		{
-			PlayerControllerRef->SubtractBasicCurrency(GarageRef->GetCurrentCatalogVehicle()->GetPrice());
+			PlayerControllerRef->DecreaseBasicCurrency(GarageRef->GetCurrentCatalogVehicle()->GetPrice());
 
 			FInventorySlot Vehicle;
 			Vehicle.VehicleClass = GarageRef->GetCurrentCatalogVehicle()->GetClass();
@@ -61,7 +61,7 @@ void UMenuWidget::BuyVehicle()
 			Vehicle.VehicleCustomization.BodyPaint = GarageRef->GetCurrentCatalogVehicle()->GetMesh()->GetMaterial(0)->GetMaterial();
 
 			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, Vehicle);
-			Cast<UMyGameInstance>(GetGameInstance())->SetPlayerVehicle_Inst(PlayerControllerRef->GetInventory()->GetVehicleInventory().Find(VehicleInt)->VehicleClass);
+			Cast<UMyGameInstance>(GetGameInstance())->SetVehicleClassInstance(PlayerControllerRef->GetInventory()->GetInventory().Find(VehicleInt)->VehicleClass);
 			
 		}
 		else

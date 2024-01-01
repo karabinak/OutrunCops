@@ -7,10 +7,11 @@
 // Custom
 #include "OutrunCops/Vehicles/VehiclePawn.h"
 
+//////////////////////////////////////////////////////
+
 APickup::APickup()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
 
 	PickupMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PickupStaticMesh"));
 	PickupMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
@@ -32,10 +33,10 @@ void APickup::BeginPlay()
 
 void APickup::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AVehiclePawn* Pawn = Cast<AVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	if (Pawn == OtherActor)
+	AVehiclePawn* PlayerPawn = Cast<AVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	if (PlayerPawn == OtherActor)
 	{
-		Pawn->AddHealth(HealthAmount);
+		PlayerPawn->AddHealth(HealthAmount);
 		Destroy();
 	}
 }

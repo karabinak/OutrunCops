@@ -22,15 +22,12 @@ protected:
 private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	TMap<int32, FInventorySlot> PlayerInventory;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	//TMap<int32, TSubclassOf<ABaseVehiclePawn>> PlayerInventory;
+	TMap<int32, FInventorySlot> Inventory;
 
 public:	
 
-	FORCEINLINE TMap<int32, FInventorySlot> GetVehicleInventory() { return PlayerInventory; }
-	FORCEINLINE void SetVehicleInventory(TMap<int32, FInventorySlot> Inventory) { PlayerInventory = Inventory; }
+	FORCEINLINE TMap<int32, FInventorySlot> GetInventory() { return Inventory; }
+	FORCEINLINE void SetInventory(TMap<int32, FInventorySlot> NewInventory) { Inventory = NewInventory; }
 
 	UFUNCTION(BlueprintCallable)
 	void AddToInventory(int32 Value, FInventorySlot Vehicle);

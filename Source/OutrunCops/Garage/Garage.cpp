@@ -16,6 +16,8 @@
 #include "OutrunCops/Widgets/MenuWidget.h"
 #include "OutrunCops/Widgets/LevelSelectorWidget.h"
 
+//////////////////////////////////////////////////////
+
 AGarage::AGarage()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -34,12 +36,24 @@ AGarage::AGarage()
 void AGarage::BeginPlay()
 {
 	Super::BeginPlay();
-	PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	if (PlayerController)
-	{
-		PlayerController->SetViewTarget(this);
-	}
+	PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
+	BeginCameraView();
+	WidgetSettings();
+
+	GetWorld()->GetTimerManager().SetTimer(SpawnDelayTimer, this, &AGarage::DelayedBeginPlayFunc, 0.001f);
+}
+
+void AGarage::BeginCameraView()
+{
+	if (PC)
+	{
+		PC->SetViewTarget(this);
+	}
+}
+
+void AGarage::WidgetSettings()
+{
 	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
 	CreateShopWidget();
 	CreateLevelSelector();
@@ -51,13 +65,6 @@ void AGarage::BeginPlay()
 		Cast<UUpgradeWidget>(UpgradeWidget)->SetGarageRef(this);
 		ShopWidget->AddToViewport();
 	}
-
-	GetWorld()->GetTimerManager().SetTimer(SpawnDelayTimer, this, &AGarage::DelayedBeginPlayFunc, 0.001f);
-
-	//// PLACEHODER
-	//PlayerController->GetInventory()->AddToInventory(0, VehicleCatalog.Find(0)->Get());
-	//UBaseGameInstance* Instance = Cast<UBaseGameInstance>(GetGameInstance());
-	//Instance->SetCurrentVehicle(PlayerController->GetInventory()->GetFromInventory(0));
 }
 
 void AGarage::Tick(float DeltaTime)
@@ -68,8 +75,8 @@ void AGarage::Tick(float DeltaTime)
 
 AVehiclePawn* AGarage::SetPreviewVehicle(int32 VehicleValue)
 {
-	bool IsInInventory = PlayerController->GetInventory()->GetVehicleInventory().Contains(VehicleValue);
-	bool IsNotEmpty = !PlayerController->GetInventory()->GetVehicleInventory().IsEmpty();
+	bool IsInInventory = PC->GetInventory()->GetInventory().Contains(VehicleValue);
+	bool IsNotEmpty = !PC->GetInventory()->GetInventory().IsEmpty();
 
 	// Vehicle From Player Inventory ( if purchased )
 	if (IsNotEmpty && IsInInventory)
@@ -77,10 +84,7 @@ AVehiclePawn* AGarage::SetPreviewVehicle(int32 VehicleValue)
 		DestroyPreviousVehicle();
 		SpawnNewVehicle(VehicleValue, IsInInventory);
 		UMenuWidget* ShopCast = Cast<UMenuWidget>(ShopWidget);
-		//if (ShopCast)
-		//{
-		//	ShopCast->SetVehicleStats(CurrentCatalogVehicle);
-		//}
+
 		return CurrentCatalogVehicle;
 	}
 
@@ -90,10 +94,7 @@ AVehiclePawn* AGarage::SetPreviewVehicle(int32 VehicleValue)
 		DestroyPreviousVehicle();
 		SpawnNewVehicle(VehicleValue, IsInInventory);
 		UMenuWidget* ShopCast = Cast<UMenuWidget>(ShopWidget);
-		//if (ShopCast)
-		//{
-		//	ShopCast->SetVehicleStats(CurrentCatalogVehicle);
-		//}
+
 		return CurrentCatalogVehicle;
 	}
 	return CurrentCatalogVehicle;
@@ -114,9 +115,8 @@ void AGarage::SpawnNewVehicle(int32 VehicleValue, bool IsInInventory)
 	FActorSpawnParameters SpawnParameters;
 	if (IsInInventory)
 	{
-		CurrentCatalogVehicle = GetWorld()->SpawnActor<AVehiclePawn>(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->VehicleClass.Get(), Location, Rotation, SpawnParameters);
-		//Cast<UBaseGameInstance>(GetGameInstance())->SetPlayerVehicle_Inst(PlayerController->GetInventory()->GetVehicleInventory().Find(VehicleValue)->VehicleClass.GetDefaultObject());
-		//UE_LOG(LogTemp, Warning, TEXT("True"));
+		CurrentCatalogVehicle = GetWorld()->SpawnActor<AVehiclePawn>(PC->GetInventory()->GetInventory().Find(VehicleValue)->VehicleClass.Get(), Location, Rotation, SpawnParameters);
+	//UE_LOG(LogTemp, Warning, TEXT("True"));
 	}
 	else
 	{
@@ -154,7 +154,7 @@ void AGarage::CreateUpgradeWidget()
 
 void AGarage::DelayedBeginPlayFunc()
 {
-	SetPreviewVehicle(Cast<UMyGameInstance>(GetGameInstance())->GetVehicleInt_Inst());
+	SetPreviewVehicle(Cast<UMyGameInstance>(GetGameInstance())->GetVehicleIntInstance());
 }
 
 void AGarage::SetWidgetState(EWidgetState ChangeWidgetState)

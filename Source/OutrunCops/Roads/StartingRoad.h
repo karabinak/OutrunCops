@@ -8,6 +8,7 @@
 
 class USplineComponent;
 class ARoad;
+class AVehiclePawn;
 
 UCLASS()
 class OUTRUNCOPS_API AStartingRoad : public ARoad
@@ -30,6 +31,7 @@ protected:
 	void ActiveAnimationBox();
 
 private:
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spline", meta = (AllowPrivateAccess = "true"))
 	USplineComponent* SplineComp;

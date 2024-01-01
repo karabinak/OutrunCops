@@ -9,6 +9,8 @@
 class AVehiclePawn;
 class AEnemy;
 class ACutsceneCameraDesert;
+class UMyGameInstance;
+class AMyPlayerController;
 
 //UENUM(BlueprintType)
 //enum class EChaseState : uint8
@@ -27,13 +29,20 @@ class OUTRUNCOPS_API AGameplayGamemode : public AGameModeBase
 {
 	GENERATED_BODY()
 
-protected:
+public:
 
 	AGameplayGamemode();
+	virtual void Tick(float DeltaTime) override;
+
+	void WastedTimers();
+
+protected:
 
 	virtual void BeginPlay() override;
 
-	virtual void Tick(float DeltaTime) override;
+	void SpawnCutsceneCamera();
+
+	void SpawnPlayerVehicle();
 
 	void CreateGameplayWidget();
 	void CreatePauseWidget();
@@ -42,6 +51,17 @@ protected:
 	void AddEndRunToViewport();
 
 private:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"));
+	AVehiclePawn* PlayerVehicle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"));
+	UMyGameInstance* GameInstance;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"));
+	AMyPlayerController* PC;
+
+
 	// Gameplay Widget
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> GameplayWidgetClass;
@@ -66,10 +86,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	FVector CameraSpawnLocation = FVector(2000.f, 0.f, 2500.f);
 
-	// TEST
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"));
-	AVehiclePawn* BaseVehicle;
-
+	// Police functions
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"));
 	TSubclassOf<AEnemy> BasicPoliceCar;
 
@@ -102,17 +119,18 @@ private:
 
 public:
 	
-	FORCEINLINE UUserWidget* GetPauseWidget() { return PauseWidget; }
+	// Getters/Setters
 
-	// TEST
+	FORCEINLINE UUserWidget* GetPauseWidget() { return PauseWidget; }
 	FORCEINLINE FTransform SetPoliceSpawnLocation(FTransform SpawnLocation) { return PoliceSpawnTransform = SpawnLocation; }
 
 	FORCEINLINE float GetTimeToGetWasted() { return TimeToGetWasted; }
 	FORCEINLINE float GetElapsedTimeWasted() { return ElapsedTimeWasted; }
 
-	int32 SetPoliceAmount(int32 Amount) { return PoliceAmount += Amount; }
+	FORCEINLINE int32 SetPoliceAmount(int32 Amount) { return PoliceAmount += Amount; }
+	FORCEINLINE int32 SetMaxPolice(int32 Amount) { return MaxPolice = Amount; }
 
-	int32 SetMaxPolice(int32 Amount) { return MaxPolice = Amount; }
+	// Public functions
 
 	UFUNCTION(BlueprintCallable)
 	void SpawnPoliceCar();

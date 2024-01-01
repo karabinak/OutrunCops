@@ -34,14 +34,14 @@ public:
 
 	FORCEINLINE UInventoryComponent* GetInventory() const { return Inventory; }
 
-	FORCEINLINE void SetPlayerBasicCurrency(int32 BasicCurrency) { PlayerBasicCurrency = BasicCurrency; }
+	FORCEINLINE void SetPlayerBasicCurrency(int32 Currency) { PlayerBasicCurrency = Currency; }
 	FORCEINLINE int32 GetPlayerBasicCurrency() const { return PlayerBasicCurrency; }
 
 	// Public functions
 
 	UFUNCTION(BlueprintCallable)
-	void AddBasicCurrency(int32 BasicCurrency);
+	void AddBasicCurrency(int32 Currency);
 	UFUNCTION(BlueprintCallable)
-	void SubtractBasicCurrency(int32 BasicCurrency);
+	void DecreaseBasicCurrency(int32 Currency);
 
 };

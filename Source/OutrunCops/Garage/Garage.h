@@ -27,9 +27,14 @@ class OUTRUNCOPS_API AGarage : public AActor
 	
 public:	
 	AGarage();
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	virtual void BeginPlay() override;
+
+	void BeginCameraView();
+
+	void WidgetSettings();
 
 	void DestroyPreviousVehicle();
 	void SpawnNewVehicle(int32 VehicleValue, bool IsInInventory);
@@ -40,6 +45,9 @@ protected:
 	void DelayedBeginPlayFunc();
 
 private:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	AMyPlayerController* PC;
 
 
 	// Widgets
@@ -78,24 +86,20 @@ private:
 	UStaticMeshComponent* VehicleStand;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* GarageMainView;
-	
-	// PC
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	AMyPlayerController* PlayerController;
 
 
 public:	
-	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
-	AVehiclePawn* SetPreviewVehicle(int32 VehicleValue);
-	UFUNCTION(BlueprintCallable)
-	void SetWidgetState(EWidgetState ChangeWidgetState);
-
-	TMap<int32, TSubclassOf<AVehiclePawn>> GetVehicleCatalog() { return VehicleCatalog; }
+	// Getters/Setters
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE AVehiclePawn* GetCurrentCatalogVehicle() { return CurrentCatalogVehicle; }
+
+
+	UFUNCTION(BlueprintCallable)
+	AVehiclePawn* SetPreviewVehicle(int32 VehicleValue);
+
+	TMap<int32, TSubclassOf<AVehiclePawn>> GetVehicleCatalog() { return VehicleCatalog; }
 
 	UFUNCTION(BlueprintCallable)
 	void OpenLevelSelector();
@@ -106,5 +110,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RemoveLevelSelector();
 
+	UFUNCTION(BlueprintCallable)
+	void SetWidgetState(EWidgetState ChangeWidgetState);
 
 };

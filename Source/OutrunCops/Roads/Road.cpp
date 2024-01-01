@@ -10,6 +10,7 @@
 #include "OutrunCops/Gamemodes/GameplayGamemode.h"
 #include "OutrunCops/Pickups/Pickup.h"
 
+//////////////////////////////////////////////////////
 
 ARoad::ARoad()
 {
@@ -36,20 +37,23 @@ void ARoad::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PlayerPawn = Cast<AVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	Gamemode = Cast<AGameplayGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
+
 	SpawnerTrigger->OnComponentBeginOverlap.AddDynamic(this, &ARoad::OnSpawnerTriggerBeginOverlap);
 	CameraTrigger->OnComponentBeginOverlap.AddDynamic(this, &ARoad::OnCameraChangeOverlap);
 	CameraTrigger->OnComponentEndOverlap.AddDynamic(this, &ARoad::ChangeCameraEndOverlap);
 
-	SpawnHealthPickup();
+	SpawnPickup();
 }
 
 void ARoad::OnSpawnerTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (SpawnerRef)
+	if (Spawner)
 	{
 		SpawnerTrigger->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-		SpawnerRef->SpawnRoad();
-		AGameplayGamemode* Gamemode = Cast<AGameplayGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
+		Spawner->SpawnRoad();
+
 		Gamemode->SetPoliceSpawnLocation(FTransform(SpawnLocation->GetComponentRotation(), SpawnLocation->GetComponentLocation(), FVector(1.f, 1.f, 1.f)));
 		Gamemode->SpawnPoliceCar();
 	}
@@ -57,27 +61,25 @@ void ARoad::OnSpawnerTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp, AA
 
 void ARoad::OnCameraChangeOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AVehiclePawn* Pawn = Cast<AVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	if (Pawn == OtherActor)
+	if (PlayerPawn == OtherActor)
 	{
 		if (!bTunnel)
 		{
 			CameraTrigger->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 		}
-		Pawn->ChangeCamera(CameraChangeValue, bTunnel);
+		PlayerPawn->ChangeCamera(CameraChangeValue, bTunnel);
 	}
 }
 
 void ARoad::ChangeCameraEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	AVehiclePawn* Pawn = Cast<AVehiclePawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	if (Pawn == OtherActor)
+	if (PlayerPawn == OtherActor)
 	{
-		Pawn->EndChangCamera(bTunnel);
+		PlayerPawn->EndChangCamera(bTunnel);
 	}
 }
 
-void ARoad::SpawnHealthPickup()
+void ARoad::SpawnPickup()
 {
 	if (ChanceToSpawnPickup <= 0.f) return;
 	if (ChanceToSpawnPickup >= FMath::FRandRange(0.0f, 1.0f))
@@ -87,6 +89,5 @@ void ARoad::SpawnHealthPickup()
 			FActorSpawnParameters ActorSpawnParameters;
 			GetWorld()->SpawnActor<APickup>(Pickup, PickupSpawnLocation->GetComponentLocation(), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
 		}
-
 	}
 }

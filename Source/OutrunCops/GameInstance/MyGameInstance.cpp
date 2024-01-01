@@ -26,9 +26,9 @@ void UMyGameInstance::SaveGame()
 
 	if (DataToSave != nullptr)
 	{
-		DataToSave->PlayerBasicCurrency = PlayerBasicCurrency_Inst;
-		DataToSave->Inventory = PlayerInventory_Inst;
-		DataToSave->ChosenVehicleInt = VehicleInt_Inst;
+		DataToSave->PlayerBasicCurrency = BasicCurrencyInstance;
+		DataToSave->Inventory = InventoryInstance;
+		DataToSave->ChosenVehicleInt = VehicleIntInstance;
 		UGameplayStatics::SaveGameToSlot(DataToSave, TEXT("Slot1"), 0);
 
 		GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Green, FString::Printf(TEXT("Game Saved")));
@@ -45,9 +45,9 @@ void UMyGameInstance::LoadGame()
 
 	if (DataToLoad != nullptr)
 	{
-		PlayerBasicCurrency_Inst = DataToLoad->PlayerBasicCurrency;
-		PlayerInventory_Inst = DataToLoad->Inventory;
-		VehicleInt_Inst = DataToLoad->ChosenVehicleInt;
+		BasicCurrencyInstance = DataToLoad->PlayerBasicCurrency;
+		InventoryInstance = DataToLoad->Inventory;
+		VehicleIntInstance = DataToLoad->ChosenVehicleInt;
 
 		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("Game Loaded")));
 	}
@@ -68,8 +68,8 @@ void UMyGameInstance::DeleteSave()
 	}
 }
 
-void UMyGameInstance::SetVehicleInt_Inst(int32 CurrentVehicleInt)
+void UMyGameInstance::SetVehicleIntInstance(int32 CurrentVehicleInt)
 {
-	VehicleInt_Inst = CurrentVehicleInt;
+	VehicleIntInstance = CurrentVehicleInt;
 	SaveGame();
 }

@@ -7,6 +7,8 @@
 #include "OutrunCops/Vehicles/VehiclePawn.h"
 #include "OutrunCops/GameInstance/MyGameInstance.h"
 
+//////////////////////////////////////////////////////
+
 
 UInventoryComponent::UInventoryComponent()
 {
@@ -28,23 +30,23 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UInventoryComponent::AddToInventory(int32 Value, FInventorySlot Vehicle)
 {
-	PlayerInventory.Add(Value, Vehicle);
+	Inventory.Add(Value, Vehicle);
 	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	GameInstance->SetPlayerInventory_Inst(PlayerInventory);
+	GameInstance->SetInventoryInstance(Inventory);
 	GameInstance->SaveGame();
 }
 
 UClass* UInventoryComponent::GetFromInventory(int32 Value)
 {
-	if (PlayerInventory.Contains(Value))
+	if (Inventory.Contains(Value))
 	{
-		return PlayerInventory.FindRef(Value).VehicleClass;
+		return Inventory.FindRef(Value).VehicleClass;
 	}
 	return nullptr;
 }
 
 bool UInventoryComponent::IsInInventory(int32 Value)
 {
-	return PlayerInventory.Contains(Value);
+	return Inventory.Contains(Value);
 }
 

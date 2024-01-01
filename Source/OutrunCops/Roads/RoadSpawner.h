@@ -18,6 +18,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	void BeginRoadPattern();
+
 	void SpawnBarricade();
 
 private:
@@ -52,6 +54,7 @@ private:
 public: 
 
 	void SpawnRoad(int32 RoadNumber = 0, bool CustomRoad = false);
+	void RandomRoadInt(bool CustomRoad, const int32& RoadNumber);
 	void CreateRoad(UClass* SelectedRoad);
 	void DestroyLastRoad();
 	void GetSocketTransform();

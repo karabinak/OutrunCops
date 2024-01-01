@@ -8,6 +8,8 @@
 #include "OutrunCops/Controllers/MyPlayerController.h"
 #include "OutrunCops/Inventory/InventoryComponent.h"
 
+//////////////////////////////////////////////////////
+
 
 AMainGamemode::AMainGamemode()
 {
@@ -16,15 +18,19 @@ AMainGamemode::AMainGamemode()
 
 void AMainGamemode::BeginPlay()
 {
+	PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	GameInstance = Cast<UMyGameInstance>(GetGameInstance());
 
-	// Setting Vehicle
-	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetInventory()->SetVehicleInventory(Cast<UMyGameInstance>(GetGameInstance())->GetPlayerInventory_Inst());
-	// Setting Basic Currency
-	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetPlayerBasicCurrency(Cast<UMyGameInstance>(GetGameInstance())->GetPlayerBasicCurrency_Inst());
+	if (PC && GameInstance)
+	{
+		PC->GetInventory()->SetInventory(GameInstance->GetInventoryInstance());
+		PC->SetPlayerBasicCurrency(GameInstance->GetBasicCurrencyInstance());
+	}
 
-	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
 
-	GameInstance->SaveGame();
-	GameInstance->LoadGame();
-
+	if (GameInstance)
+	{
+		GameInstance->SaveGame();
+		GameInstance->LoadGame();
+	}
 }

@@ -27,6 +27,8 @@ public:
 
 	AVehiclePawn();
 	virtual void BeginPlay() override;
+	void LoadVehicleMaterial();
+	void PopulateMeshArray();
 	virtual void Tick(float DeltaSeconds) override;
 
 protected:

@@ -35,7 +35,7 @@ void UUpgradeWidget::ChangeColor(UMaterial* NewMaterial)
 	NewVehicle.VehicleClass = Vehicle->GetClass();
 	NewVehicle.VehicleCustomization.BodyPaint = NewMaterial;
 	NewVehicle.VehicleUpgrades.MaxTorque = 60.f;
-	PlayerController->GetInventory()->AddToInventory(GameInstance->GetVehicleInt_Inst(), NewVehicle);
+	PlayerController->GetInventory()->AddToInventory(GameInstance->GetVehicleIntInstance(), NewVehicle);
 }
 
 void UUpgradeWidget::Return()

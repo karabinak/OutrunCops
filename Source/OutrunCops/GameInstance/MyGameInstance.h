@@ -20,39 +20,41 @@ protected:
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	UClass* PlayerVehicle_Inst;
+	UClass* VehicleClassInstance;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	TMap<int32, FInventorySlot> PlayerInventory_Inst;
+	TMap<int32, FInventorySlot> InventoryInstance;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	int32 VehicleInt_Inst = 0;
+	int32 VehicleIntInstance = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	int32 PlayerBasicCurrency_Inst = 50999;
+	int32 BasicCurrencyInstance = 50999;
 
 
 public:
-
-	FORCEINLINE void SetPlayerVehicle_Inst(UClass* Vehicle) { PlayerVehicle_Inst = Vehicle; }
-	FORCEINLINE UClass* GetPlayerVehicle_Inst() { return PlayerVehicle_Inst;}
-
-	FORCEINLINE void SetPlayerInventory_Inst(TMap<int32, FInventorySlot> Inventory) { PlayerInventory_Inst = Inventory; }
-	FORCEINLINE TMap<int32, FInventorySlot> GetPlayerInventory_Inst() { return PlayerInventory_Inst; }
-
-	UFUNCTION(BlueprintCallable)
-	void SetVehicleInt_Inst(int32 CurrentVehicleInt);
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE int32 GetVehicleInt_Inst() { return VehicleInt_Inst; }
-
-	FORCEINLINE void SetPlayerBasicCurrency_Inst(int32 BasicCurrency) { PlayerBasicCurrency_Inst = BasicCurrency; }
-	FORCEINLINE int32 GetPlayerBasicCurrency_Inst() { return PlayerBasicCurrency_Inst; }
-
 	
+	// Getter/Setter
+
+	FORCEINLINE void SetVehicleClassInstance(UClass* Vehicle) { VehicleClassInstance = Vehicle; }
+	FORCEINLINE UClass* GetVehicleClassInstance() { return VehicleClassInstance;}
+
+	FORCEINLINE void SetInventoryInstance(TMap<int32, FInventorySlot> Inventory) { InventoryInstance = Inventory; }
+	FORCEINLINE TMap<int32, FInventorySlot> GetInventoryInstance() { return InventoryInstance; }
+
+	FORCEINLINE void SetBasicCurrencyInstance(int32 BasicCurrency) { BasicCurrencyInstance = BasicCurrency; }
+	FORCEINLINE int32 GetBasicCurrencyInstance() { return BasicCurrencyInstance; }
+
+
+	UFUNCTION(BlueprintCallable)
+	void SetVehicleIntInstance(int32 VehicleInt);
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE int32 GetVehicleIntInstance() { return VehicleIntInstance; }
+
+	// Public functions
+
 	void CreateSaveFile();
-
 	void SaveGame();
-
 	void LoadGame();
 
 

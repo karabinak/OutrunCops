@@ -15,6 +15,8 @@
 #include "OutrunCops/GameInstance/MyGameInstance.h"
 #include "OutrunCops/Gamemodes/GameplayGamemode.h"
 
+//////////////////////////////////////////////////////
+
 
 AVehiclePawn::AVehiclePawn()
 {
@@ -79,9 +81,43 @@ void AVehiclePawn::BeginPlay()
 
 	EngineRef = Cast<UChaosWheeledVehicleMovementComponent>(GetVehicleMovement());
 
-
 	GetMesh()->OnComponentHit.AddDynamic(this, &AVehiclePawn::OnHit);
 
+	PopulateMeshArray();
+
+	ActiveParts = PartsToDetach.Num();
+	OnePartHitPoints = MaxHealth / ActiveParts;
+
+	LoadVehicleMaterial();
+
+}
+
+void AVehiclePawn::LoadVehicleMaterial()
+{
+	UMySaveGame* DataToLoad = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0));
+	if (DataToLoad != nullptr)
+	{
+		UMyGameInstance* Instance = Cast<UMyGameInstance>(GetGameInstance());
+
+		if (DataToLoad->Inventory.Contains(Instance->GetVehicleIntInstance()))
+		{
+			GetMesh()->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.BodyPaint);
+
+			for (int i = 0; i < PartsToDetach.Num(); i++)
+			{
+				if (PartsToDetach[i])
+				{
+					PartsToDetach[i]->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.BodyPaint);
+				}
+			}
+		}
+
+		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("Game Loaded")));
+	}
+}
+
+void AVehiclePawn::PopulateMeshArray()
+{
 	if (FrontBumper->GetMaterial(0))
 	{
 		PartsToDetach.Add(FrontBumper);
@@ -106,31 +142,6 @@ void AVehiclePawn::BeginPlay()
 	{
 		PartsToDetach.Add(Trunk);
 	}
-
-	ActiveParts = PartsToDetach.Num();
-	OnePartHitPoints = MaxHealth / ActiveParts;
-
-	UMySaveGame* DataToLoad = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0));
-	if (DataToLoad != nullptr)
-	{
-		UMyGameInstance* Instance = Cast<UMyGameInstance>(GetGameInstance());
-
-		if (DataToLoad->Inventory.Contains(Instance->GetVehicleInt_Inst()))
-		{
-			GetMesh()->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleInt_Inst())->VehicleCustomization.BodyPaint);
-
-			for (int i = 0; i < PartsToDetach.Num(); i++)
-			{
-				if (PartsToDetach[i])
-				{
-					PartsToDetach[i]->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleInt_Inst())->VehicleCustomization.BodyPaint);
-				}
-			}
-		}
-
-		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("Game Loaded")));
-	}
-
 }
 
 void AVehiclePawn::Tick(float DeltaSeconds)
@@ -300,18 +311,6 @@ void AVehiclePawn::SetVehicleState(EVehicleState NewVehicleState)
 void AVehiclePawn::PathDriving(USplineComponent* SplineComp)
 {
 	SplineComponent = SplineComp;
-	//FVector ActorLocation = GetActorLocation();
-	//FVector TangentLocation = SplineComp->FindTangentClosestToWorldLocation(ActorLocation, ESplineCoordinateSpace::World);
-	//FVector NormalizedTangent = TangentLocation.GetSafeNormal() * 200.f + ActorLocation;
-	//FVector TangentNormalizedLocation = SplineComp->FindLocationClosestToWorldLocation(NormalizedTangent, ESplineCoordinateSpace::World);
-	//FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(ActorLocation, TangentNormalizedLocation);
-	//FRotator NormalizedDeltaRot = UKismetMathLibrary::NormalizedDeltaRotator(LookAtRot, GetActorRotation());
-
-	//double Steering = UKismetMathLibrary::MapRangeClamped(NormalizedDeltaRot.Yaw, -20.f, 20.f, -1.f, 1.f);
-
-	//GetVehicleMovement()->SetThrottleInput(0.95f);
-	//GetVehicleMovement()->SetBrakeInput(0.f);
-	//GetVehicleMovement()->SetSteeringInput(Steering);
 }
 
 void AVehiclePawn::SelfDrive()
@@ -330,5 +329,4 @@ void AVehiclePawn::SelfDrive()
 	GetVehicleMovement()->SetThrottleInput(0.95f);
 	GetVehicleMovement()->SetBrakeInput(0.f);
 	GetVehicleMovement()->SetSteeringInput(Steering);
-
 }

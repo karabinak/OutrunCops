@@ -13,6 +13,7 @@
 #include "OutrunCops/Enemies/Enemy.h"
 #include "OutrunCops/Cutscenes/CutsceneCameraDesert.h"
 
+//////////////////////////////////////////////////////
 
 AGameplayGamemode::AGameplayGamemode()
 {
@@ -24,32 +25,16 @@ void AGameplayGamemode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
+	GameInstance = Cast<UMyGameInstance>(GetGameInstance());
+	PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
-	if (GameInstance->GetPlayerVehicle_Inst())
-	{
-		FActorSpawnParameters ActorSpawnParameters;
-		BaseVehicle = GetWorld()->SpawnActor<AVehiclePawn>(GameInstance->GetPlayerVehicle_Inst(), FVector(10100.f, 1050.f, 10.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BaseVehicle);
-		UE_LOG(LogTemp, Warning, TEXT("Works"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Nope"));
-	}
-	if (CutsceneCamera)
-	{
-		FActorSpawnParameters CameraActorSpawnParameters;
-		GetWorld()->SpawnActor<ACutsceneCameraDesert>(CutsceneCamera->GetDefaultObject()->GetClass(), CameraSpawnLocation, FRotator(0.f, 0.f, 0.f), CameraActorSpawnParameters);
-	}
-
+	SpawnPlayerVehicle();
+	SpawnCutsceneCamera();
 
 
 	// Setting Basic Currency
-	Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetPlayerBasicCurrency(GameInstance->GetPlayerBasicCurrency_Inst());
+	PC->SetPlayerBasicCurrency(GameInstance->GetBasicCurrencyInstance());
 	GameInstance->LoadGame();
-
-	//Cast<ABasePlayerController>(BaseVehicle->GetController())->GetInventory()->SetVehicleInventory(GameInstance->GetPlayerInventory_Inst());
 
 	CreateGameplayWidget();
 	CreatePauseWidget();
@@ -61,11 +46,44 @@ void AGameplayGamemode::BeginPlay()
 	}
 }
 
+void AGameplayGamemode::SpawnCutsceneCamera()
+{
+	if (CutsceneCamera)
+	{
+		FActorSpawnParameters CameraActorSpawnParameters;
+		GetWorld()->SpawnActor<ACutsceneCameraDesert>(CutsceneCamera->GetDefaultObject()->GetClass(), CameraSpawnLocation, FRotator(0.f, 0.f, 0.f), CameraActorSpawnParameters);
+	}
+}
+
+void AGameplayGamemode::SpawnPlayerVehicle()
+{
+	if (GameInstance->GetVehicleClassInstance())
+	{
+		FActorSpawnParameters ActorSpawnParameters;
+		PlayerVehicle = GetWorld()->SpawnActor<AVehiclePawn>(GameInstance->GetVehicleClassInstance(), FVector(10100.f, 1050.f, 10.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
+		PC->Possess(PlayerVehicle);
+		UE_LOG(LogTemp, Warning, TEXT("Works"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Nope"));
+	}
+}
+
 void AGameplayGamemode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (AmountOfChasersInSphere > 0 && BaseVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 <= MinSpeedToGetWasted && BaseVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 >= -MinSpeedToGetWasted && !bPlayerWasted)
+	WastedTimers();
+}
+
+void AGameplayGamemode::WastedTimers()
+{
+	bool bChasersInSphere = AmountOfChasersInSphere > 0;
+	bool bWastedSpeed = PlayerVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 <= MinSpeedToGetWasted &&
+		PlayerVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 >= -MinSpeedToGetWasted;
+
+	if (bChasersInSphere && bWastedSpeed && !bPlayerWasted)
 	{
 		ElapsedTimeWasted = GetWorldTimerManager().GetTimerElapsed(WastedTimer);
 		if (!GetWorldTimerManager().IsTimerActive(WastedTimer))

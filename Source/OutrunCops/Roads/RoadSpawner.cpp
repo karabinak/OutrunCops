@@ -6,6 +6,8 @@
 // Custom
 #include "OutrunCops/Roads/Road.h"
 
+//////////////////////////////////////////////////////
+
 
 ARoadSpawner::ARoadSpawner()
 {
@@ -17,6 +19,11 @@ void ARoadSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
+	BeginRoadPattern();
+}
+
+void ARoadSpawner::BeginRoadPattern()
+{
 	SpawnRoad(0, true);
 	SpawnRoad(0, true);
 	SpawnRoad(5, true);
@@ -27,6 +34,21 @@ void ARoadSpawner::BeginPlay()
 }
 
 void ARoadSpawner::SpawnRoad(int32 RoadNumber, bool CustomRoad)
+{
+	RandomRoadInt(CustomRoad, RoadNumber);
+
+	UClass* SelectedRoad = RoadCollection[RandRoad];
+
+	GetSocketTransform();
+	DestroyLastRoad();
+	CreateRoad(SelectedRoad);
+	if (!CustomRoad)
+	{
+		SpawnBarricade();
+	}
+}
+
+void ARoadSpawner::RandomRoadInt(bool CustomRoad, const int32& RoadNumber)
 {
 	RandRoad = FMath::RandRange(0, RoadCollection.Num() - 2);
 	if (CustomRoad)
@@ -41,23 +63,13 @@ void ARoadSpawner::SpawnRoad(int32 RoadNumber, bool CustomRoad)
 		}
 	}
 	LastRoadSpawned = RandRoad;
-
-	UClass* SelectedRoad = RoadCollection[RandRoad];
-
-	GetSocketTransform();
-	DestroyLastRoad();
-	CreateRoad(SelectedRoad);
-	if (!CustomRoad)
-	{
-		SpawnBarricade();
-	}
 }
 
 void ARoadSpawner::CreateRoad(UClass* SelectedRoad)
 {
 	FActorSpawnParameters SpawnParameters;
 	ARoad* Road = GetWorld()->SpawnActor<ARoad>(SelectedRoad, SpawnLocation, SpawnRotation, SpawnParameters);
-	Road->SetSpawnRef(this);
+	Road->SetSpawner(this);
 	SpawnedRoads.Add(Road);
 }
 

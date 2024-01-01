@@ -6,7 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "MainGamemode.generated.h"
 
-class ABaseVehiclePawn;
+class AMyPlayerController;
+class UMyGameInstance;
 
 UCLASS()
 class OUTRUNCOPS_API AMainGamemode : public AGameModeBase
@@ -22,6 +23,11 @@ protected:
 
 private:
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"));
+	AMyPlayerController* PC;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"));
+	UMyGameInstance* GameInstance;
 
 public:
 

@@ -15,6 +15,7 @@ class OUTRUNCOPS_API APickup : public AActor
 	
 public:	
 	APickup();
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -41,6 +42,6 @@ private:
 	float HealthAmount = 10.f;
 
 public:	
-	virtual void Tick(float DeltaTime) override;
+
 
 };

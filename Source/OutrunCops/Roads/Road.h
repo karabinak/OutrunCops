@@ -8,6 +8,8 @@
 class UBoxComponent;
 class ARoadSpawner;
 class APickup;
+class AVehiclePawn;
+class AGameplayGamemode;
 
 UCLASS()
 class OUTRUNCOPS_API ARoad : public AActor
@@ -29,10 +31,19 @@ protected:
 	UFUNCTION()
 	void ChangeCameraEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	virtual void SpawnHealthPickup();
+	virtual void SpawnPickup();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	AVehiclePawn* PlayerPawn;
 
 private:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	ARoadSpawner* Spawner;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	AGameplayGamemode* Gamemode;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Road;
@@ -45,14 +56,19 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* CameraTrigger;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	ARoadSpawner* SpawnerRef;
 
-	//CameraChange
+	// CameraChange
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	float CameraChangeValue = 0.f;
 
-	// Other
+	// Pickups
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Organization", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<APickup> Pickup;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Organization", meta = (AllowPrivateAccess = "true"))
+	float ChanceToSpawnPickup = 0.05f;
+
+	// Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	bool bTunnel;
 
@@ -69,15 +85,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Organization", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* Props;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Organization", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<APickup> Pickup;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Organization", meta = (AllowPrivateAccess = "true"))
-	float ChanceToSpawnPickup = 0.1f;
-
 public:
 
 	FORCEINLINE UStaticMeshComponent* GetMesh() const { return Road; }
-	FORCEINLINE void SetSpawnRef(ARoadSpawner* Spawner) { SpawnerRef = Spawner; }
+	FORCEINLINE void SetSpawner(ARoadSpawner* SpawnerRef) { Spawner = SpawnerRef; }
 
 };
