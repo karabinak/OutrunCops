@@ -79,6 +79,7 @@ void AGameplayGamemode::Tick(float DeltaTime)
 
 void AGameplayGamemode::WastedTimers()
 {
+	if (!PlayerVehicle) return;
 	bool bChasersInSphere = AmountOfChasersInSphere > 0;
 	bool bWastedSpeed = PlayerVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 <= MinSpeedToGetWasted &&
 		PlayerVehicle->GetVehicleMovement()->GetForwardSpeedMPH() * 1.609344 >= -MinSpeedToGetWasted;

@@ -39,7 +39,7 @@ protected:
 	void DestroyPreviousVehicle();
 	void SpawnNewVehicle(int32 VehicleValue, bool IsInInventory);
 
-	void CreateShopWidget();
+	void CreateMenuWidget();
 	void CreateUpgradeWidget();
 	void CreateLevelSelector();
 	void DelayedBeginPlayFunc();
@@ -52,9 +52,9 @@ private:
 
 	// Widgets
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<UUserWidget> ShopWidgetClass;
+	TSubclassOf<UUserWidget> MenuWidgetClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
-	UUserWidget* ShopWidget;
+	UUserWidget* MenuWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> LevelSelectorClass;

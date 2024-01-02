@@ -55,15 +55,16 @@ void AGarage::BeginCameraView()
 void AGarage::WidgetSettings()
 {
 	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
-	CreateShopWidget();
+
+	CreateMenuWidget();
 	CreateLevelSelector();
 	CreateUpgradeWidget();
-	if (ShopWidget && LevelSelectorWidget && UpgradeWidget)
+	if (MenuWidget && LevelSelectorWidget && UpgradeWidget)
 	{
-		Cast<UMenuWidget>(ShopWidget)->SetGarageRef(this);
+		Cast<UMenuWidget>(MenuWidget)->SetGarageRef(this);
 		Cast<ULevelSelectorWidget>(LevelSelectorWidget)->SetGarageRef(this);
 		Cast<UUpgradeWidget>(UpgradeWidget)->SetGarageRef(this);
-		ShopWidget->AddToViewport();
+		MenuWidget->AddToViewport();
 	}
 }
 
@@ -83,7 +84,7 @@ AVehiclePawn* AGarage::SetPreviewVehicle(int32 VehicleValue)
 	{
 		DestroyPreviousVehicle();
 		SpawnNewVehicle(VehicleValue, IsInInventory);
-		UMenuWidget* ShopCast = Cast<UMenuWidget>(ShopWidget);
+		UMenuWidget* ShopCast = Cast<UMenuWidget>(MenuWidget);
 
 		return CurrentCatalogVehicle;
 	}
@@ -93,7 +94,7 @@ AVehiclePawn* AGarage::SetPreviewVehicle(int32 VehicleValue)
 	{
 		DestroyPreviousVehicle();
 		SpawnNewVehicle(VehicleValue, IsInInventory);
-		UMenuWidget* ShopCast = Cast<UMenuWidget>(ShopWidget);
+		UMenuWidget* ShopCast = Cast<UMenuWidget>(MenuWidget);
 
 		return CurrentCatalogVehicle;
 	}
@@ -128,11 +129,11 @@ void AGarage::SpawnNewVehicle(int32 VehicleValue, bool IsInInventory)
 	CurrentCatalogVehicle->SetActorRelativeLocation(CurrentCatalogVehicle->GetGarageSpawnLocation());
 }
 
-void AGarage::CreateShopWidget()
+void AGarage::CreateMenuWidget()
 {
-	if (ShopWidgetClass)
+	if (MenuWidgetClass)
 	{
-		ShopWidget = CreateWidget<UUserWidget>(GetWorld(), ShopWidgetClass);
+		MenuWidget = CreateWidget<UUserWidget>(GetWorld(), MenuWidgetClass);
 	}
 }
 
@@ -166,7 +167,7 @@ void AGarage::SetWidgetState(EWidgetState ChangeWidgetState)
 	case EWidgetState::EWS_Shop:
 
 		UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
-		ShopWidget->AddToViewport();
+		MenuWidget->AddToViewport();
 		break;
 
 	case EWidgetState::EWS_Upgrade:
