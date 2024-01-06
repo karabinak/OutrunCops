@@ -3,6 +3,7 @@
 // Engine
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
+//#include "GeometryCollection/GeometryCollectionActor.h"
 
 // Custom
 #include "OutrunCops/Vehicles/VehiclePawn.h"
@@ -45,6 +46,7 @@ void ARoad::BeginPlay()
 	CameraTrigger->OnComponentEndOverlap.AddDynamic(this, &ARoad::ChangeCameraEndOverlap);
 
 	SpawnPickup();
+	SpawnPoliceBarricade();
 }
 
 void ARoad::OnSpawnerTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -89,5 +91,15 @@ void ARoad::SpawnPickup()
 			FActorSpawnParameters ActorSpawnParameters;
 			GetWorld()->SpawnActor<APickup>(Pickup, PickupSpawnLocation->GetComponentLocation(), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
 		}
+	}
+}
+
+void ARoad::SpawnPoliceBarricade()
+{
+	if (ChanceToSpawnPoliceBarricade <= 0.f || !PoliceBarricade) return;
+	if (ChanceToSpawnPoliceBarricade >= FMath::FRandRange(0.0f, 1.0f))
+	{
+		FActorSpawnParameters ActorSpawnParameters;
+		GetWorld()->SpawnActor<AActor>(PoliceBarricade, PickupSpawnLocation->GetComponentLocation(), GetActorRotation(), ActorSpawnParameters);
 	}
 }

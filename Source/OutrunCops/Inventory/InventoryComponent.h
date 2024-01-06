@@ -4,7 +4,7 @@
 #include "Outruncops/Vehicles/VehicleStructs.h"
 #include "InventoryComponent.generated.h"
 
-class ABaseVehiclePawn;
+class AVehiclePawn;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -33,7 +33,7 @@ public:
 	void AddToInventory(int32 Value, FInventorySlot Vehicle);
 
 	UFUNCTION(BlueprintCallable)
-	UClass* GetFromInventory(int32 Value);
+	AVehiclePawn* GetFromInventory(int32 Value);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsInInventory(int32 Value);

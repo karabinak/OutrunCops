@@ -16,17 +16,17 @@ void UMenuWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	PlayerControllerRef = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	GameInstanceRef = Cast<UMyGameInstance>(GetGameInstance());
+	PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	GameInstance = Cast<UMyGameInstance>(GetGameInstance());
 
-	AmountOfVehiclesInCatalog = GarageRef->GetVehicleCatalog().Num();
+	AmountOfVehiclesInCatalog = Garage->GetVehicleCatalog().Num();
 
-	VehicleInt = GameInstanceRef->GetVehicleIntInstance();
+	VehicleInt = GameInstance->GetVehicleIntInstance();
 }
 
 void UMenuWidget::SaveCurrentVehicleInt(int32 CurrentVehicle)
 {
-	GameInstanceRef->SetVehicleIntInstance(CurrentVehicle);
+	GameInstance->SetVehicleIntInstance(CurrentVehicle);
 }
 
 bool UMenuWidget::AddVehicleInt()
@@ -34,7 +34,7 @@ bool UMenuWidget::AddVehicleInt()
 	if (VehicleInt + 1 > AmountOfVehiclesInCatalog - 1) return false;
 
 	VehicleInt++;
-	GameInstanceRef->SetVehicleIntInstance(VehicleInt);
+	GameInstance->SetVehicleIntInstance(VehicleInt);
 	return true;
 }
 
@@ -43,25 +43,24 @@ bool UMenuWidget::SubtractVehicleInt()
 	if (VehicleInt - 1 < 0) return false;
 
 	VehicleInt--;
-	GameInstanceRef->SetVehicleIntInstance(VehicleInt);
+	GameInstance->SetVehicleIntInstance(VehicleInt);
 	return true;
 }
 
 void UMenuWidget::BuyVehicle()
 {
-	if (PlayerControllerRef)
+	if (PC)
 	{
-		if (PlayerControllerRef->GetPlayerBasicCurrency() >= GarageRef->GetCurrentCatalogVehicle()->GetPrice())
+		if (PC->GetPlayerBasicCurrency() >= Garage->GetCurrentCatalogVehicle()->GetPrice())
 		{
-			PlayerControllerRef->DecreaseBasicCurrency(GarageRef->GetCurrentCatalogVehicle()->GetPrice());
+			PC->DecreaseBasicCurrency(Garage->GetCurrentCatalogVehicle()->GetPrice());
 
 			FInventorySlot Vehicle;
-			Vehicle.VehicleClass = GarageRef->GetCurrentCatalogVehicle()->GetClass();
+			Vehicle.VehicleClass = Garage->GetCurrentCatalogVehicle()->GetClass();
 			Vehicle.VehicleUpgrades.MaxTorque = 60.f;
-			Vehicle.VehicleCustomization.BodyPaint = GarageRef->GetCurrentCatalogVehicle()->GetMesh()->GetMaterial(0)->GetMaterial();
+			Vehicle.VehicleCustomization.BodyPaint = Garage->GetCurrentCatalogVehicle()->GetMesh()->GetMaterial(0)->GetMaterial();
 
-			PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, Vehicle);
-			Cast<UMyGameInstance>(GetGameInstance())->SetVehicleClassInstance(PlayerControllerRef->GetInventory()->GetInventory().Find(VehicleInt)->VehicleClass);
+			PC->GetInventory()->AddToInventory(VehicleInt, Vehicle);
 			
 		}
 		else
@@ -71,22 +70,3 @@ void UMenuWidget::BuyVehicle()
 		}
 	}
 }
-
-//void UBaseShopWidget::ChangeVehicleColor()
-//{
-//	GarageRef->GetCurrentCatalogVehicle()->GetMesh()->SetMaterial(0, Material);
-//
-//	TArray<UStaticMeshComponent*> VehicleParts = GarageRef->GetCurrentCatalogVehicle()->GetPartsToDetach();
-//	for (int i = 0; i < VehicleParts.Num(); i++)
-//	{
-//		if (VehicleParts[i])
-//		{
-//			VehicleParts[i]->SetMaterial(0, Material);
-//		}
-//	}
-//
-//	FInventorySlot Vehicle;
-//	Vehicle.VehicleClass = GarageRef->GetCurrentCatalogVehicle()->StaticClass();
-//	Vehicle.VehicleCustomization.BodyPaint = Material;
-//	PlayerControllerRef->GetInventory()->AddToInventory(VehicleInt, Vehicle);
-//}

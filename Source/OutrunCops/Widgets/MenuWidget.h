@@ -31,20 +31,17 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void BuyVehicle();
 
-	//UFUNCTION(BlueprintCallable)
-	//void ChangeVehicleColor();
-
 
 private:
 	// REFERENCES
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
-	AGarage* GarageRef;
+	AGarage* Garage;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
-	AMyPlayerController* PlayerControllerRef;
+	AMyPlayerController* PC;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
-	UMyGameInstance* GameInstanceRef;
+	UMyGameInstance* GameInstance;
 
 	// Widget Values
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
@@ -55,7 +52,7 @@ private:
 
 public:
 
-	void SetGarageRef(AGarage* Garage) { GarageRef = Garage; }
+	void SetGarageRef(AGarage* GarageRef) { Garage = GarageRef; }
 
 	//UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	//FORCEINLINE void SetVehicleStats(ABaseVehiclePawn* CurrentVehicle);

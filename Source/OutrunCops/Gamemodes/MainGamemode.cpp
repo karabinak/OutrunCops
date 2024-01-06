@@ -25,12 +25,8 @@ void AMainGamemode::BeginPlay()
 	{
 		PC->GetInventory()->SetInventory(GameInstance->GetInventoryInstance());
 		PC->SetPlayerBasicCurrency(GameInstance->GetBasicCurrencyInstance());
-	}
 
-
-	if (GameInstance)
-	{
-		GameInstance->SaveGame();
 		GameInstance->LoadGame();
+		GameInstance->SaveGame();
 	}
 }

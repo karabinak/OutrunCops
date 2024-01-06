@@ -10,6 +10,7 @@ class ARoadSpawner;
 class APickup;
 class AVehiclePawn;
 class AGameplayGamemode;
+//class AGeometryCollectionActor;
 
 UCLASS()
 class OUTRUNCOPS_API ARoad : public AActor
@@ -19,6 +20,8 @@ class OUTRUNCOPS_API ARoad : public AActor
 public:
 	ARoad();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	AVehiclePawn* PlayerPawn;
 protected:
 	virtual void BeginPlay() override;
 
@@ -33,8 +36,8 @@ protected:
 
 	virtual void SpawnPickup();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	AVehiclePawn* PlayerPawn;
+	void SpawnPoliceBarricade();
+
 
 private:
 
@@ -67,6 +70,15 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Organization", meta = (AllowPrivateAccess = "true"))
 	float ChanceToSpawnPickup = 0.05f;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"))
+	//TSubclassOf<AGeometryCollectionActor> PoliceBarricade;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> PoliceBarricade;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	float ChanceToSpawnPoliceBarricade = 0.f;
 
 	// Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))

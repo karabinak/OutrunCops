@@ -57,17 +57,13 @@ void AGameplayGamemode::SpawnCutsceneCamera()
 
 void AGameplayGamemode::SpawnPlayerVehicle()
 {
-	if (GameInstance->GetVehicleClassInstance())
+	if (GameInstance->GetInventoryInstance().Find(GameInstance->GetVehicleIntInstance())->VehicleClass)
 	{
 		FActorSpawnParameters ActorSpawnParameters;
-		PlayerVehicle = GetWorld()->SpawnActor<AVehiclePawn>(GameInstance->GetVehicleClassInstance(), FVector(10100.f, 1050.f, 10.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
+		PlayerVehicle = GetWorld()->SpawnActor<AVehiclePawn>(GameInstance->GetInventoryInstance().Find(GameInstance->GetVehicleIntInstance())->VehicleClass, FVector(10100.f, 1050.f, 10.f), FRotator(0.f, 0.f, 0.f), ActorSpawnParameters);
 		PC->Possess(PlayerVehicle);
-		UE_LOG(LogTemp, Warning, TEXT("Works"));
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Nope"));
-	}
+
 }
 
 void AGameplayGamemode::Tick(float DeltaTime)

@@ -31,7 +31,7 @@ void UMyGameInstance::SaveGame()
 		DataToSave->ChosenVehicleInt = VehicleIntInstance;
 		UGameplayStatics::SaveGameToSlot(DataToSave, TEXT("Slot1"), 0);
 
-		GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Green, FString::Printf(TEXT("Game Saved")));
+		GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Green, FString::Printf(TEXT("Game Saved")));
 	}
 	else if (!UGameplayStatics::DoesSaveGameExist(TEXT("Slot1"), 0))
 	{
@@ -49,7 +49,7 @@ void UMyGameInstance::LoadGame()
 		InventoryInstance = DataToLoad->Inventory;
 		VehicleIntInstance = DataToLoad->ChosenVehicleInt;
 
-		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("Game Loaded")));
+		GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Green, FString::Printf(TEXT("Game Loaded")));
 	}
 	else if (!UGameplayStatics::DoesSaveGameExist(TEXT("Slot1"), 0))
 	{

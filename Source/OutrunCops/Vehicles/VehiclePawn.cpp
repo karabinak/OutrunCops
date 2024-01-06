@@ -3,6 +3,7 @@
 // Engine
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Camera/CameraShake.h"
 #include "ChaosVehicleMovementComponent.h"
 #include "ChaosWheeledVehicleMovementComponent.h"
 #include "Components/WidgetComponent.h"
@@ -234,10 +235,11 @@ void AVehiclePawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, 
 	bCanHit = false;
 	GetWorld()->GetTimerManager().SetTimer(HitCooldownTimer, this, &AVehiclePawn::ResetCanHit, 0.3f);
 
-
 	float Impact = FMath::Floor(NormalImpulse.Length() / 60000.f);
 	if (Impact <= 4.f) return;
 	HitPoints -= Impact;
+
+	GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraShake(CameraShake);
 
 	if (HitPoints < ActiveParts * OnePartHitPoints && !PartsToDetach.IsEmpty())
 	{

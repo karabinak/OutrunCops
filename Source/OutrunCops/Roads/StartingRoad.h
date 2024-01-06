@@ -32,7 +32,6 @@ protected:
 
 private:
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spline", meta = (AllowPrivateAccess = "true"))
 	USplineComponent* SplineComp;
 

@@ -19,8 +19,6 @@ protected:
 
 private:
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	UClass* VehicleClassInstance;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
 	TMap<int32, FInventorySlot> InventoryInstance;
@@ -29,15 +27,12 @@ private:
 	int32 VehicleIntInstance = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	int32 BasicCurrencyInstance = 50999;
+	int32 BasicCurrencyInstance = 50500;
 
 
 public:
 	
 	// Getter/Setter
-
-	FORCEINLINE void SetVehicleClassInstance(UClass* Vehicle) { VehicleClassInstance = Vehicle; }
-	FORCEINLINE UClass* GetVehicleClassInstance() { return VehicleClassInstance;}
 
 	FORCEINLINE void SetInventoryInstance(TMap<int32, FInventorySlot> Inventory) { InventoryInstance = Inventory; }
 	FORCEINLINE TMap<int32, FInventorySlot> GetInventoryInstance() { return InventoryInstance; }

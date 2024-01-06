@@ -36,11 +36,11 @@ void UInventoryComponent::AddToInventory(int32 Value, FInventorySlot Vehicle)
 	GameInstance->SaveGame();
 }
 
-UClass* UInventoryComponent::GetFromInventory(int32 Value)
+AVehiclePawn* UInventoryComponent::GetFromInventory(int32 Value)
 {
 	if (Inventory.Contains(Value))
 	{
-		return Inventory.FindRef(Value).VehicleClass;
+		return Inventory.FindRef(Value).VehicleClass.GetDefaultObject();
 	}
 	return nullptr;
 }

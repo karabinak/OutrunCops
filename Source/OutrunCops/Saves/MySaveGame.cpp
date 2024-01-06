@@ -5,7 +5,7 @@
 
 UMySaveGame::UMySaveGame()
 {
-	//PlayerBasicCurrency = 2500000;
+	PlayerBasicCurrency;
 	//FInventorySlot Vehicle;
 	//Vehicle.VehicleClass = nullptr;
 	//Vehicle.VehicleUpgrades.MaxTorque = 0.f;

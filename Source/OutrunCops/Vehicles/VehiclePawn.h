@@ -10,6 +10,7 @@ class UWidgetComponent;
 class UStaticMeshComponent;
 class UChaosWheeledVehicleMovementComponent;
 class USplineComponent;
+class UMatineeCameraShake;
 
 UENUM(BlueprintType)
 enum class EVehicleState : uint8
@@ -62,8 +63,12 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* Camera;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UMatineeCameraShake> CameraShake;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget", meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* VehicleWidget;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget", meta = (AllowPrivateAccess = "true"))
 	int32 Price = 1000;
