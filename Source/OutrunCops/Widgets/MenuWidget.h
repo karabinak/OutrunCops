@@ -31,6 +31,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void BuyVehicle();
 
+	UFUNCTION(BlueprintCallable)
+	void OpenModifyVehicle();
+
 
 private:
 	// REFERENCES
@@ -53,6 +56,9 @@ private:
 public:
 
 	void SetGarageRef(AGarage* GarageRef) { Garage = GarageRef; }
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void BottomSlide();
 
 	//UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	//FORCEINLINE void SetVehicleStats(ABaseVehiclePawn* CurrentVehicle);

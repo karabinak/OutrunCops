@@ -15,6 +15,7 @@
 #include "OutrunCops/Widgets/UpgradeWidget.h"
 #include "OutrunCops/Widgets/MenuWidget.h"
 #include "OutrunCops/Widgets/LevelSelectorWidget.h"
+#include "OutrunCops/Widgets/OptionsWidget.h"
 
 //////////////////////////////////////////////////////
 
@@ -59,11 +60,13 @@ void AGarage::WidgetSettings()
 	CreateMenuWidget();
 	CreateLevelSelector();
 	CreateUpgradeWidget();
-	if (MenuWidget && LevelSelectorWidget && UpgradeWidget)
+	CreateOptionsWidget();
+	if (MenuWidget && LevelSelectorWidget && UpgradeWidget && OptionsWidget)
 	{
 		Cast<UMenuWidget>(MenuWidget)->SetGarageRef(this);
 		Cast<ULevelSelectorWidget>(LevelSelectorWidget)->SetGarageRef(this);
 		Cast<UUpgradeWidget>(UpgradeWidget)->SetGarageRef(this);
+		Cast<UOptionsWidget>(OptionsWidget)->SetGarageRef(this);
 		MenuWidget->AddToViewport();
 	}
 }
@@ -133,7 +136,7 @@ void AGarage::CreateMenuWidget()
 {
 	if (MenuWidgetClass)
 	{
-		MenuWidget = CreateWidget<UUserWidget>(GetWorld(), MenuWidgetClass);
+		MenuWidget = CreateWidget<UMenuWidget>(GetWorld(), MenuWidgetClass);
 	}
 }
 
@@ -141,7 +144,15 @@ void AGarage::CreateLevelSelector()
 {
 	if (LevelSelectorClass)
 	{
-		LevelSelectorWidget = CreateWidget<UUserWidget>(GetWorld(), LevelSelectorClass);
+		LevelSelectorWidget = CreateWidget<ULevelSelectorWidget>(GetWorld(), LevelSelectorClass);
+	}
+}
+
+void AGarage::CreateOptionsWidget()
+{
+	if (OptionsWidgetClass)
+	{
+		OptionsWidget = CreateWidget<UOptionsWidget>(GetWorld(), OptionsWidgetClass);
 	}
 }
 
@@ -149,7 +160,7 @@ void AGarage::CreateUpgradeWidget()
 {
 	if (UpgradeWidgetClass)
 	{
-		UpgradeWidget = CreateWidget<UUserWidget>(GetWorld(), UpgradeWidgetClass);
+		UpgradeWidget = CreateWidget<UUpgradeWidget>(GetWorld(), UpgradeWidgetClass);
 	}
 }
 
@@ -166,12 +177,18 @@ void AGarage::SetWidgetState(EWidgetState ChangeWidgetState)
 	{
 	case EWidgetState::EWS_Shop:
 
-		UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
-		MenuWidget->AddToViewport();
+		if (MenuWidget->IsInViewport())
+		{
+			UpgradeWidget->RemoveFromViewport();
+			MenuWidget->BottomSlide();
+		}
+		else
+		{
+			MenuWidget->AddToViewport();
+		}
 		break;
 
 	case EWidgetState::EWS_Upgrade:
-		UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
 		OpenUpgrade();
 
 	case EWidgetState::EWS_MAX:

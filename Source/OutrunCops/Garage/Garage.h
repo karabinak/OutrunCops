@@ -10,6 +10,11 @@
 class AVehiclePawn;
 class AMyPlayerController;
 class UCameraComponent;
+class UMenuWidget;
+class ULevelSelectorWidget;
+class UUpgradeWidget;
+class UOptionsWidget;
+
 
 UENUM(BlueprintType)
 enum class EWidgetState : uint8
@@ -42,6 +47,7 @@ protected:
 	void CreateMenuWidget();
 	void CreateUpgradeWidget();
 	void CreateLevelSelector();
+	void CreateOptionsWidget();
 	void DelayedBeginPlayFunc();
 
 private:
@@ -54,17 +60,22 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> MenuWidgetClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
-	UUserWidget* MenuWidget;
+	UMenuWidget* MenuWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> OptionsWidgetClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
+	UOptionsWidget* OptionsWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> LevelSelectorClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
-	UUserWidget* LevelSelectorWidget;
+	ULevelSelectorWidget* LevelSelectorWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> UpgradeWidgetClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
-	UUserWidget* UpgradeWidget;
+	UUpgradeWidget* UpgradeWidget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	EWidgetState WidgetState;

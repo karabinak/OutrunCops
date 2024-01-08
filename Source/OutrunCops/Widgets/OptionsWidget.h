@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "OptionsWidget.generated.h"
 
+class AGarage;
+
 /**
  * 
  */
@@ -13,5 +15,14 @@ UCLASS()
 class OUTRUNCOPS_API UOptionsWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+private:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
+	AGarage* GarageRef;
+
+public:
+
+	void SetGarageRef(AGarage* Garage) { GarageRef = Garage; }
 	
 };

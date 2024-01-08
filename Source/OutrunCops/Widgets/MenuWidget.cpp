@@ -70,3 +70,11 @@ void UMenuWidget::BuyVehicle()
 		}
 	}
 }
+
+void UMenuWidget::OpenModifyVehicle()
+{
+	if (Garage)
+	{
+		Garage->SetWidgetState(EWidgetState::EWS_Upgrade);
+	}
+}
