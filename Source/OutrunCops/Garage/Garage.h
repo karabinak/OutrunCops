@@ -21,6 +21,7 @@ enum class EWidgetState : uint8
 {
 	EWS_Shop UMETA(DisplayName = "Shop"),
 	EWS_Upgrade UMETA(DisplayName = "Upgrade"),
+	EWS_Options UMETA(DisplayName = "Options"),
 
 	EWS_MAX UMETA(DisplayName = "Default")
 };

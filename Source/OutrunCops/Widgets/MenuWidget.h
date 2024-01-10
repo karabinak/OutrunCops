@@ -31,9 +31,6 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void BuyVehicle();
 
-	UFUNCTION(BlueprintCallable)
-	void OpenModifyVehicle();
-
 
 private:
 	// REFERENCES

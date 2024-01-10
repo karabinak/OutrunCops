@@ -39,7 +39,7 @@ private:
 	UCameraComponent* CutsceneCamera;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	FRotator CameraBaseRotation = FRotator(-50.f, 0.f, 0.f);
+	FRotator CameraBaseRotation = FRotator(-35.f, 0.f, 0.f);
 
 	UPROPERTY()
 	FTimerHandle CameraChangeTime;

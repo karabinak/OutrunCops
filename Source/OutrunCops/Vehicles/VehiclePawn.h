@@ -136,7 +136,7 @@ private:
 	FVector GarageSpawnLocation = FVector::ZeroVector;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	float SpringArmBaseLenght = 1700.f;
+	float SpringArmBaseLenght = 1500.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	FRotator SpringArmLastRotation;

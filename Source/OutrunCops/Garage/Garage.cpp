@@ -177,6 +177,12 @@ void AGarage::SetWidgetState(EWidgetState ChangeWidgetState)
 	{
 	case EWidgetState::EWS_Shop:
 
+		if (OptionsWidget->IsInViewport())
+		{
+			OptionsWidget->RemoveFromParent();
+			break;
+		}
+
 		if (MenuWidget->IsInViewport())
 		{
 			UpgradeWidget->RemoveFromViewport();
@@ -186,11 +192,18 @@ void AGarage::SetWidgetState(EWidgetState ChangeWidgetState)
 		{
 			MenuWidget->AddToViewport();
 		}
+
 		break;
 
 	case EWidgetState::EWS_Upgrade:
 		OpenUpgrade();
 
+		break;
+	case EWidgetState::EWS_Options:
+
+		OptionsWidget->AddToViewport();
+
+		break;
 	case EWidgetState::EWS_MAX:
 		break;
 	}

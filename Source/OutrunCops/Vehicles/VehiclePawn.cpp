@@ -30,7 +30,7 @@ AVehiclePawn::AVehiclePawn()
 
 	GetMesh()->SetSimulatePhysics(true);
 	SpringArm->TargetArmLength = SpringArmBaseLenght;
-	SpringArm->SetRelativeRotation(FRotator(-40.f, 0.f, 0.f));
+	SpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
 	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 150.f));
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->bEnableCameraRotationLag = true;

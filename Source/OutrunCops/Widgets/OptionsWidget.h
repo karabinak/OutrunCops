@@ -19,10 +19,10 @@ class OUTRUNCOPS_API UOptionsWidget : public UUserWidget
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Garage", meta = (AllowPrivateAccess = "true"))
-	AGarage* GarageRef;
+	AGarage* Garage;
 
 public:
 
-	void SetGarageRef(AGarage* Garage) { GarageRef = Garage; }
+	void SetGarageRef(AGarage* GarageRef) { Garage = GarageRef; }
 	
 };
