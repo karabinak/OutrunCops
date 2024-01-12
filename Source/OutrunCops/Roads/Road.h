@@ -101,5 +101,6 @@ public:
 
 	FORCEINLINE UStaticMeshComponent* GetMesh() const { return Road; }
 	FORCEINLINE void SetSpawner(ARoadSpawner* SpawnerRef) { Spawner = SpawnerRef; }
+	FORCEINLINE void SetCameraChangeValue(float Value) { CameraChangeValue = Value; }
 
 };

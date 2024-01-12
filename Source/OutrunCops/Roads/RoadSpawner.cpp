@@ -24,17 +24,69 @@ void ARoadSpawner::BeginPlay()
 
 void ARoadSpawner::BeginRoadPattern()
 {
-	SpawnRoad(0, true);
-	SpawnRoad(0, true);
-	SpawnRoad(5, true);
-	SpawnRoad(0, true);
-	SpawnRoad(0, true);
-	SpawnRoad(0, true);
+	SpawnRoad();
+	SpawnRoad();
+	SpawnRoad();
+	SpawnRoad();
+	SpawnRoad();
+	SpawnRoad();
 	SpawnBarricade();
 }
 
 void ARoadSpawner::SpawnRoad(int32 RoadNumber, bool CustomRoad)
 {
+	if (bActivePattern)
+	{
+		if (bBeginPattern)
+		{
+			if (ActiveRoadPattern.IsEmpty())
+			{
+				/*
+						Index 0 is a begin pattern ( ONLY ) !!
+				*/
+
+				ActiveRoadPattern = RoadPatterns.Find(0)->RoadPatterns;
+			}
+
+			UClass* SelectedRoad = ActiveRoadPattern[0];
+
+			GetSocketTransform();
+			DestroyLastRoad();
+			CreateRoad(SelectedRoad);
+
+			ActiveRoadPattern.RemoveAt(0);
+
+			if (ActiveRoadPattern.IsEmpty())
+			{
+					bBeginPattern = false;
+					bActivePattern = false;
+			}
+		}
+		else
+		{
+			if (ActiveRoadPattern.IsEmpty())
+			{
+				int RandInt = FMath::RandRange(1, RoadPatterns.Num() - 1);
+				ActiveRoadPattern = RoadPatterns.Find(RandInt)->RoadPatterns;
+			}
+
+			UClass* SelectedRoad = ActiveRoadPattern[0];
+
+			GetSocketTransform();
+			DestroyLastRoad();
+			CreateRoad(SelectedRoad);
+
+			ActiveRoadPattern.RemoveAt(0);
+
+			if (ActiveRoadPattern.IsEmpty())
+			{
+				bActivePattern = false;
+			}
+		}
+		return;
+	}
+
+
 	RandomRoadInt(CustomRoad, RoadNumber);
 
 	UClass* SelectedRoad = RoadCollection[RandRoad];
@@ -45,6 +97,15 @@ void ARoadSpawner::SpawnRoad(int32 RoadNumber, bool CustomRoad)
 	if (!CustomRoad)
 	{
 		SpawnBarricade();
+	}
+
+	// Active Pattern by chance
+	if (!bActivePattern)
+	{
+		if (PatternRoadChance >= FMath::FRandRange(0.0f, 1.0f))
+		{
+			bActivePattern = true;
+		}
 	}
 }
 
@@ -86,25 +147,40 @@ void ARoadSpawner::GetSocketTransform()
 {
 	if (!SpawnedRoads.IsEmpty())
 	{
-		FTransform SocketTransform = SpawnedRoads[SpawnedRoads.Num() - 1]->GetMesh()->GetSocketTransform("AttachSocket");
-		SpawnLocation = SocketTransform.GetLocation();
-		SpawnRotation = SocketTransform.GetRotation().Rotator();
+		TArray<FName> Sockets = SpawnedRoads[SpawnedRoads.Num() - 1]->GetMesh()->GetAllSocketNames();
+
+		if (Sockets.Num() == 1)
+		{
+			FTransform SocketTransform = SpawnedRoads[SpawnedRoads.Num() - 1]->GetMesh()->GetSocketTransform(Sockets[0]);
+			SpawnLocation = SocketTransform.GetLocation();
+			SpawnRotation = SocketTransform.GetRotation().Rotator();
+		}
+		else
+		{
+			int32 RandomInt = FMath::RandRange(0, Sockets.Num() - 1);
+			FTransform SocketTransform = SpawnedRoads[SpawnedRoads.Num() - 1]->GetMesh()->GetSocketTransform(Sockets[RandomInt]);
+			SpawnLocation = SocketTransform.GetLocation();
+			SpawnRotation = SocketTransform.GetRotation().Rotator();
+		}
+
+		// WORK IN PROGRESS CAMERA CHANGE 
+		SpawnedRoads[SpawnedRoads.Num() - 1]->SetCameraChangeValue(SpawnRotation.Yaw);
 	}
 }
 
 void ARoadSpawner::SpawnBarricade()
 {
-	if (SpawnedBarricade)
+	if (SpawnedBlockingActor)
 	{
-		SpawnedBarricade->Destroy();
-		SpawnedBarricade = nullptr;
+		SpawnedBlockingActor->Destroy();
+		SpawnedBlockingActor = nullptr;
 	}
 
 	if (SpawnedRoads[1])
 	{
 		FActorSpawnParameters SpawnerParametersBarricade;
 		ARoad* RoadToSpawnBarricade = SpawnedRoads[1];
-		UClass* BarricadeClass = Barricade.Get();
-		SpawnedBarricade = GetWorld()->SpawnActor<AActor>(BarricadeClass, RoadToSpawnBarricade->GetActorLocation(), RoadToSpawnBarricade->GetActorRotation(), SpawnerParametersBarricade);
+		UClass* BlockingActorClass = BlockingActor.Get();
+		SpawnedBlockingActor = GetWorld()->SpawnActor<AActor>(BlockingActorClass, RoadToSpawnBarricade->GetActorLocation(), RoadToSpawnBarricade->GetActorRotation(), SpawnerParametersBarricade);
 	}
 }

@@ -193,7 +193,8 @@ void AVehiclePawn::CalculateDistance()
 
 void AVehiclePawn::ChangeCamera(float ChangeValue, bool Tunnel)
 {
-	FRotator NewCameraRot = SpringArm->GetRelativeRotation() + FRotator(0.f, ChangeValue, 0.f);
+	//FRotator NewCameraRot = SpringArm->GetRelativeRotation() + FRotator(0.f, ChangeValue, 0.f);
+	FRotator NewCameraRot = FRotator(SpringArm->GetRelativeRotation().Pitch, ChangeValue, SpringArm->GetRelativeRotation().Roll);
 	SpringArm->SetRelativeRotation(NewCameraRot);
 	SpringArmLastRotation = NewCameraRot;
 	if (Tunnel)

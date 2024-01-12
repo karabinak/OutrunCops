@@ -7,6 +7,15 @@
 
 class ARoad;
 
+USTRUCT(BlueprintType)
+struct FRoadPatterns
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "RoadPatterns", meta = (AllowPrivateAccess = "true"))
+	TArray<TSubclassOf<ARoad>> RoadPatterns;
+};
+
 UCLASS()
 class OUTRUNCOPS_API ARoadSpawner : public AActor
 {
@@ -46,10 +55,25 @@ private:
 	FRotator SpawnRotation = FRotator::ZeroRotator;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AActor> Barricade;
+	TSubclassOf<AActor> BlockingActor;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properites", meta = (AllowPrivateAccess = "true"))
-	AActor* SpawnedBarricade;
+	AActor* SpawnedBlockingActor;
+
+	// Road Pattern Spawner
+	bool bActivePattern = true;
+
+	bool bBeginPattern = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "RoadPatterns", meta = (AllowPrivateAccess = "true"))
+	float PatternRoadChance = 0.3f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "RoadPatterns", meta = (AllowPrivateAccess = "true"))
+	TMap<int32, FRoadPatterns> RoadPatterns;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "RoadPatterns", meta = (AllowPrivateAccess = "true"))
+	TArray<TSubclassOf<ARoad>> ActiveRoadPattern;
+
 
 public: 
 
