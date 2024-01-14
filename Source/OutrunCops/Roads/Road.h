@@ -34,8 +34,6 @@ protected:
 	UFUNCTION()
 	void ChangeCameraEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	virtual void SpawnPickup();
-
 	void SpawnPoliceBarricade();
 
 
@@ -102,5 +100,7 @@ public:
 	FORCEINLINE UStaticMeshComponent* GetMesh() const { return Road; }
 	FORCEINLINE void SetSpawner(ARoadSpawner* SpawnerRef) { Spawner = SpawnerRef; }
 	FORCEINLINE void SetCameraChangeValue(float Value) { CameraChangeValue = Value; }
+
+	virtual void SpawnPickup();
 
 };

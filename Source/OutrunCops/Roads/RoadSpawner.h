@@ -20,8 +20,8 @@ UCLASS()
 class OUTRUNCOPS_API ARoadSpawner : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	ARoadSpawner();
 
 protected:
@@ -75,11 +75,12 @@ private:
 	TArray<TSubclassOf<ARoad>> ActiveRoadPattern;
 
 
-public: 
+public:
 
 	void SpawnRoad(int32 RoadNumber = 0, bool CustomRoad = false);
 	void RandomRoadInt(bool CustomRoad, const int32& RoadNumber);
 	void CreateRoad(UClass* SelectedRoad);
 	void DestroyLastRoad();
 	void GetSocketTransform();
+	TArray<ARoad*> GetSpawnedRoads() { return SpawnedRoads; }
 };

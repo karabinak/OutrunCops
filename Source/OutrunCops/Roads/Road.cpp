@@ -45,7 +45,6 @@ void ARoad::BeginPlay()
 	CameraTrigger->OnComponentBeginOverlap.AddDynamic(this, &ARoad::OnCameraChangeOverlap);
 	CameraTrigger->OnComponentEndOverlap.AddDynamic(this, &ARoad::ChangeCameraEndOverlap);
 
-	SpawnPickup();
 	SpawnPoliceBarricade();
 }
 
@@ -83,7 +82,11 @@ void ARoad::ChangeCameraEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* 
 
 void ARoad::SpawnPickup()
 {
+
 	if (ChanceToSpawnPickup <= 0.f) return;
+	if (!Spawner) return;
+	if (Spawner->GetSpawnedRoads().Num() <= 5) return;
+
 	if (ChanceToSpawnPickup >= FMath::FRandRange(0.0f, 1.0f))
 	{
 		if (Pickup)

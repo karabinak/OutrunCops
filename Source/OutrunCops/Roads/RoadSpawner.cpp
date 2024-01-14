@@ -111,7 +111,7 @@ void ARoadSpawner::SpawnRoad(int32 RoadNumber, bool CustomRoad)
 
 void ARoadSpawner::RandomRoadInt(bool CustomRoad, const int32& RoadNumber)
 {
-	RandRoad = FMath::RandRange(0, RoadCollection.Num() - 2);
+	RandRoad = FMath::RandRange(0, RoadCollection.Num() - 1);
 	if (CustomRoad)
 	{
 		RandRoad = RoadNumber;
@@ -120,7 +120,7 @@ void ARoadSpawner::RandomRoadInt(bool CustomRoad, const int32& RoadNumber)
 	{
 		while (RandRoad == LastRoadSpawned)
 		{
-			RandRoad = FMath::RandRange(0, RoadCollection.Num() - 2);
+			RandRoad = FMath::RandRange(0, RoadCollection.Num() - 1);
 		}
 	}
 	LastRoadSpawned = RandRoad;
@@ -131,6 +131,7 @@ void ARoadSpawner::CreateRoad(UClass* SelectedRoad)
 	FActorSpawnParameters SpawnParameters;
 	ARoad* Road = GetWorld()->SpawnActor<ARoad>(SelectedRoad, SpawnLocation, SpawnRotation, SpawnParameters);
 	Road->SetSpawner(this);
+	Road->SpawnPickup();
 	SpawnedRoads.Add(Road);
 }
 
