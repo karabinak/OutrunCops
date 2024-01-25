@@ -13,15 +13,8 @@ struct FCustomizations
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UMaterial* BodyPaint;
 
-};
-
-USTRUCT(BlueprintType)
-struct FUpgrades
-{
-	GENERATED_BODY()
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MaxTorque;
+	UStaticMesh* Wheel;
 
 };
 
@@ -35,8 +28,5 @@ struct FInventorySlot
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FCustomizations VehicleCustomization;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FUpgrades VehicleUpgrades;
 
 };

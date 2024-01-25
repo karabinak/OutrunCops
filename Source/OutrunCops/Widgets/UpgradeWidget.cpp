@@ -31,11 +31,43 @@ void UUpgradeWidget::ChangeColor(UMaterial* NewMaterial)
 		}
 	}
 
-	FInventorySlot NewVehicle;
-	NewVehicle.VehicleClass = Vehicle->GetClass();
+	FInventorySlot NewVehicle = *GameInstance->GetInventoryInstance().Find(GameInstance->GetVehicleIntInstance());
 	NewVehicle.VehicleCustomization.BodyPaint = NewMaterial;
-	NewVehicle.VehicleUpgrades.MaxTorque = 60.f;
 	PlayerController->GetInventory()->AddToInventory(GameInstance->GetVehicleIntInstance(), NewVehicle);
+}
+
+void UUpgradeWidget::SelectWheels(UStaticMesh* NewWheels)
+{
+	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
+	AVehiclePawn* Vehicle = GarageRef->GetCurrentCatalogVehicle();
+
+	if (Vehicle)
+	{
+		Vehicle->GetWheelFL()->SetStaticMesh(NewWheels);
+		Vehicle->GetWheelFR()->SetStaticMesh(NewWheels);
+		Vehicle->GetWheelRL()->SetStaticMesh(NewWheels);
+		Vehicle->GetWheelRR()->SetStaticMesh(NewWheels);
+	}
+}
+
+bool UUpgradeWidget::BuyWheels(UStaticMesh* NewWheels, int32 Price)
+{
+	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
+
+	if (GameInstance->GetBasicCurrencyInstance() >= Price)
+	{
+		PlayerController->DecreaseBasicCurrency(Price);
+
+		FInventorySlot NewVehicle = *GameInstance->GetInventoryInstance().Find(GameInstance->GetVehicleIntInstance());
+		NewVehicle.VehicleCustomization.Wheel = NewWheels;
+		PlayerController->GetInventory()->AddToInventory(GameInstance->GetVehicleIntInstance(), NewVehicle);
+
+		return true;
+	}
+
+	return false;
 }
 
 void UUpgradeWidget::Return()

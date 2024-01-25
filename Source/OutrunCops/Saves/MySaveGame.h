@@ -23,8 +23,10 @@ public:
 	int32 ChosenVehicleInt;
 
 	UPROPERTY(VisibleAnywhere)
-	TMap<int32, FInventorySlot> Inventory;
+	int32 PlayerBasicCurrency;
 
 	UPROPERTY(VisibleAnywhere)
-	int32 PlayerBasicCurrency;
+	TMap<int32, FInventorySlot> Inventory;
+
+
 };

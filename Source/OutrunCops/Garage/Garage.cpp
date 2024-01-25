@@ -75,6 +75,45 @@ void AGarage::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	GarageAnimations(DeltaTime);
+}
+
+void AGarage::GarageAnimations(float DeltaTime)
+{
+	if (bCameraAnimationActive)
+	{
+		FVector TargetLocation = FVector::ZeroVector;
+		FRotator TargetRotation = FRotator::ZeroRotator;
+		switch (AnimationState)
+		{
+		case EAnimationState::EAS_BaseCameraPosition:
+			TargetLocation = BaseCameraTransform.GetLocation();
+			TargetRotation = BaseCameraTransform.GetRotation().Rotator();
+			break;
+
+		case EAnimationState::EAS_WheelsCameraPosition:
+			TargetLocation = WheelsCameraTransform.GetLocation();
+			TargetRotation = WheelsCameraTransform.GetRotation().Rotator();
+			break;
+
+		default:
+			break;
+		}
+		FVector Location = FMath::VInterpTo(GarageMainView->GetComponentLocation(), TargetLocation, DeltaTime, 2.f);
+		FRotator Rotation = FMath::RInterpTo(GarageMainView->GetComponentRotation(), TargetRotation, DeltaTime, 2.f);
+		GarageMainView->SetRelativeLocation(Location);
+		GarageMainView->SetRelativeRotation(Rotation);
+
+		if (GetWorldTimerManager().IsTimerActive(AnimDuration)) return;
+		GetWorldTimerManager().SetTimer(AnimDuration, this, &AGarage::RestartAnim, 2.f, false);
+	}
+}
+
+void AGarage::RestartAnim()
+{
+	bCameraAnimationActive = false;
+	GetWorldTimerManager().ClearTimer(AnimDuration);
 }
 
 AVehiclePawn* AGarage::SetPreviewVehicle(int32 VehicleValue)
@@ -207,6 +246,12 @@ void AGarage::SetWidgetState(EWidgetState ChangeWidgetState)
 	case EWidgetState::EWS_MAX:
 		break;
 	}
+}
+
+void AGarage::StartPlatformCameraAnimation()
+{
+	if (bCameraAnimationActive) return;
+	bCameraAnimationActive = true;
 }
 
 void AGarage::OpenLevelSelector()

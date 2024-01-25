@@ -9,6 +9,23 @@
 class UMenuWidget;
 class AGarage;
 
+USTRUCT(BlueprintType)
+struct FWheel
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wheels", meta = (AllowPrivateAccess = "true"))
+	UStaticMesh* Mesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wheels", meta = (AllowPrivateAccess = "true"))
+	int32 Price;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wheels", meta = (AllowPrivateAccess = "true"))
+	UTexture2D* Image;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wheels", meta = (AllowPrivateAccess = "true"))
+	FName Name;
+
+
+};
+
 UCLASS()
 class OUTRUNCOPS_API UUpgradeWidget : public UUserWidget
 {
@@ -19,7 +36,16 @@ protected:
 	void ChangeColor(UMaterial* NewMaterial);
 
 	UFUNCTION(BlueprintCallable)
+	void SelectWheels(UStaticMesh* NewWheels);
+
+	UFUNCTION(BlueprintCallable)
+	bool BuyWheels(UStaticMesh* NewWheels, int32 Price);
+
+	UFUNCTION(BlueprintCallable)
 	void Return();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wheels", meta = (AllowPrivateAccess = "true"))
+	TMap<int32, FWheel> Wheels;
 	
 private:
 

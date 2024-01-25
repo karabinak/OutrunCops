@@ -28,8 +28,8 @@ public:
 
 	AVehiclePawn();
 	virtual void BeginPlay() override;
-	void LoadVehicleMaterial();
-	void PopulateMeshArray();
+	void LoadVehicle();
+	void PopulateDetachArray();
 	virtual void Tick(float DeltaSeconds) override;
 
 protected:
@@ -90,27 +90,56 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Distance Calculation", meta = (AllowPrivateAccess = "true"))
 	bool bCanDrive = false;
 
-	// Car Parts
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+
+// ------------------------------------------------ VEHICLE PARTS ------------------------------------------------ //
+	// WHEELS //
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
 	 UStaticMeshComponent* WheelFL;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
 	 UStaticMeshComponent* WheelFR;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
 	 UStaticMeshComponent* WheelRL;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* WheelRR;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
+
+	// BUMPERS //
 	UStaticMeshComponent* FrontBumper;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* RearBumper;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
+
+	// LIGHTS //
+	UStaticMeshComponent* FrontLightR;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* FrontLightL;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* BackLightR;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* BackLightL;
+
+	// MIRRORS //
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* MirrorR;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* MirrorL;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+
+	// FENDERS //
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* FenderR;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* FenderL;
+
+	// OTHERS //
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* Engine;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Hood;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Trunk;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Parts", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* BackWing;
+// -------------------------------------------------------------------------------------------------------------- //
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	bool bCanHit = true;
@@ -136,7 +165,7 @@ private:
 	FVector GarageSpawnLocation = FVector::ZeroVector;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	float SpringArmBaseLenght = 1500.f;
+	float SpringArmBaseLenght = 1200.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	FRotator SpringArmLastRotation;
@@ -170,4 +199,11 @@ public:
 	FORCEINLINE float GetMaxHealth() { return MaxHealth; }
 	FORCEINLINE TArray<UStaticMeshComponent*> GetPartsToDetach() { return PartsToDetach; }
 	FORCEINLINE FVector GetGarageSpawnLocation() { return GarageSpawnLocation; }
+
+
+	// TO CHANGE
+	FORCEINLINE UStaticMeshComponent* GetWheelFL() { return WheelFL; }
+	FORCEINLINE UStaticMeshComponent* GetWheelFR() { return WheelFR; }
+	FORCEINLINE UStaticMeshComponent* GetWheelRL() { return WheelRL; }
+	FORCEINLINE UStaticMeshComponent* GetWheelRR() { return WheelRR; }
 };

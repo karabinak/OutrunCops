@@ -26,6 +26,14 @@ enum class EWidgetState : uint8
 	EWS_MAX UMETA(DisplayName = "Default")
 };
 
+UENUM(BlueprintType)
+enum class EAnimationState : uint8
+{
+	EAS_BaseCameraPosition UMETA(DisplayName = "BasicCameraPos"),
+	EAS_WheelsCameraPosition UMETA(DisplayName = "WheelsCameraPosition")
+};
+
+
 UCLASS()
 class OUTRUNCOPS_API AGarage : public AActor
 {
@@ -34,6 +42,8 @@ class OUTRUNCOPS_API AGarage : public AActor
 public:	
 	AGarage();
 	virtual void Tick(float DeltaTime) override;
+
+	void GarageAnimations(float DeltaTime);
 
 protected:
 	virtual void BeginPlay() override;
@@ -51,6 +61,7 @@ protected:
 	void CreateOptionsWidget();
 	void DelayedBeginPlayFunc();
 
+	void RestartAnim();
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
@@ -99,6 +110,18 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* GarageMainView;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	FTransform BaseCameraTransform = FTransform(FRotator(-10.f, -130.f, 0.f), FVector(370.f, 400.f, 180.f), FVector(1.f, 1.f, 1.f));
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	FTransform WheelsCameraTransform = FTransform(FRotator(0.f, -90.f, 0.f), FVector(50.f, 380.f, 75.f), FVector(1.f, 1.f, 1.f));
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	EAnimationState AnimationState = EAnimationState::EAS_BaseCameraPosition;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	bool bCameraAnimationActive = false;
+
+	FTimerHandle AnimDuration;
+
 
 public:	
 
@@ -107,6 +130,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE AVehiclePawn* GetCurrentCatalogVehicle() { return CurrentCatalogVehicle; }
 
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetAnimationState(EAnimationState AnimState) { AnimationState = AnimState; }
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE EAnimationState GetAnimationState() { return AnimationState; }
+
+	bool GetCameraAnimationActive() { return bCameraAnimationActive; }
 
 	UFUNCTION(BlueprintCallable)
 	AVehiclePawn* SetPreviewVehicle(int32 VehicleValue);
@@ -124,5 +153,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetState(EWidgetState ChangeWidgetState);
+
+
+	UFUNCTION(BlueprintCallable)
+	void StartPlatformCameraAnimation();
 
 };

@@ -30,8 +30,8 @@ AVehiclePawn::AVehiclePawn()
 
 	GetMesh()->SetSimulatePhysics(true);
 	SpringArm->TargetArmLength = SpringArmBaseLenght;
-	SpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
-	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 150.f));
+	SpringArm->SetRelativeRotation(FRotator(-30.f, 0.f, 0.f));
+	SpringArm->SetRelativeLocation(FVector(0.f, 0.f, 100.f));
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->bEnableCameraRotationLag = true;
 	SpringArm->CameraRotationLagSpeed = 3.f;
@@ -44,7 +44,7 @@ AVehiclePawn::AVehiclePawn()
 	VehicleWidget->SetPivot(FVector2D(0.f, 1.f));
 
 
-	// CAR PARTS
+// ------------------------------------------------ VEHICLE PARTS ------------------------------------------------ //
 	WheelFL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FL_Wheel"));
 	WheelFR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FR_Wheel"));
 	WheelRL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RL_Wheel"));
@@ -52,11 +52,25 @@ AVehiclePawn::AVehiclePawn()
 
 	FrontBumper = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontBumper"));
 	RearBumper = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearBumper"));
+
+	FrontLightR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontLightRight"));
+	FrontLightL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontLightLeft"));
+	BackLightR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BackLightRight"));
+	BackLightL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BackLightLeft"));
+
 	MirrorR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MirrorR"));
 	MirrorL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MirrorL"));
-	Hood = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hood"));
-	Trunk = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Trunk"));
 
+	FenderR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FenderRight"));
+	FenderL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FenderLeft"));
+
+	Engine = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Engine"));
+	Hood = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hood"));
+
+	Trunk = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Trunk"));
+	BackWing = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BackWing"));
+
+// --------------------------------------------- VEHICLE ATTACHMENTS --------------------------------------------- //
 	WheelFL->SetupAttachment(GetMesh(), TEXT("FL"));
 	WheelFR->SetupAttachment(GetMesh(), TEXT("FR"));
 	WheelRL->SetupAttachment(GetMesh(), TEXT("RL"));
@@ -64,11 +78,25 @@ AVehiclePawn::AVehiclePawn()
 
 	FrontBumper->SetupAttachment(GetMesh());
 	RearBumper->SetupAttachment(GetMesh());
+
+	FrontLightR->SetupAttachment(GetMesh());
+	FrontLightL->SetupAttachment(GetMesh());
+	BackLightR->SetupAttachment(GetMesh());
+	BackLightL->SetupAttachment(GetMesh());
+
 	MirrorR->SetupAttachment(GetMesh());
 	MirrorL->SetupAttachment(GetMesh());
-	Hood->SetupAttachment(GetMesh());
-	Trunk->SetupAttachment(GetMesh());
 
+	FenderR->SetupAttachment(GetMesh());
+	FenderL->SetupAttachment(GetMesh());
+
+	Engine->SetupAttachment(GetMesh());
+	Hood->SetupAttachment(GetMesh());
+
+	Trunk->SetupAttachment(GetMesh());
+	BackWing->SetupAttachment(Trunk);
+
+// ----------------------------------------------------------------------------------------------------------- //
 }
 
 void AVehiclePawn::BeginPlay()
@@ -84,16 +112,16 @@ void AVehiclePawn::BeginPlay()
 
 	GetMesh()->OnComponentHit.AddDynamic(this, &AVehiclePawn::OnHit);
 
-	PopulateMeshArray();
+	PopulateDetachArray();
 
 	ActiveParts = PartsToDetach.Num();
 	OnePartHitPoints = MaxHealth / ActiveParts;
 
-	LoadVehicleMaterial();
+	LoadVehicle();
 
 }
 
-void AVehiclePawn::LoadVehicleMaterial()
+void AVehiclePawn::LoadVehicle()
 {
 	UMySaveGame* DataToLoad = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0));
 	if (DataToLoad != nullptr)
@@ -102,6 +130,7 @@ void AVehiclePawn::LoadVehicleMaterial()
 
 		if (DataToLoad->Inventory.Contains(Instance->GetVehicleIntInstance()))
 		{
+			// Change Materials on every part
 			GetMesh()->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.BodyPaint);
 
 			for (int i = 0; i < PartsToDetach.Num(); i++)
@@ -111,38 +140,36 @@ void AVehiclePawn::LoadVehicleMaterial()
 					PartsToDetach[i]->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.BodyPaint);
 				}
 			}
-		}
 
-		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("Game Loaded")));
+			if (DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.Wheel != nullptr)
+			{
+				WheelFL->SetStaticMesh(DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.Wheel);
+				WheelFR->SetStaticMesh(DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.Wheel);
+				WheelRL->SetStaticMesh(DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.Wheel);
+				WheelRR->SetStaticMesh(DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.Wheel);
+			}
+		}
 	}
 }
 
-void AVehiclePawn::PopulateMeshArray()
+void AVehiclePawn::PopulateDetachArray()
 {
-	if (FrontBumper->GetMaterial(0))
-	{
-		PartsToDetach.Add(FrontBumper);
-	}
-	if (RearBumper->GetMaterial(0))
-	{
-		PartsToDetach.Add(RearBumper);
-	}
-	if (MirrorR->GetMaterial(0))
-	{
-		PartsToDetach.Add(MirrorR);
-	}
-	if (MirrorL->GetMaterial(0))
-	{
-		PartsToDetach.Add(MirrorL);
-	}
-	if (Hood->GetMaterial(0))
-	{
-		PartsToDetach.Add(Hood);
-	}
-	if (Trunk->GetMaterial(0))
-	{
-		PartsToDetach.Add(Trunk);
-	}
+	if (FrontBumper->IsValidLowLevelFast()) { PartsToDetach.Add(FrontBumper); }
+	if (RearBumper->IsValidLowLevelFast()) { PartsToDetach.Add(RearBumper); }
+
+	if (FrontLightR->IsValidLowLevelFast()) { PartsToDetach.Add(FrontLightR); }
+	if (FrontLightL->IsValidLowLevelFast()) { PartsToDetach.Add(FrontLightL); }
+	if (BackLightR->IsValidLowLevelFast()) { PartsToDetach.Add(BackLightR); }
+	if (BackLightL->IsValidLowLevelFast()) { PartsToDetach.Add(BackLightL); }
+
+	if (MirrorR->IsValidLowLevelFast()) { PartsToDetach.Add(MirrorR); }
+	if (MirrorL->IsValidLowLevelFast()) { PartsToDetach.Add(MirrorL); }
+
+	if (FenderR->IsValidLowLevelFast()) { PartsToDetach.Add(FenderR); }
+	if (FenderL->IsValidLowLevelFast()) { PartsToDetach.Add(FenderL); }
+
+	if (Hood->IsValidLowLevelFast()) { PartsToDetach.Add(Hood); }
+	if (Trunk->IsValidLowLevelFast()) { PartsToDetach.Add(Trunk); }
 }
 
 void AVehiclePawn::Tick(float DeltaSeconds)

@@ -57,7 +57,7 @@ void UMenuWidget::BuyVehicle()
 
 			FInventorySlot Vehicle;
 			Vehicle.VehicleClass = Garage->GetCurrentCatalogVehicle()->GetClass();
-			Vehicle.VehicleUpgrades.MaxTorque = 60.f;
+			Vehicle.VehicleCustomization.Wheel = Garage->GetCurrentCatalogVehicle()->GetWheelFL()->GetStaticMesh();
 			Vehicle.VehicleCustomization.BodyPaint = Garage->GetCurrentCatalogVehicle()->GetMesh()->GetMaterial(0)->GetMaterial();
 
 			PC->GetInventory()->AddToInventory(VehicleInt, Vehicle);
