@@ -22,8 +22,21 @@ struct FWheel
 	UTexture2D* Image;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wheels", meta = (AllowPrivateAccess = "true"))
 	FName Name;
+};
 
+USTRUCT(BlueprintType)
+struct FPaint
+{
+	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paints", meta = (AllowPrivateAccess = "true"))
+	UMaterial* Paint;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paints", meta = (AllowPrivateAccess = "true"))
+	int32 Price;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paints", meta = (AllowPrivateAccess = "true"))
+	UTexture2D* Image;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paints", meta = (AllowPrivateAccess = "true"))
+	FName Name;
 };
 
 UCLASS()
@@ -33,7 +46,9 @@ class OUTRUNCOPS_API UUpgradeWidget : public UUserWidget
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	void ChangeColor(UMaterial* NewMaterial);
+	void SelectPaint(UMaterial* NewMaterial);
+	UFUNCTION(BlueprintCallable)
+	bool BuyPaint(UMaterial* NewMaterial, int32 Price);
 
 	UFUNCTION(BlueprintCallable)
 	void SelectWheels(UStaticMesh* NewWheels);
@@ -46,6 +61,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wheels", meta = (AllowPrivateAccess = "true"))
 	TMap<int32, FWheel> Wheels;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wheels", meta = (AllowPrivateAccess = "true"))
+	TMap<int32, FPaint> Paints;
 	
 private:
 

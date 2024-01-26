@@ -11,7 +11,7 @@
 #include "OutrunCops/Garage/Garage.h"
 
 
-void UUpgradeWidget::ChangeColor(UMaterial* NewMaterial)
+void UUpgradeWidget::SelectPaint(UMaterial* NewMaterial)
 {
 	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
@@ -21,7 +21,7 @@ void UUpgradeWidget::ChangeColor(UMaterial* NewMaterial)
 	{
 		Vehicle->GetMesh()->SetMaterial(0, NewMaterial);
 
-		TArray<UStaticMeshComponent*> VehicleParts = Vehicle->GetPartsToDetach();
+		TArray<UStaticMeshComponent*> VehicleParts = Vehicle->GetAllVehicleParts();
 		for (int i = 0; i < VehicleParts.Num(); i++)
 		{
 			if (VehicleParts[i])
@@ -30,10 +30,25 @@ void UUpgradeWidget::ChangeColor(UMaterial* NewMaterial)
 			}
 		}
 	}
+}
 
-	FInventorySlot NewVehicle = *GameInstance->GetInventoryInstance().Find(GameInstance->GetVehicleIntInstance());
-	NewVehicle.VehicleCustomization.BodyPaint = NewMaterial;
-	PlayerController->GetInventory()->AddToInventory(GameInstance->GetVehicleIntInstance(), NewVehicle);
+bool UUpgradeWidget::BuyPaint(UMaterial* NewMaterial, int32 Price)
+{
+	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
+
+	if (GameInstance->GetBasicCurrencyInstance() >= Price)
+	{
+		PlayerController->DecreaseBasicCurrency(Price);
+
+		FInventorySlot NewVehicle = *GameInstance->GetInventoryInstance().Find(GameInstance->GetVehicleIntInstance());
+		NewVehicle.VehicleCustomization.BodyPaint = NewMaterial;
+		PlayerController->GetInventory()->AddToInventory(GameInstance->GetVehicleIntInstance(), NewVehicle);
+
+		return true;
+	}
+
+	return false;
 }
 
 void UUpgradeWidget::SelectWheels(UStaticMesh* NewWheels)

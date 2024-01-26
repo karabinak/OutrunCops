@@ -112,9 +112,9 @@ void AVehiclePawn::BeginPlay()
 
 	GetMesh()->OnComponentHit.AddDynamic(this, &AVehiclePawn::OnHit);
 
-	PopulateDetachArray();
+	PopulateMeshArray();
 
-	ActiveParts = PartsToDetach.Num();
+	ActiveParts = AllVehicleParts.Num();
 	OnePartHitPoints = MaxHealth / ActiveParts;
 
 	LoadVehicle();
@@ -133,11 +133,11 @@ void AVehiclePawn::LoadVehicle()
 			// Change Materials on every part
 			GetMesh()->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.BodyPaint);
 
-			for (int i = 0; i < PartsToDetach.Num(); i++)
+			for (int i = 0; i < AllVehicleParts.Num(); i++)
 			{
-				if (PartsToDetach[i])
+				if (AllVehicleParts[i])
 				{
-					PartsToDetach[i]->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.BodyPaint);
+					AllVehicleParts[i]->SetMaterial(0, DataToLoad->Inventory.Find(Instance->GetVehicleIntInstance())->VehicleCustomization.BodyPaint);
 				}
 			}
 
@@ -152,24 +152,34 @@ void AVehiclePawn::LoadVehicle()
 	}
 }
 
-void AVehiclePawn::PopulateDetachArray()
+void AVehiclePawn::PopulateMeshArray()
 {
-	if (FrontBumper->IsValidLowLevelFast()) { PartsToDetach.Add(FrontBumper); }
-	if (RearBumper->IsValidLowLevelFast()) { PartsToDetach.Add(RearBumper); }
 
-	if (FrontLightR->IsValidLowLevelFast()) { PartsToDetach.Add(FrontLightR); }
-	if (FrontLightL->IsValidLowLevelFast()) { PartsToDetach.Add(FrontLightL); }
-	if (BackLightR->IsValidLowLevelFast()) { PartsToDetach.Add(BackLightR); }
-	if (BackLightL->IsValidLowLevelFast()) { PartsToDetach.Add(BackLightL); }
+	// Populate AllVehicleParts Array
+	if (FrontBumper->IsValidLowLevelFast()) { AllVehicleParts.Add(FrontBumper); }
+	if (RearBumper->IsValidLowLevelFast()) { AllVehicleParts.Add(RearBumper); }
 
-	if (MirrorR->IsValidLowLevelFast()) { PartsToDetach.Add(MirrorR); }
-	if (MirrorL->IsValidLowLevelFast()) { PartsToDetach.Add(MirrorL); }
+	if (FrontLightR->IsValidLowLevelFast()) { AllVehicleParts.Add(FrontLightR); }
+	if (FrontLightL->IsValidLowLevelFast()) { AllVehicleParts.Add(FrontLightL); }
+	if (BackLightR->IsValidLowLevelFast()) { AllVehicleParts.Add(BackLightR); }
+	if (BackLightL->IsValidLowLevelFast()) { AllVehicleParts.Add(BackLightL); }
 
-	if (FenderR->IsValidLowLevelFast()) { PartsToDetach.Add(FenderR); }
-	if (FenderL->IsValidLowLevelFast()) { PartsToDetach.Add(FenderL); }
+	if (MirrorR->IsValidLowLevelFast()) { AllVehicleParts.Add(MirrorR); }
+	if (MirrorL->IsValidLowLevelFast()) { AllVehicleParts.Add(MirrorL); }
 
-	if (Hood->IsValidLowLevelFast()) { PartsToDetach.Add(Hood); }
-	if (Trunk->IsValidLowLevelFast()) { PartsToDetach.Add(Trunk); }
+	if (FenderR->IsValidLowLevelFast()) { AllVehicleParts.Add(FenderR); }
+	if (FenderL->IsValidLowLevelFast()) { AllVehicleParts.Add(FenderL); }
+
+	if (Hood->IsValidLowLevelFast()) { AllVehicleParts.Add(Hood); }
+	if (Engine->IsValidLowLevelFast()) { AllVehicleParts.Add(Engine); }
+
+	if (Trunk->IsValidLowLevelFast()) { AllVehicleParts.Add(Trunk); }
+	if (BackWing->IsValidLowLevelFast()) { AllVehicleParts.Add(BackWing); }
+
+	// Populate Deatachable parts array ( not everything can detach )
+	VehiclePartsToDetach = AllVehicleParts;
+	VehiclePartsToDetach.Remove(Engine);
+	VehiclePartsToDetach.Remove(BackWing);
 }
 
 void AVehiclePawn::Tick(float DeltaSeconds)
@@ -269,11 +279,11 @@ void AVehiclePawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, 
 
 	GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraShake(CameraShake);
 
-	if (HitPoints < ActiveParts * OnePartHitPoints && !PartsToDetach.IsEmpty())
+	if (HitPoints < ActiveParts * OnePartHitPoints && !VehiclePartsToDetach.IsEmpty())
 	{
-		int32 Random = FMath::RandRange(0, PartsToDetach.Num() - 1);
-		DetachComponent(PartsToDetach[Random]);
-		PartsToDetach.RemoveAt(Random);
+		int32 Random = FMath::RandRange(0, VehiclePartsToDetach.Num() - 1);
+		DetachComponent(VehiclePartsToDetach[Random]);
+		VehiclePartsToDetach.RemoveAt(Random);
 		ActiveParts--;
 	}
 

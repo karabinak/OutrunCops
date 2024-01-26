@@ -29,7 +29,7 @@ public:
 	AVehiclePawn();
 	virtual void BeginPlay() override;
 	void LoadVehicle();
-	void PopulateDetachArray();
+	void PopulateMeshArray();
 	virtual void Tick(float DeltaSeconds) override;
 
 protected:
@@ -159,7 +159,10 @@ private:
 	int32 ActiveParts;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
-	TArray<UStaticMeshComponent*> PartsToDetach;
+	TArray<UStaticMeshComponent*> AllVehicleParts;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	TArray<UStaticMeshComponent*> VehiclePartsToDetach;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	FVector GarageSpawnLocation = FVector::ZeroVector;
@@ -197,7 +200,7 @@ public:
 	FORCEINLINE int32 GetPrice() { return Price; }
 	FORCEINLINE float GetHitPoints() { return HitPoints; }
 	FORCEINLINE float GetMaxHealth() { return MaxHealth; }
-	FORCEINLINE TArray<UStaticMeshComponent*> GetPartsToDetach() { return PartsToDetach; }
+	FORCEINLINE TArray<UStaticMeshComponent*> GetAllVehicleParts() { return AllVehicleParts; }
 	FORCEINLINE FVector GetGarageSpawnLocation() { return GarageSpawnLocation; }
 
 
