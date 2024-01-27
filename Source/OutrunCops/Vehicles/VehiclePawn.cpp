@@ -36,6 +36,9 @@ AVehiclePawn::AVehiclePawn()
 	SpringArm->bEnableCameraRotationLag = true;
 	SpringArm->CameraRotationLagSpeed = 3.f;
 	SpringArm->CameraLagSpeed = 5.f;
+	SpringArm->CameraLagMaxDistance = 700.f;
+
+	Camera->SetRelativeLocation(FVector(280.f, 0.f, 45.f));
 
 	VehicleWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("VehicleWidget"));
 	VehicleWidget->SetupAttachment(GetRootComponent());

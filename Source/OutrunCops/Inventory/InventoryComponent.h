@@ -24,8 +24,14 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
 	TMap<int32, FInventorySlot> Inventory;
 
-public:	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
+	TMap<int32, UMaterial*> PaintsInventory;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
+	TMap<int32, UStaticMesh*> WheelsInventory;
+
+public:	
+	// VEHICLES INVENTORY //
 	FORCEINLINE TMap<int32, FInventorySlot> GetInventory() { return Inventory; }
 	FORCEINLINE void SetInventory(TMap<int32, FInventorySlot> NewInventory) { Inventory = NewInventory; }
 
@@ -38,5 +44,30 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsInInventory(int32 Value);
 
-		
+	// WHEELS INVENTORY //
+	FORCEINLINE TMap<int32, UStaticMesh*> GetWheelsInventory() { return WheelsInventory; }
+	FORCEINLINE void SetWheelsInventory(TMap<int32, UStaticMesh*> NewInventory) { WheelsInventory = NewInventory; }
+
+	UFUNCTION(BlueprintCallable)
+	void AddToWheelsInventory(int32 Value, UStaticMesh* Wheel);
+
+	UFUNCTION(BlueprintCallable)
+	UStaticMesh* GetFromWheelsInventory(int32 Value);
+
+	UFUNCTION(BlueprintCallable)
+	bool IsInWheelsInventory(int32 Value);
+
+	// PAINTS INVENTORY //
+
+	FORCEINLINE TMap<int32, UMaterial*> GetPaintsInventory() { return PaintsInventory; }
+	FORCEINLINE void SetPaintsInventory(TMap<int32, UMaterial*> NewInventory) { PaintsInventory = NewInventory; }
+
+	UFUNCTION(BlueprintCallable)
+	void AddToPaintsInventoryInventory(int32 Value, UMaterial* Paint);
+
+	UFUNCTION(BlueprintCallable)
+	UMaterial* GetFromPaintsInventoryInventory(int32 Value);
+
+	UFUNCTION(BlueprintCallable)
+	bool IsInPaintsInventoryInventory(int32 Value);
 };

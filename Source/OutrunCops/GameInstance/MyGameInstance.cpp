@@ -29,6 +29,8 @@ void UMyGameInstance::SaveGame()
 		DataToSave->PlayerBasicCurrency = BasicCurrencyInstance;
 		DataToSave->Inventory = InventoryInstance;
 		DataToSave->ChosenVehicleInt = VehicleIntInstance;
+		DataToSave->WheelsInventory = WheelsInventoryInstance;
+		DataToSave->PaintsInventory = PaintsInventoryInstance;
 		UGameplayStatics::SaveGameToSlot(DataToSave, TEXT("Slot1"), 0);
 
 		GEngine->AddOnScreenDebugMessage(0, 3.f, FColor::Green, FString::Printf(TEXT("Game Saved")));
@@ -48,6 +50,8 @@ void UMyGameInstance::LoadGame()
 		BasicCurrencyInstance = DataToLoad->PlayerBasicCurrency;
 		InventoryInstance = DataToLoad->Inventory;
 		VehicleIntInstance = DataToLoad->ChosenVehicleInt;
+		WheelsInventoryInstance = DataToLoad->WheelsInventory;
+		PaintsInventoryInstance = DataToLoad->PaintsInventory;
 
 		GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Green, FString::Printf(TEXT("Game Loaded")));
 	}

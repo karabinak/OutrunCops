@@ -46,15 +46,15 @@ class OUTRUNCOPS_API UUpgradeWidget : public UUserWidget
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	void SelectPaint(UMaterial* NewMaterial);
+	void SelectPaint(UMaterial* NewMaterial, int32 Value);
 	UFUNCTION(BlueprintCallable)
-	bool BuyPaint(UMaterial* NewMaterial, int32 Price);
+	bool BuyPaint(UMaterial* NewMaterial, int32 Price, int32 Value);
 
 	UFUNCTION(BlueprintCallable)
-	void SelectWheels(UStaticMesh* NewWheels);
+	void SelectWheels(UStaticMesh* NewWheels, int32 Value);
 
 	UFUNCTION(BlueprintCallable)
-	bool BuyWheels(UStaticMesh* NewWheels, int32 Price);
+	bool BuyWheels(UStaticMesh* NewWheels, int32 Price, int32 Value);
 
 	UFUNCTION(BlueprintCallable)
 	void Return();

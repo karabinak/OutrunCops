@@ -11,7 +11,7 @@
 #include "OutrunCops/Garage/Garage.h"
 
 
-void UUpgradeWidget::SelectPaint(UMaterial* NewMaterial)
+void UUpgradeWidget::SelectPaint(UMaterial* NewMaterial, int32 Value)
 {
 	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
@@ -30,20 +30,28 @@ void UUpgradeWidget::SelectPaint(UMaterial* NewMaterial)
 			}
 		}
 	}
+	if (PlayerController->GetInventory()->IsInPaintsInventoryInventory(Value))
+	{
+		FInventorySlot NewVehicle = *GameInstance->GetInventoryInstance().Find(GameInstance->GetVehicleIntInstance());
+		NewVehicle.VehicleCustomization.BodyPaint = NewMaterial;
+		PlayerController->GetInventory()->AddToInventory(GameInstance->GetVehicleIntInstance(), NewVehicle);
+		PlayerController->GetInventory()->AddToPaintsInventoryInventory(Value, NewMaterial);
+	}
 }
 
-bool UUpgradeWidget::BuyPaint(UMaterial* NewMaterial, int32 Price)
+bool UUpgradeWidget::BuyPaint(UMaterial* NewMaterial, int32 Price, int32 Value)
 {
 	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
 
-	if (GameInstance->GetBasicCurrencyInstance() >= Price)
+	if (GameInstance->GetBasicCurrencyInstance() >= Price && !PlayerController->GetInventory()->IsInPaintsInventoryInventory(Value))
 	{
 		PlayerController->DecreaseBasicCurrency(Price);
 
 		FInventorySlot NewVehicle = *GameInstance->GetInventoryInstance().Find(GameInstance->GetVehicleIntInstance());
 		NewVehicle.VehicleCustomization.BodyPaint = NewMaterial;
 		PlayerController->GetInventory()->AddToInventory(GameInstance->GetVehicleIntInstance(), NewVehicle);
+		PlayerController->GetInventory()->AddToPaintsInventoryInventory(Value, NewMaterial);
 
 		return true;
 	}
@@ -51,7 +59,7 @@ bool UUpgradeWidget::BuyPaint(UMaterial* NewMaterial, int32 Price)
 	return false;
 }
 
-void UUpgradeWidget::SelectWheels(UStaticMesh* NewWheels)
+void UUpgradeWidget::SelectWheels(UStaticMesh* NewWheels, int32 Value)
 {
 	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
@@ -64,20 +72,28 @@ void UUpgradeWidget::SelectWheels(UStaticMesh* NewWheels)
 		Vehicle->GetWheelRL()->SetStaticMesh(NewWheels);
 		Vehicle->GetWheelRR()->SetStaticMesh(NewWheels);
 	}
+	if (PlayerController->GetInventory()->IsInWheelsInventory(Value))
+	{
+		FInventorySlot NewVehicle = *GameInstance->GetInventoryInstance().Find(GameInstance->GetVehicleIntInstance());
+		NewVehicle.VehicleCustomization.Wheel = NewWheels;
+		PlayerController->GetInventory()->AddToInventory(GameInstance->GetVehicleIntInstance(), NewVehicle);
+		PlayerController->GetInventory()->AddToWheelsInventory(Value, NewWheels);
+	}
 }
 
-bool UUpgradeWidget::BuyWheels(UStaticMesh* NewWheels, int32 Price)
+bool UUpgradeWidget::BuyWheels(UStaticMesh* NewWheels, int32 Price, int32 Value)
 {
 	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
 
-	if (GameInstance->GetBasicCurrencyInstance() >= Price)
+	if (GameInstance->GetBasicCurrencyInstance() >= Price && !PlayerController->GetInventory()->IsInWheelsInventory(Value))
 	{
 		PlayerController->DecreaseBasicCurrency(Price);
 
 		FInventorySlot NewVehicle = *GameInstance->GetInventoryInstance().Find(GameInstance->GetVehicleIntInstance());
 		NewVehicle.VehicleCustomization.Wheel = NewWheels;
 		PlayerController->GetInventory()->AddToInventory(GameInstance->GetVehicleIntInstance(), NewVehicle);
+		PlayerController->GetInventory()->AddToWheelsInventory(Value, NewWheels);
 
 		return true;
 	}

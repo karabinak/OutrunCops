@@ -25,6 +25,8 @@ void AMainGamemode::BeginPlay()
 	{
 		PC->GetInventory()->SetInventory(GameInstance->GetInventoryInstance());
 		PC->SetPlayerBasicCurrency(GameInstance->GetBasicCurrencyInstance());
+		PC->GetInventory()->SetWheelsInventory(GameInstance->GetWheelsInventoryInstance());
+		PC->GetInventory()->SetPaintsInventory(GameInstance->GetPaintsInventoryInstance());
 
 		GameInstance->LoadGame();
 		GameInstance->SaveGame();

@@ -28,5 +28,11 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TMap<int32, FInventorySlot> Inventory;
 
+	UPROPERTY(VisibleAnywhere)
+	TMap<int32, UMaterial*> PaintsInventory;
+
+	UPROPERTY(VisibleAnywhere)
+	TMap<int32, UStaticMesh*> WheelsInventory;
+
 
 };

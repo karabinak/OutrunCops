@@ -50,3 +50,47 @@ bool UInventoryComponent::IsInInventory(int32 Value)
 	return Inventory.Contains(Value);
 }
 
+void UInventoryComponent::AddToWheelsInventory(int32 Value, UStaticMesh* Wheel)
+{
+	WheelsInventory.Add(Value, Wheel);
+	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	GameInstance->SetWheelsInventoryInstance(WheelsInventory);
+	GameInstance->SaveGame();
+}
+
+UStaticMesh* UInventoryComponent::GetFromWheelsInventory(int32 Value)
+{
+	if (WheelsInventory.Contains(Value))
+	{
+		return WheelsInventory.FindRef(Value);
+	}
+	return nullptr;
+}
+
+bool UInventoryComponent::IsInWheelsInventory(int32 Value)
+{
+	return WheelsInventory.Contains(Value);
+}
+
+void UInventoryComponent::AddToPaintsInventoryInventory(int32 Value, UMaterial* Paint)
+{
+	PaintsInventory.Add(Value, Paint);
+	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	GameInstance->SetPaintsInventoryInstance(PaintsInventory);
+	GameInstance->SaveGame();
+}
+
+UMaterial* UInventoryComponent::GetFromPaintsInventoryInventory(int32 Value)
+{
+	if (PaintsInventory.Contains(Value))
+	{
+		return PaintsInventory.FindRef(Value);
+	}
+	return nullptr;
+}
+
+bool UInventoryComponent::IsInPaintsInventoryInventory(int32 Value)
+{
+	return PaintsInventory.Contains(Value);
+}
+

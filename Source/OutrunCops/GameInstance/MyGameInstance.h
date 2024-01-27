@@ -24,6 +24,12 @@ private:
 	TMap<int32, FInventorySlot> InventoryInstance;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
+	TMap<int32, UMaterial*> PaintsInventoryInstance;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
+	TMap<int32, UStaticMesh*> WheelsInventoryInstance;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
 	int32 VehicleIntInstance = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
@@ -36,6 +42,12 @@ public:
 
 	FORCEINLINE void SetInventoryInstance(TMap<int32, FInventorySlot> Inventory) { InventoryInstance = Inventory; }
 	FORCEINLINE TMap<int32, FInventorySlot> GetInventoryInstance() { return InventoryInstance; }
+
+	FORCEINLINE void SetPaintsInventoryInstance(TMap<int32, UMaterial*> Inventory) { PaintsInventoryInstance = Inventory; }
+	FORCEINLINE TMap<int32, UMaterial*> GetPaintsInventoryInstance() { return PaintsInventoryInstance; }
+
+	FORCEINLINE void SetWheelsInventoryInstance(TMap<int32, UStaticMesh*> Inventory) { WheelsInventoryInstance = Inventory; }
+	FORCEINLINE TMap<int32, UStaticMesh*> GetWheelsInventoryInstance() { return WheelsInventoryInstance; }
 
 	FORCEINLINE void SetBasicCurrencyInstance(int32 BasicCurrency) { BasicCurrencyInstance = BasicCurrency; }
 	FORCEINLINE int32 GetBasicCurrencyInstance() { return BasicCurrencyInstance; }
