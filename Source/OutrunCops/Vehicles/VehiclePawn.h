@@ -36,9 +36,9 @@ protected:
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
 
-	void Throttle(float AxisValue);
-	void Brake(float AxisValue);
-	void Steer(float AxisValue);
+	//void Throttle(float AxisValue);
+	//void Brake(float AxisValue);
+	//void Steer(float AxisValue);
 	void CalculateDistance();
 	void DetachComponent(UStaticMeshComponent* CarPart);
 	void AttachComponent(UStaticMeshComponent* CarPart);
@@ -202,6 +202,7 @@ public:
 	FORCEINLINE float GetMaxHealth() { return MaxHealth; }
 	FORCEINLINE TArray<UStaticMeshComponent*> GetAllVehicleParts() { return AllVehicleParts; }
 	FORCEINLINE FVector GetGarageSpawnLocation() { return GarageSpawnLocation; }
+	FORCEINLINE bool GetCanDrive() { return bCanDrive; }
 
 
 	// TO CHANGE

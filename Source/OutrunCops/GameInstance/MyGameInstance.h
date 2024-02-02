@@ -33,7 +33,7 @@ private:
 	int32 VehicleIntInstance = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory", meta = (AllowPrivateAccess = "true"))
-	int32 BasicCurrencyInstance = 50500;
+	int32 BasicCurrencyInstance = 100000;
 
 
 public:
