@@ -38,7 +38,7 @@ protected:
 
 	//void Throttle(float AxisValue);
 	//void Brake(float AxisValue);
-	//void Steer(float AxisValue);
+	void Steer(float AxisValue);
 	void CalculateDistance();
 	void DetachComponent(UStaticMeshComponent* CarPart);
 	void AttachComponent(UStaticMeshComponent* CarPart);

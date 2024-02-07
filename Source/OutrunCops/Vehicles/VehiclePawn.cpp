@@ -198,28 +198,30 @@ void AVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	//PlayerInputComponent->BindAxis("Throttle", this, &AVehiclePawn::Throttle);
 	//PlayerInputComponent->BindAxis("Brake", this, &AVehiclePawn::Brake);
-	//PlayerInputComponent->BindAxis("Steer", this, &AVehiclePawn::Steer);
+	PlayerInputComponent->BindAxis("Steer", this, &AVehiclePawn::Steer);
 
 	PlayerInputComponent->BindAction("Interaction", EInputEvent::IE_Pressed, this, &AVehiclePawn::Interaction);
 }
 
 //void AVehiclePawn::Throttle(float AxisValue)
 //{
-//	//if (!bCanDrive) return;
-//	//GetVehicleMovement()->SetThrottleInput(AxisValue);
+//	if (!bCanDrive) return;
+//	GetVehicleMovement()->SetThrottleInput(AxisValue);
 //}
-
+//
 //void AVehiclePawn::Brake(float AxisValue)
 //{
-//	//if (!bCanDrive) return;
-//	//GetVehicleMovement()->SetBrakeInput(AxisValue);
+//	if (!bCanDrive) return;
+//	GetVehicleMovement()->SetBrakeInput(AxisValue);
 //}
 
-//void AVehiclePawn::Steer(float AxisValue)
-//{
-//	//if (!bCanDrive) return;
-//	//GetVehicleMovement()->SetSteeringInput(AxisValue);
-//}
+void AVehiclePawn::Steer(float AxisValue)
+{
+	GEngine->AddOnScreenDebugMessage(2, -1.f, FColor::Black, FString::Printf(TEXT("%f"), AxisValue));
+	if (!bCanDrive) return;
+	GetVehicleMovement()->SetSteeringInput(AxisValue);
+
+}
 
 void AVehiclePawn::CalculateDistance()
 {
@@ -335,6 +337,7 @@ void AVehiclePawn::SetVehicleState(EVehicleState NewVehicleState)
 	case EVehicleState::EVS_Inactive:
 		bCanDrive = false;
 		bCanCalculateDistance = false;
+		GetVehicleMovement()->SetThrottleInput(0.f);
 		break;
 
 	case EVehicleState::EVS_Active:
